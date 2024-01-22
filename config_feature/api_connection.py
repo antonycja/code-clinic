@@ -74,7 +74,7 @@ def get_data_from_calendar_api(service, calendar=1, max_results=7):
 
 
 
-def get_calendar_results():
+def get_calendar_results(calendar, max_results):
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
@@ -82,7 +82,7 @@ def get_calendar_results():
 
     try:
         service = build("calendar", "v3", credentials=user_credentials)
-        get_data_from_calendar_api(service)
+        get_data_from_calendar_api(service, calendar, max_results)
 
     except HttpError as error:
         print(f"An error occurred: {error}")
