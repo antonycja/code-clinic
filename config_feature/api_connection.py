@@ -74,7 +74,7 @@ def get_data_from_calendar_api(service, calendar=1, max_results=7):
 
 
 
-def main():
+def get_calendar_results():
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
