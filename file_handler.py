@@ -79,20 +79,24 @@ def generating_logIn_cred():
 
 
 # config file operations
-def write_config(data: dict):
+def write_config(data: dict,path: str):
     """
     writes user config data into a file
+    
+    Args:
+        data (dict): the data we want to write
+        path (str): the path to write the data to
     """
     data_to_write = json.dumps(data,indent=2)
     
-    with open('login_credentials.json','w') as f:
-        f.write(data_to_write)
-        f.close()
+    with open(path,'w') as file:
+        file.write(data_to_write)
+        file.close()
 
     return
 
 
-def read_config(path: str):
+def read_config(path: str | dict):
     """
     Reads data from a json file. File path is passed as an arg
     The data is read from the file, then returned as a Dictionary or Lits
