@@ -44,14 +44,14 @@ def authenticate_user():
 
 
 def get_data_from_calendar_api(service, calendar=1, max_results=7):
-
+        code_clinics_calendar = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
         # Calling the Calendar API
         now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
         print(f"Getting the upcoming {max_results} events")
         events_result = (
             service.events()
             .list(
-                calendarId=f'{"c_965b5696a1903c71011a25a8eb71e97b3d847410f8ee919764cd46e585d1c528@group.calendar.google.com" if calendar == 2 else "primary"}',
+                calendarId=f'{code_clinics_calendar if calendar == 2 else "primary"}',
                 timeMin=now,
                 maxResults=max_results,
                 singleEvents=True,
