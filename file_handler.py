@@ -19,6 +19,14 @@ import json
 # Json data to DB if using data base
 # yml to local machine with login information 
 
+
+# dir operations
+def get_home():
+    """
+    Retrieves the home directory of the machine
+    """
+    return os.environ.get('HOME')
+
 def animation():
     column, lines = os.get_terminal_size()
     print('-' * column)
