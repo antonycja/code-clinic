@@ -27,10 +27,8 @@ def get_home():
     """
     return os.environ.get('HOME')
 
-def animation():
-    column, lines = os.get_terminal_size()
-    print('-' * column)
-    
+
+# user_data operations    
 def generating_logIn_cred():
     """
     Generates the user login credentials 
@@ -79,6 +77,7 @@ def generating_logIn_cred():
     
     return data
 
+
 # config file operations
 def write_config(data: dict):
     """
@@ -91,4 +90,28 @@ def write_config(data: dict):
         f.close()
 
     return
+
+
+def read_config(path: str):
+    """
+    Reads data from a json file. File path is passed as an arg
+    The data is read from the file, then returned as a Dictionary or Lits
+
+    Args:
+        path (str): path of file
+
+    Returns:
+        dict | list: the return data is dependent on the data in the json
+    """
     
+
+    with open(path) as file:
+        data = json.loads(file.read())
+        file.close()
+    
+    return data
+
+# helper functions   
+def animation():
+    column, lines = os.get_terminal_size()
+    print('-' * column)
