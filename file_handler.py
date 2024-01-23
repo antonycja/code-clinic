@@ -32,13 +32,13 @@ def generating_logIn_cred():
     
     # initialization phase
     mail_pattern = '@student.wethinkcode.co.za'
-    pattern = re.compile(r"^[a-zA-Z\s]+$")
+    pattern = re.compile(r"^[a-zA-Z\s]+[0-9]{3}"+f"{mail_pattern}$")
     data = dict()
 
     while True:
         username = input('Enter your username: ').lower().strip()
         if re.match('^[a-zA-z]+[0-9]{3}$',username):
-            data["name"] = username
+            data["username"] = username
             break
         else:
             print('Incorrect username: (johndoe023).\n')
@@ -56,8 +56,8 @@ def generating_logIn_cred():
     
     while True:
 
-        password = input('Enter a passphrase: ')
-        confirm_password = input('Confirm your passphrase: ')
+        password = input('Enter passphrase: ')
+        confirm_password = input('Enter same passphrase: ')
         
         if len(password) == 0 and len(confirm_password) == 0:
             data["password"] = None
@@ -67,7 +67,7 @@ def generating_logIn_cred():
             data["password"] = password
             break
         else:
-            print('Passwords Do not match\n')
+            print('Passphrases do not match. Try again.\n')
     
     return data
 
