@@ -27,6 +27,7 @@ def get_home():
     """
     return os.environ.get('HOME')
 
+
 def create_secure_dir():
     """
     Creates the secure dir to store important file
@@ -46,6 +47,15 @@ def create_secure_dir():
     
     return secure_dir
 
+
+def get_secure_dir():
+    """
+    For emergencies use. Returns what the name of the secure folder is
+
+    Returns:
+        str: name of secure folder
+    """
+    return os.path.join(os.environ.get("HOME"),'.code_doctor')
 
 # user_data operations    
 def generating_logIn_cred():
