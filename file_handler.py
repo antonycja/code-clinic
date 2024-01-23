@@ -81,7 +81,6 @@ def write_config(data: dict):
     with open('login_credentials.json','w') as f:
         f.write(data_to_write)
         f.close()
-    
-    print(f'line 84: config data saved')
+
     return
     
