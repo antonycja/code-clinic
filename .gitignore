@@ -1,2 +1,5 @@
 # Beware of the sand
-sand 
+sand* 
+
+# files 
+*.json
