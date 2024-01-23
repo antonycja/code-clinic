@@ -27,6 +27,25 @@ def get_home():
     """
     return os.environ.get('HOME')
 
+def create_secure_dir():
+    """
+    Creates the secure dir to store important file
+    
+    Returns:
+        str : the path of the folder that has been created
+    """
+    # getting the home variable (pc account user name)
+    home = os.environ.get('HOME')
+    dir_name = '.code_doctor'   # name of the folder
+    secure_dir = os.path.join(home,dir_name)
+    
+    if os.path.exists(secure_dir):
+        pass
+    else:
+        os.makedirs(secure_dir)
+    
+    return secure_dir
+
 
 # user_data operations    
 def generating_logIn_cred():
