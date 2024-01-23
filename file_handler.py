@@ -71,3 +71,17 @@ def generating_logIn_cred():
     
     return data
 
+# config file operations
+def write_config(data: dict):
+    """
+    writes user config data into a file
+    """
+    data_to_write = json.dumps(data,indent=2)
+    
+    with open('login_credentials.json','w') as f:
+        f.write(data_to_write)
+        f.close()
+    
+    print(f'line 84: config data saved')
+    return
+    
