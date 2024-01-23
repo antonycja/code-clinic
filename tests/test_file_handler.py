@@ -2,8 +2,9 @@ import unittest
 from test_base import captured_io, captured_output
 from io import StringIO
 from file_handler import *
+import os
 
-class Test_Functions(unittest.TestCase):
+class Test_data_generation(unittest.TestCase):
     
     def test_correct_output(self):
         name = 'james023'
@@ -47,7 +48,33 @@ class Test_Functions(unittest.TestCase):
 
     
 
+class Test_Config_File(unittest.TestCase):
+    
+    def test_write_data(self):
+        path = 'tests/test_config.json'
+        name = 'johndoe023'
+        email = 'johndoe023@student.wethinkcode.co.za'
+        password = '1234'
+        with captured_io(StringIO(f'{name}\n{email}\n{password}\n{password}\n')) as (out,err):
+            data = generating_logIn_cred()
+            write_config(data,path)
+            folder = [file for file in os.listdir('tests') if file == 'test_config.json']
+            self.assertEqual(len(folder),1)
+    
+    def test_read_data(self):
+        path = 'tests/test_config.json'
+        name = 'johndoe023'
+        email = 'johndoe023@student.wethinkcode.co.za'
+        password = '1234'
+        with captured_output() as (out,err):
+            data = read_config(path)
+            self.assertIsInstance(data,dict)
+            self.assertEqual(data['username'],name)
+            self.assertEqual(data['email'],email)
+            self.assertEqual(data['password'],password)
             
+            
+           
             
     
     
