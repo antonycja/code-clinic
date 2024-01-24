@@ -5,9 +5,8 @@ This is nothing more than a helper module
 
 import json
 from os.path import join as join_path
-import os
-# json file handling
 
+# json file handling
 def convert_data(data: object | dict | list):
     """
     Formats the data to json format so that it can be saved on a .json file
@@ -52,3 +51,19 @@ def save_to_json(path: str, file_name: str,data_ref: object | dict | list):
     return
 
 
+def read_json(json_file: str):
+    """
+    The path of the json file
+
+    Args:
+        json_file (object): _description_
+    """
+    
+
+    with open(json_file,'r') as file:
+        data = json.loads(file.read())
+        file.close()
+    
+
+    return data
+    
