@@ -37,7 +37,7 @@ def create_secure_dir():
     """
     # getting the home variable (pc account user name)
     home = os.environ.get('HOME')
-    dir_name = '.code_doctor'   # name of the folder
+    dir_name = '.codez'   # name of the folder
     secure_dir = os.path.join(home,dir_name)
     
     if os.path.exists(secure_dir):

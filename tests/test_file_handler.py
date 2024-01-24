@@ -78,7 +78,7 @@ class Test_dir_tree(unittest.TestCase):
     
     def test_folder_creation(self):
         home = os.environ.get('HOME')
-        file = os.path.join(home,'.code_doctor')
+        file = os.path.join(home,'.codez')
         with captured_output() as (out,err):
             file_dir = create_secure_dir()
             self.assertEqual(file,file_dir)
