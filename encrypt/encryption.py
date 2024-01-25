@@ -12,6 +12,7 @@ from Cryptodome.Util.Padding import pad, unpad
 from string import ascii_letters
 from random import randint, choice
 from os.path import join as save_path
+import re
 
 def generating_salt_and_pepper():
     """
@@ -104,3 +105,40 @@ def read_enc_data(key: bytes, path: str):
     auth_data = unpad(cipher.decrypt(data),AES.block_size) # using standard block size
     
     return auth_data
+
+
+
+# helpers
+
+def return_data(data: str):
+    """
+    Returns a dictionary of the users log in credentials
+
+    Args:
+        data (str): data source
+    """
+    credentials = dict()
+    
+    # cleaning up the str, so we can store in a dictionary
+    pattern = re.compile("{|}|'|\s")
+
+    filtered_data = re.sub(pattern,"",data)
+    clean_up = filtered_data.split(',')
+
+    for sequence in clean_up:
+        meta = sequence.split(':')
+        credentials[meta[0]] = meta[1]
+        
+    return credentials
+
+def convert_bytes(data: bytes):
+    """
+    Converts a given byte sequence to strings
+
+    Args:
+        data (bytes): byte sequence
+    Returns:
+        str : converted bytes
+    """
+    
+    return str(data,"utf-8")
