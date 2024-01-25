@@ -108,6 +108,21 @@ def read_enc_data(key: bytes, path: str):
 
 
 
+# keys
+def save_key(path: str,file_name: str,key: bytes):
+    """
+    Saves the key for the login
+    
+    Args:
+        path (str): location to save the key
+        key (bytes): the key
+    """
+    path = save_path(path,file_name)
+    
+    with open(f'{path}.bin','wb') as file:
+        file.write(key)
+        file.close()
+
 # helpers
 
 def return_data(data: str):
