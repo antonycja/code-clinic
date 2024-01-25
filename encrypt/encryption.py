@@ -64,3 +64,23 @@ def encrypting_data(encryption_key: bytes, data):
     encrypted_data = cipher.encrypt(pad(data,AES.block_size))
     
     return cipher, encrypted_data
+
+
+def write_enc_data(cipher: object, path: str ,file_name: str , data: bytes ):
+    """
+    Saves the encrypted data onto a bin
+
+    Args:
+        cipher (object): the encryption object
+        path (str): the directory you want to save the file to
+        file_name (str): the name of the file
+        data (bytes): the encrypted data
+    """
+    file_path = save_path(path,file_name)
+    
+    with open(f'{file_path}.bin','wb') as file:
+        file.write(cipher.iv)   # iv: buffer for the cipher
+        file.write(data)
+        file.close
+    
+    return
