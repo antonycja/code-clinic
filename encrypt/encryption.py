@@ -46,3 +46,21 @@ def generate_key(salt: bytes, password: str):
     
     # decryption key length: 32
     return PBKDF2(password,salt,dkLen=32)
+
+
+def encrypting_data(encryption_key: bytes, data):
+    """
+    Encrypting given data
+
+    Args:
+        encryption_key (bytes): the key for the encryption
+        data (_type_): the data to decrypt
+    
+    """
+    
+    # creating our cipher object, used to generate encryption entity
+    cipher = AES.new(encryption_key,AES.MODE_CBC)    # encryption mode type CBC: BLOCK CIPHER 
+
+    encrypted_data = cipher.encrypt(pad(data,AES.block_size))
+    
+    return cipher, encrypted_data
