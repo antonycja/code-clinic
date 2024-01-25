@@ -4,7 +4,8 @@ This is nothing more than a helper module
 """
 
 import json
-from os.path import join as join_path
+import pickle
+from os.path import join as save_path
 
 # json file handling
 def convert_data(data: object | dict | list):
@@ -28,7 +29,7 @@ def write_json(path: str, file_name:str ,data: str):
         data (str): data / data source to convert
     """
     
-    file_path = join_path(path,file_name)
+    file_path = save_path(path,file_name)
     
     with open(f'{file_path}.json','w') as file:
         file.write(data)
@@ -66,4 +67,21 @@ def read_json(json_file: str):
     
 
     return data
-    
+   
+   
+# pickle 
+def capture_pickle(path: str,file_name: str, data  : dict):
+    """
+    Saves the recovery file. Recovery file only used in emergencies.
+    Regenerates encryption token
+
+    Args:
+        path: path to save files to
+        recovery_data (dict): its a secret
+    """
+    file_path = save_path(path,file_name)
+    with open(f'{file_path}.bin','wb') as file:
+        pickle.dump(data,file, protocol=pickle.HIGHEST_PROTOCOL)
+        file.close()
+        
+    return   
