@@ -34,3 +34,15 @@ def generating_salt_and_pepper():
     recovery_key["pepper"] = password
     
     return salt, password, recovery_key
+
+
+def generate_key(salt: bytes, password: str):
+    """
+    Generates the encryption key based of the given salt and password
+    
+    Returns:
+        bytes : generated key
+    """  
+    
+    # decryption key length: 32
+    return PBKDF2(password,salt,dkLen=32)
