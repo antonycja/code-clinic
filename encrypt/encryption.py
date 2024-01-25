@@ -46,7 +46,25 @@ def generate_key(salt: bytes, password: str):
     # decryption key length: 32
     return PBKDF2(password,salt,dkLen=32)
 
+# writing salt
+def write_enc_data(cipher: object, path: str ,file_name: str , data: bytes ):
+    """
+    Saves the encrypted data onto a bin
 
+    Args:
+        cipher (object): the encryption object
+        path (str): the directory you want to save the file to
+        file_name (str): the name of the file
+        data (bytes): the encrypted data
+    """
+    file_path = save_path(path,file_name)
+    
+    with open(f'{file_path}.bin','wb') as file:
+        file.write(cipher.iv)   # iv: buffer for the cipher
+        file.write(data)
+        file.close
+    
+    return
 
 # recon recovery 
 def save_recon(path: str, recovery_data: dict):
