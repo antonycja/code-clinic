@@ -123,6 +123,23 @@ def save_key(path: str,file_name: str,key: bytes):
         file.write(key)
         file.close()
 
+
+def read_key(path: str):
+    """
+    reads the decryption key
+    
+    Args:
+        path (str): location of the key
+        key (bytes): the key
+    """
+    
+    with open(f'{path}.bin','wb') as file:
+        key = file.read()
+        file.close()
+
+    return key
+
+
 # helpers
 
 def return_data(data: str):
