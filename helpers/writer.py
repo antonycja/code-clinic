@@ -84,4 +84,22 @@ def capture_pickle(path: str,file_name: str, data  : dict):
         pickle.dump(data,file, protocol=pickle.HIGHEST_PROTOCOL)
         file.close()
         
-    return   
+    return
+
+
+def load_pickle(path: str):
+    """
+    Reads the recon file and returns a dictionary containing recovery data
+    incase user lost encryption key
+
+    Args:
+        path (str): path_of_recon_file
+    Returns:
+        dict : contains recovery data
+    """
+    
+    with open(f'{path}','rb') as file:
+        recovery_data = pickle.load(file)
+        file.close()
+        
+    return recovery_data
