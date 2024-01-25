@@ -12,7 +12,7 @@ from Cryptodome.Util.Padding import pad, unpad
 from string import ascii_letters
 from random import randint, choice
 from os.path import join as save_path
-import os
+import pickle
 
 def generating_salt_and_pepper():
     """
@@ -45,3 +45,41 @@ def generate_key(salt: bytes, password: str):
     
     # decryption key length: 32
     return PBKDF2(password,salt,dkLen=32)
+
+
+
+# recon recovery 
+def save_recon(path: str, recovery_data: dict):
+    """
+    Saves the recovery file. Recovery file only used in emergencies.
+    Regenerates encryption token
+
+    Args:
+        path: path to save files to
+        recovery_data (dict): its a secret
+    """
+    file_path = save_path(path,'recon')
+    with open(f'{file_path}.json','wb') as file:
+        pickle.dump(recovery_data,file, protocol=pickle.HIGHEST_PROTOCOL)
+        file.close
+        
+    return   
+
+# reading
+def read_recon(path: str):
+    """
+    Reads the recon file and returns a dictionary containing recovery data
+    incase user lost encryption key
+
+    Args:
+        path (str): path_of_recon_file
+    Returns:
+        dict : contains recovery data
+    """
+    
+    with open(f'{path}','rb') as file:
+        recovery_data = pickle.load(file)
+        file.close()
+        
+    return recovery_data
+     
