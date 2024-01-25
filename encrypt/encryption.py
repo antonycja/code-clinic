@@ -174,3 +174,16 @@ def convert_bytes(data: bytes):
     """
     
     return str(data,"utf-8")
+
+
+def convert_str(data:  str):
+    """
+    Converts a given string sequence to byte
+
+    Args:
+        data (str): str sequence
+    Returns:
+        byte : converted str
+    """
+    
+    return bytes(data,"utf-8")
