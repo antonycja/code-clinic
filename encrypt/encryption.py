@@ -46,6 +46,25 @@ def generate_key(salt: bytes, password: str):
     # decryption key length: 32
     return PBKDF2(password,salt,dkLen=32)
 
+def encrypting_data(encryption_key: bytes, data):
+    """
+    Encrypting given data
+
+    Args:
+        encryption_key (bytes): the key for the encryption
+        data (_type_): the data to decrypt
+    
+    """
+    
+    # creating our cipher object, used to generate encryption entity
+    cipher = AES.new(encryption_key,AES.MODE_CBC)    # encryption mode type CBC: BLOCK CIPHER 
+
+    encrypted_data = cipher.encrypt(pad(data,AES.block_size))
+    
+    return cipher, encrypted_data
+
+
+
 # writing salt
 def write_enc_data(cipher: object, path: str ,file_name: str , data: bytes ):
     """
@@ -65,6 +84,27 @@ def write_enc_data(cipher: object, path: str ,file_name: str , data: bytes ):
         file.close
     
     return
+
+def read_enc_data(key: bytes, path: str):
+    """
+    Decrypts and reads the data from the file
+
+    Args:
+        key (bytes): encryption key
+        path(bytes | str): path of relative data source
+    Returns:
+        str: authentication details 
+    """
+    with open(path,'rb') as file:
+        iv=file.read(16)    # reading first 16 bytes of file
+        data = file.read()
+        file.close()
+    
+    cipher = AES.new(key,AES.MODE_CBC,iv=iv)
+    auth_data = unpad(cipher.decrypt(data),AES.block_size) # using standard block size
+    
+    return auth_data
+
 
 # recon recovery 
 def save_recon(path: str, recovery_data: dict):
@@ -100,4 +140,4 @@ def read_recon(path: str):
         file.close()
         
     return recovery_data
-     
+
