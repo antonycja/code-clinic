@@ -70,7 +70,7 @@ def read_json(json_file: str):
    
    
 # pickle 
-def capture_pickle(path: str,file_name: str, data  : dict):
+def capture_pickle(path: str,file_name: str, ext: str ,data  : dict):
     """
     Saves the recovery file. Recovery file only used in emergencies.
     Regenerates encryption token
@@ -80,7 +80,7 @@ def capture_pickle(path: str,file_name: str, data  : dict):
         recovery_data (dict): its a secret
     """
     file_path = save_path(path,file_name)
-    with open(f'{file_path}.bin','wb') as file:
+    with open(f'{file_path}.{ext}','wb') as file:
         pickle.dump(data,file, protocol=pickle.HIGHEST_PROTOCOL)
         file.close()
         
