@@ -4,6 +4,11 @@ configuration module
 
 import re
 
+__all__ = [
+    'generate_logIn_cred'
+]
+
+
 # user_data operations    
 def generate_logIn_cred():
     """
