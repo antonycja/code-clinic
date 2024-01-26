@@ -7,6 +7,15 @@ import json
 import pickle
 from os.path import join as save_path
 
+__all__ = [
+    'convert_data',
+    'write_to_json',
+    'save_to_json',
+    'read_from_json',
+    'capture_pickle',
+    'load_pickle'
+]
+
 # json file handling
 def convert_data(data: object | dict | list):
     """
@@ -19,7 +28,7 @@ def convert_data(data: object | dict | list):
     json_strings = json.dumps(data, indent=2) # specifying indent depth
     return json_strings
 
-def write_json(path: str, file_name:str ,data: str):
+def write_to_json(path: str, file_name:str ,data: str):
     """
     Saves the formatted data into a .json file
 
@@ -52,7 +61,7 @@ def save_to_json(path: str, file_name: str,data_ref: object | dict | list):
     return
 
 
-def read_json(json_file: str):
+def read_from_json(json_file: str):
     """
     The path of the json file
 
@@ -85,9 +94,24 @@ def capture_pickle(path: str,file_name: str, ext: str ,data  : dict):
         file.close()
         
     return
+def capture_pickle(path: str,file_name: str, ext: str ,data):
+    """
+    Saves the recovery file. Recovery file only used in emergencies.
+    Regenerates encryption token
+
+    Args:
+        path: path to save files to
+        recovery_data (dict): its a secret
+    """
+    file_path = save_path(path,file_name)
+    with open(f'{file_path}.{ext}','wb') as file:
+        pickle.dump(data,file, protocol=pickle.HIGHEST_PROTOCOL)
+        file.close()
+        
+    return
 
 
-def load_pickle(path: str):
+def load_pickle(path: str,file_name: str):
     """
     Reads the recon file and returns a dictionary containing recovery data
     incase user lost encryption key
@@ -97,9 +121,9 @@ def load_pickle(path: str):
     Returns:
         dict : contains recovery data
     """
-    
-    with open(f'{path}','rb') as file:
-        recovery_data = pickle.load(file)
+    path_name = save_path(path,file_name)
+    with open(f'{path_name}','rb') as file:
+        data = pickle.load(file)
         file.close()
         
-    return recovery_data
+    return data
