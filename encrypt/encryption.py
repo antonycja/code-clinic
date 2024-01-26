@@ -69,6 +69,9 @@ def encrypt_data(encryption_key: bytes, data):
     Args:
         encryption_key (bytes): the key for the encryption
         data (_type_): the data to decrypt
+    Returns:
+        object: cipher object, used for encryption
+        bytes: encrypted data
     
     """
     
@@ -80,7 +83,7 @@ def encrypt_data(encryption_key: bytes, data):
     return cipher, encrypted_data
 
 
-def write_enc_data(cipher: object, path: str ,file_name: str , data: bytes ):
+def write_enc_data(cipher: object, path: str ,file_name: str ,ext: str, data: bytes ):
     """
     Saves the encrypted data onto a bin
 
@@ -88,11 +91,12 @@ def write_enc_data(cipher: object, path: str ,file_name: str , data: bytes ):
         cipher (object): the encryption object
         path (str): the directory you want to save the file to
         file_name (str): the name of the file
+        ext (str): the file extension
         data (bytes): the encrypted data
     """
     file_path = save_path(path,file_name)
     
-    with open(f'{file_path}.bin','wb') as file:
+    with open(f'{file_path}.{ext}','wb') as file:
         file.write(cipher.iv)   # iv: buffer for the cipher
         file.write(data)
         file.close
