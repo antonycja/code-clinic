@@ -3,7 +3,6 @@ The encryption module is in charge of creating, writing and reading the encrypte
 data
 """
 
-__author__ = 'Johnny Ilanga'
 
 from Cryptodome.Random import get_random_bytes
 from Crypto.Protocol.KDF import PBKDF2
@@ -13,6 +12,21 @@ from string import ascii_letters
 from random import randint, choice
 from os.path import join as save_path
 import re
+
+__author__ = 'Johnny Ilanga'
+__all__ = [
+    'generate_key',
+    'generating_salt_and_pepper',
+    'encrypting_data',
+    'write_enc_data', 
+    'read_enc_data',
+    'save_key',
+    'read_key',
+    'return_data',
+    'convert_bytes',
+    'convert_str'
+    ]
+
 
 def generating_salt_and_pepper():
     """
@@ -163,7 +177,7 @@ def return_data(data: str):
         
     return credentials
 
-def convert_bytes(data: bytes):
+def convert_to_bytes(data: bytes):
     """
     Converts a given byte sequence to strings
 
@@ -176,7 +190,7 @@ def convert_bytes(data: bytes):
     return str(data,"utf-8")
 
 
-def convert_str(data:  str):
+def convert_to_str(data:  str):
     """
     Converts a given string sequence to byte
 
@@ -186,4 +200,4 @@ def convert_str(data:  str):
         byte : converted str
     """
     
-    return bytes(data,"utf-8")
+    return bytes(str(data),"utf-8")
