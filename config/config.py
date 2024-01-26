@@ -5,7 +5,7 @@ configuration module
 import re
 
 # user_data operations    
-def generating_logIn_cred():
+def generate_logIn_cred():
     """
     Generates the user login credentials 
     Returns:
