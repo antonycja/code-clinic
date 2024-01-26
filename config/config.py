@@ -28,7 +28,7 @@ def generate_logIn_cred():
             data["username"] = username
             break
         else:
-            print('Incorrect username: (johndoe023).\n')
+            print('Incorrect username format: (johndoe023).\n')
             
 
     while True:
@@ -38,7 +38,7 @@ def generate_logIn_cred():
             data["email"] = useremail
             break
         else:
-            print('Incorrect email.\n')
+            print('Incorrect email format: (johndoe023@student.wethinkcode.co.za)\n')
             
     
     while True:
