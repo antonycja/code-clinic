@@ -30,6 +30,6 @@ def create_dir(dir_path: str, dir_name: str):
     else:
         os.makedirs(dir)
     
-    return
+    return dir
 
 
