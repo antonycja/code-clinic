@@ -5,3 +5,4 @@ sand*
 *.json
 *.bin
 *.pick*
+__pycache__
