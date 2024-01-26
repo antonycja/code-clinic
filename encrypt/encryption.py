@@ -17,7 +17,7 @@ __author__ = 'Johnny Ilanga'
 __all__ = [
     'generate_key',
     'generating_salt_and_pepper',
-    'encrypting_data',
+    'encrypt_data',
     'write_enc_data', 
     'read_enc_data',
     'save_key',
@@ -62,7 +62,7 @@ def generate_key(salt: bytes, password: str):
     return PBKDF2(password,salt,dkLen=32)
 
 
-def encrypting_data(encryption_key: bytes, data):
+def encrypt_data(encryption_key: bytes, data):
     """
     Encrypting given data
 
