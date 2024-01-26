@@ -56,7 +56,7 @@ def save_to_json(path: str, file_name: str,data_ref: object | dict | list):
         data (object | dict | list): data / data source 
     """
     data = convert_data(data_ref)
-    write_json(path,file_name,data)
+    write_to_json(path,file_name,data)
     
     return
 
