@@ -142,7 +142,7 @@ def save_key(path: str,file_name: str, ext: str,key: bytes):
         file.close()
 
 
-def read_key(path: str):
+def read_key(path: str,file_name:  str):
     """
     reads the decryption key
     
@@ -150,8 +150,8 @@ def read_key(path: str):
         path (str): location of the key
         key (bytes): the key
     """
-    
-    with open(f'{path}.bin','wb') as file:
+    path = save_path(path,file_name)
+    with open(f'{path}','rb') as file:
         key = file.read()
         file.close()
 
