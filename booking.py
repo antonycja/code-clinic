@@ -16,7 +16,7 @@ def book_slot(creds, date_time):
     try:
         service = build('calendar', 'v3', credentials=creds)
         
-        display_events(service, CLINIC_CALENDAR_ID)
+        #display_events(service, CLINIC_CALENDAR_ID)
 
         #create_event(service)
 
@@ -24,10 +24,9 @@ def book_slot(creds, date_time):
 
         os.remove('token.json')
     except HttpError as error:
-        print("An error occured:", error)
-    
+        print("An error occured:", error) 
 
-     
+
 def update_event(service, start_date_time):
     now = dt.datetime.utcnow().isoformat() + "Z"
 
@@ -84,6 +83,7 @@ def create_event(service):
     event = service.events().insert(calendarId=CLINIC_CALENDAR_ID, body=event).execute()
 
     print(f'event created: {event.get("htmlLink")}')
+
 
 def authenticate():
     creds = None
