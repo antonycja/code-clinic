@@ -36,6 +36,7 @@ def update_event(service, start_date_time):
     for event in events:
         if event['start']['dateTime'] == start_date_time:
             event['attendees'].append({'email': USER_EMAIL})
+            event["summary"] = "Code Clinic Meeting"
             event_id = event['id']
             updated_event = service.events().update(calendarId= CLINIC_CALENDAR_ID, eventId=event_id, body=event).execute()
             return True
@@ -60,7 +61,7 @@ def display_events(service, calendar_id):
 
 def create_event(service):
     event = {
-        "summary" : "Code Clinic Meeting",
+        "summary" : "Volunteer slot",
         'location': "cpt",
         'description': 'Some more details on this awesome event.',
         'colorId' : 6,
