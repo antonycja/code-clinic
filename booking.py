@@ -12,7 +12,7 @@ SCOPES = ["https://www.googleapis.com/auth/calendar"]
 CLINIC_CALENDAR_ID = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 YEAR = 2024
 USER_EMAIL = 'btshulisi023@student.wethinkcode.co.za'
-def book_slot(creds, date_time):
+def book_slot(creds, booking_info : dict):
     try:
         service = build('calendar', 'v3', credentials=creds)
         
@@ -20,27 +20,43 @@ def book_slot(creds, date_time):
 
         #create_event(service)
 
-        update_event(service, date_time)
+        update_event(service, booking_info)
 
         os.remove('token.json')
     except HttpError as error:
         print("An error occured:", error) 
 
 
-def update_event(service, start_date_time):
+def update_event(service, booking_info : dict) -> bool:
     now = dt.datetime.utcnow().isoformat() + "Z"
 
     events_result = service.events().list(calendarId=CLINIC_CALENDAR_ID, timeMin=now, maxResults=10, singleEvents=True, orderBy='startTime').execute()
 
     events = events_result.get('items', [])
+
     for event in events:
-        if event['start']['dateTime'] == start_date_time:
+        if event['start']['dateTime'] == booking_info['dateTime']:
+            number_of_attendees = len(event['attendees'])
+            if number_of_attendees == 2:
+                print("Slot is already booked. TRY ANOTHER.")
+                return False
+            
             event['attendees'].append({'email': USER_EMAIL})
             event["summary"] = "Code Clinic Meeting"
+            event['description'] = booking_info['description']
+
             event_id = event['id']
+
             updated_event = service.events().update(calendarId= CLINIC_CALENDAR_ID, eventId=event_id, body=event).execute()
+
+            print("Booking Successful!")
+
             return True
-            
+    
+
+    print("There is no volunteer for the slot you selected. TRY ANOTHER.")
+    return False
+
 
 
 def display_events(service, calendar_id):
@@ -61,16 +77,16 @@ def display_events(service, calendar_id):
 
 def create_event(service):
     event = {
-        "summary" : "Volunteer slot",
-        'location': "cpt",
+        "summary" : "VOLUNTEER SLOT",
+        'location': "CPT",
         'description': 'Some more details on this awesome event.',
         'colorId' : 6,
         'start': {
-            'dateTime': '2024-01-29T17:00:00+02:00',
+            'dateTime': '2024-01-30T17:00:00+02:00',
             'timeZone': 'Africa/Johannesburg',
         },
         'end': {
-            'dateTime': '2024-01-29T17:30:00+02:00',
+            'dateTime': '2024-01-30T17:30:00+02:00',
             'timeZone': 'Africa/Johannesburg'
         },
         'recurrence': [
@@ -106,9 +122,66 @@ def authenticate():
     return creds
 
 
+def cancel_booking(creds, booking_info):
+    try:
+
+        service = build('calendar', 'v3', credentials=creds)
+
+        remove_attendee(service, booking_info)
+
+        print("Booking Cancelled.")
+
+    except HttpError as err:
+        message = f"An error occured: {err}"
+        print(message)
+
+
+def remove_attendee(service, booking_info : dict):
+    date_time = booking_info['dateTime']
+
+    now = dt.datetime.utcnow().isoformat() + "Z"
+
+    events_result = service.events().list(calendarId=CLINIC_CALENDAR_ID, timeMin=now, maxResults=10, singleEvents=True, orderBy='startTime').execute()
+
+    events = events_result.get("items", [])
+
+    for event in events:
+        if event['start']['dateTime'] == booking_info['dateTime'] and booked_event(event):
+            event['attendees'].pop()
+            event['summary'] = "VOLUNTEER SLOT"
+            event['description'] = ""
+
+
+            event_id = event['id']
+
+            updated_event = service.events().update(calendarId=CLINIC_CALENDAR_ID, eventId=event_id, body=event).execute()
+
+
+
+def booked_event(event) -> bool:
+    for attendee in event['attendees']:
+        if attendee['email'] == USER_EMAIL:
+            return True
+    
+    return False
+
+
+
+
+
 if __name__== '__main__':
     creds = authenticate()
-    date_time = '2024-01-29T17:00:00+02:00'
-    book_slot(creds, date_time)
+
+    date_time = '2024-01-30T17:00:00+02:00'
+    description = 'I need help with 2D arrays'
+
+    booking_info = dict()
+    booking_info['description'] = description
+    booking_info['dateTime'] = date_time
+
+    #book_slot(creds, booking_info)
+
+    
+    cancel_booking(creds, booking_info)
 
 
