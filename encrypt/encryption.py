@@ -181,7 +181,7 @@ def return_data(data: str):
         
     return credentials
 
-def convert_to_bytes(data: bytes):
+def convert_bytes_to_str(data: bytes):
     """
     Converts a given byte sequence to strings
 
@@ -194,7 +194,7 @@ def convert_to_bytes(data: bytes):
     return str(data,"utf-8")
 
 
-def convert_to_str(data:  str):
+def convert_str_to_bytes(data:  str):
     """
     Converts a given string sequence to byte
 
