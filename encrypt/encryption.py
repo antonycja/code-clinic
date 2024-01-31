@@ -160,7 +160,7 @@ def read_key(path: str,file_name:  str):
 
 # helpers
 
-def data_purification(data: str):
+def data_ablution(data: str):
     """
     Returns a dictionary of the users log in credentials
 
