@@ -20,9 +20,9 @@ def book_slot(creds, booking_info : dict):
 
         #create_event(service)
 
-        update_event(service, booking_info)
+        return update_event(service, booking_info)
 
-        os.remove('token.json')
+
     except HttpError as error:
         print("An error occured:", error) 
 
@@ -49,13 +49,13 @@ def update_event(service, booking_info : dict) -> bool:
 
             updated_event = service.events().update(calendarId= CLINIC_CALENDAR_ID, eventId=event_id, body=event).execute()
 
-            print("Booking Successful!")
+            message = "Booking Successful!"
 
-            return True
+            return True, message
     
 
-    print("There is no volunteer for the slot you selected. TRY ANOTHER.")
-    return False
+    message = "There is no volunteer for the slot you selected. TRY ANOTHER."
+    return False, message
 
 
 
@@ -127,9 +127,8 @@ def cancel_booking(creds, booking_info):
 
         service = build('calendar', 'v3', credentials=creds)
 
-        remove_attendee(service, booking_info)
+        return remove_attendee(service, booking_info)
 
-        print("Booking Cancelled.")
 
     except HttpError as err:
         message = f"An error occured: {err}"
@@ -151,10 +150,12 @@ def remove_attendee(service, booking_info : dict):
             event['summary'] = "VOLUNTEER SLOT"
             event['description'] = ""
 
-
             event_id = event['id']
 
             updated_event = service.events().update(calendarId=CLINIC_CALENDAR_ID, eventId=event_id, body=event).execute()
+
+            message = "Booking Cancelled."
+            return True, message
 
 
 
@@ -184,4 +185,6 @@ if __name__== '__main__':
     
     cancel_booking(creds, booking_info)
 
+
+    os.remove('token.json')
 
