@@ -29,30 +29,30 @@ def get_events(service, calender, days):
     return events
 
 
-def get_data_from_calendar_api(service, calendar=1, max_results=7):
-    calendars = {"personal": "primary",
+def get_data_from_calendar_api(service, calendar=1, days=7):
+    calendar_dict = {"personal": "primary",
                  "clinic": "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"}
     cal_type_list = ["PERSONAL calendar", "CODE CLINIC calendar"]
     if calendar == 1:
-        calendars = [calendars["personal"]]
+        calendars = [calendar_dict["personal"]]
         cal_type = cal_type_list[0]
     elif calendar == 2:
-        calendars = [calendars["clinic"]]
+        calendars = [calendar_dict["clinic"]]
         cal_type = cal_type_list[1]
     else:
-        calendars = [calendar for calendar in calendars.values()]
-        cal_type = cal_type_list
+        calendars = [calendar for calendar in calendar_dict.values()]
+        cal_type = "ALL calendars"
         
 
     # Calling the Calendar API
     print(
-        f"Getting the upcoming {max_results} events for {'ALL calendars' if 1 > calendar > 2 else cal_type}...\n")
+        f"Getting the upcoming {days} events for {cal_type}...\n")
     
     event_list = []
     # Get each calendar from the list of calendars
-    for index, calendar_data in enumerate(calendars):
-        events = get_events(service, calendar_data, max_results)
-        event_list.append(f"{events}_{index}")
+    for calendar_id in calendars:
+        events = get_events(service, calendar_id, days)
+        event_list.append(events)
 
 
     for index, events in enumerate(event_list):
