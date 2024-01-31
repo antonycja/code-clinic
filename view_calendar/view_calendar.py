@@ -63,10 +63,6 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
             
         # Prints the start and name of the next max_events events
         for event in events:
-            print("Start")
-            print("Events obj:", event)
-            print("End")
-            
             start = event["start"].get("dateTime", event["start"].get("date"))
             start = start.replace("T", " at ")
             start = start[:19]
