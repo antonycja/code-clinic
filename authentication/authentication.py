@@ -36,7 +36,6 @@ def authenticate(cred_path: str, token_path: str):
         # and assigning them permissions based off the scope         
         creds = Credentials.from_authorized_user_file(token_path,SCOPES)
 
-        # creds.account
     # Invalid credentials 
     if not creds or not creds.valid:
         
