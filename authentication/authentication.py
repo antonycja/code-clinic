@@ -77,5 +77,3 @@ def authenticate(cred_path: str, token_path: str):
     
        
     return creds
-        
-
