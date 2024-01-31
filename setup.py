@@ -8,6 +8,7 @@ from file_handling import files
 from helpers import writer, animation
 from authentication import authentication
 from os.path import join as save_path
+from os.path import exists
 
 __author__ = 'Johnny Ilanga'
 __version_ = '1.0'
@@ -43,10 +44,29 @@ def encrypt_it(user_info: dict, dirs: dict):
     
     key = encryption.generate_key(salt,pepper)
     encryption.save_key(dirs['key'],'.key','elite',key)
-    writer.capture_pickle(dirs['recon'],'SOS','.recon',recon)    
+    writer.capture_pickle(dirs['recon'],'.SOS','recon',recon)    
     data = encryption.convert_str_to_bytes(user_info)
     cipher, enc_data = encryption.encrypt_data(key,data)
     encryption.write_enc_data(cipher,dirs["auth"],'.config','elite',enc_data)
+
+    return
+
+def encrypt_creds(cred_ref: dict, dirs: dict):
+    """
+    Main Encryption method for encrypting and writing the credentials in user dir
+    
+    Args:
+        cred_ref (dict): credentials source
+    """   
+    
+    salt, pepper, recon = encryption.generating_salt_and_pepper()
+    
+    key = encryption.generate_key(salt,pepper)
+    encryption.save_key(dirs['key'],'.key','cred',key)
+    writer.capture_pickle(dirs['recon'],'.SOS','cred',recon)    
+    data = encryption.convert_str_to_bytes(cred_ref)
+    cipher, enc_data = encryption.encrypt_data(key,data)
+    encryption.write_enc_data(cipher,dirs["auth"],'.credentials','cred',enc_data)
 
     return
 
@@ -69,3 +89,27 @@ def decrypt_it(dirs: dict):
     user_info = encryption.data_ablution(clean_up)
 
     return user_info
+
+def setup():
+    folders = secure_folder()
+    user_data = config.generate_logIn_cred()
+    encrypt_it(user_data,folders)
+    
+    return user_data, folders
+    
+
+def main():
+    """
+    Main function
+    """
+    if exists(save_path(files.get_home(),'.elite')):
+        print('no code')
+    else:
+       setup()
+       authentication.authenticate()
+       
+    
+    
+
+if __name__ == '__main__':
+    main()
