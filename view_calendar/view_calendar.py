@@ -6,14 +6,16 @@ from googleapiclient.errors import HttpError
 from auth.auth import authenticate_user
 
 
-def get_events(service, calender, max_results):
+def get_events(service, calender, days):
     now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
+    end = (datetime.datetime.utcnow() + datetime.timedelta(days=days)).isoformat() + "Z"  # 'Date in <days> amount of days
     events_result = (
         service.events()
         .list(
             calendarId=calender,
             timeMin=now,
-            maxResults=max_results,
+            timeMax=end,
+            maxResults=100,
             singleEvents=True,
             orderBy="startTime",
         )
