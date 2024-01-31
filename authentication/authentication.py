@@ -29,7 +29,6 @@ __all__ = [
     'authenticate'
 ]
 
-
 def authenticate(cred_path: str, token_path: str):
     """
     Validates token and authenticates the user if credentials are valid.
