@@ -30,40 +30,46 @@ def get_events(service, calender, max_results):
 def get_data_from_calendar_api(service, calendar=1, max_results=7):
     calendars = {"personal": "primary",
                  "clinic": "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"}
-    
+    cal_type_list = ["PERSONAL calendar", "CODE CLINIC calendar"]
     if calendar == 1:
-        calendars = calendars["personal"]
-        cal_type = "PERSONAL calendar"
+        calendars = [calendars["personal"]]
+        cal_type = cal_type_list[0]
     elif calendar == 2:
-        calendars = calendars["clinic"]
-        cal_type = "CODE CLINIC calendar"
+        calendars = [calendars["clinic"]]
+        cal_type = cal_type_list[1]
     else:
-        calendars = [calendar for calendar in calendars.values]
-        cal_type = "ALL calendars"
+        calendars = [calendar for calendar in calendars.values()]
+        cal_type = cal_type_list
         
 
     # Calling the Calendar API
     print(
-        f"Getting the upcoming {max_results} events for {cal_type}.")
+        f"Getting the upcoming {max_results} events for {'ALL calendars' if 1 > calendar > 2 else cal_type}...\n")
     
     event_list = []
     # Get each calendar from the list of calendars
-    for index, calendar in enumerate(calendars):
-        events = get_events(service, calendar, max_results)
+    for index, calendar_data in enumerate(calendars):
+        events = get_events(service, calendar_data, max_results)
         event_list.append(f"{events}_{index}")
 
 
-    for events in event_list:
-        # Prints the start and name of the next max_events events
-        if calendar != 1 or calendar != 2:
-            print(cal_type.upper())
+    for index, events in enumerate(event_list):
+        if calendar != 1 and calendar != 2:
+            print(f"{cal_type_list[index].upper()}: ")
         else:
-            print()
+            print(f"{cal_type.upper()}: ")
+            
+        # Prints the start and name of the next max_events events
         for event in events:
+            print("Start")
+            print("Events obj:", event)
+            print("End")
+            
             start = event["start"].get("dateTime", event["start"].get("date"))
             start = start.replace("T", " at ")
             start = start[:19]
             print(start, "->", event["summary"])
+        print()
 
 
 def get_calendar_results(calendar, max_results):
