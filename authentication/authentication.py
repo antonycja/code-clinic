@@ -19,14 +19,28 @@ import googleapiclient._auth as auth
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-import googleapiclient.errors as ERR
+
 
 # permissions being granted to user. Consider it as rules of usage 
 SCOPES =  ['https://www.googleapis.com/auth/calendar']  # (Full Access)
 
+__all__ = [
+    'authenticate'
+]
 
 def authenticate(cred_path: str, token_path: str):
+    """
+    Validates token and authenticates the user if credentials are valid.
+    Ig credentials are not valid, a new token is generated
+
+    Args:
+        cred_path (str): the dir path of cred | cred of user
+        token (str): the dir path of token | token of user
+         
+
+    Returns:
+        _type_: _description_
+    """
     
     creds = None
     
