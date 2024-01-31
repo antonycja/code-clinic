@@ -32,28 +32,38 @@ def get_data_from_calendar_api(service, calendar=1, max_results=7):
                  "clinic": "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"}
     
     if calendar == 1:
-        calendar = calendars["personal"]
+        calendars = calendars["personal"]
         cal_type = "PERSONAL calendar"
     elif calendar == 2:
-        calendar = calendars["clinic"]
+        calendars = calendars["clinic"]
         cal_type = "CODE CLINIC calendar"
     else:
-        calendar = [calendar for calendar in calendars.values]
+        calendars = [calendar for calendar in calendars.values]
         cal_type = "ALL calendars"
         
 
     # Calling the Calendar API
     print(
         f"Getting the upcoming {max_results} events for {cal_type}.")
+    
+    event_list = []
+    # Get each calendar from the list of calendars
+    for index, calendar in enumerate(calendars):
+        events = get_events(service, calendar, max_results)
+        event_list.append(f"{events}_{index}")
 
-    events = get_events(service, calendar, max_results)
 
-    # Prints the start and name of the next max_events events
-    for event in events:
-        start = event["start"].get("dateTime", event["start"].get("date"))
-        start = start.replace("T", " at ")
-        start = start[:19]
-        print(start, "->", event["summary"])
+    for events in event_list:
+        # Prints the start and name of the next max_events events
+        if calendar != 1 or calendar != 2:
+            print(cal_type.upper())
+        else:
+            print()
+        for event in events:
+            start = event["start"].get("dateTime", event["start"].get("date"))
+            start = start.replace("T", " at ")
+            start = start[:19]
+            print(start, "->", event["summary"])
 
 
 def get_calendar_results(calendar, max_results):
