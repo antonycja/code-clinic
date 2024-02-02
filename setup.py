@@ -23,10 +23,17 @@ def secure_folder():
     """
     
     user_dir = files.get_home()
-    main_dir = files.create_dir(user_dir,'.elite') # main folder
-    auth_dir = files.create_dir(main_dir,'.access')  # user login details, authentication key and token
-    recon_dir = files.create_dir(main_dir,'.recon') # key recovery data
-    key_dir = files.create_dir(main_dir,'.elite')   # key
+    if not exists(save_path(user_dir,'.elite')):
+        main_dir = files.create_dir(user_dir,'.elite') # main folder
+        
+    if not exists(save_path(main_dir,'.access')):
+        auth_dir = files.create_dir(main_dir,'.access')  # user login details, authentication key and token
+    
+    if not exists(save_path(main_dir,'.recon')):
+        recon_dir = files.create_dir(main_dir,'.recon') # key recovery data
+
+    if not exists(save_path(main_dir,'.elite')):
+        key_dir = files.create_dir(main_dir,'.elite')   # key
     
     return {"main":main_dir, "auth":auth_dir, "recon": recon_dir, "key":key_dir}
 
@@ -84,8 +91,10 @@ def decrypt_it(dirs: dict,key_name: str, key_ext: str, file_name: str ,file_ext:
 
 def setup():
     folders = secure_folder()
+    cs = authentication.get_credentials()
     user_data = config.generate_logIn_cred()
-    encrypt_it(user_data,folders)
+    encrypt_it(user_data,folders,'.keys','.elite','.SOS','.recon','.config','.elite')
+    encrypt_it(cs,folders,'.keys','.cred','.creds','.recon','.credentials','.elite')
     
     return user_data, folders
     
