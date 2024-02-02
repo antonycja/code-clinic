@@ -8,10 +8,13 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 CLINIC_CALENDAR_ID = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 YEAR = 2024
 USER_EMAIL = 'btshulisi023@student.wethinkcode.co.za'
+
+
 def book_slot(creds, booking_info : dict):
     try:
         service = build('calendar', 'v3', credentials=creds)
@@ -58,7 +61,6 @@ def update_event(service, booking_info : dict) -> bool:
     return False, message
 
 
-
 def display_events(service, calendar_id):
 
         now = dt.datetime.utcnow().isoformat() + "Z"
@@ -79,14 +81,14 @@ def create_event(service):
     event = {
         "summary" : "VOLUNTEER SLOT",
         'location': "CPT",
-        'description': 'Some more details on this awesome event.',
+        'description': 'You can book this slot if  you want to volunteer.',
         'colorId' : 6,
         'start': {
-            'dateTime': '2024-01-30T17:00:00+02:00',
+            'dateTime': '2024-02-02T17:00:00+02:00',
             'timeZone': 'Africa/Johannesburg',
         },
         'end': {
-            'dateTime': '2024-01-30T17:30:00+02:00',
+            'dateTime': '2024-02-02T17:30:00+02:00',
             'timeZone': 'Africa/Johannesburg'
         },
         'recurrence': [
@@ -148,7 +150,7 @@ def remove_attendee(service, booking_info : dict):
         if event['start']['dateTime'] == booking_info['dateTime'] and booked_event(event):
             event['attendees'].pop()
             event['summary'] = "VOLUNTEER SLOT"
-            event['description'] = ""
+            event['description'] = "You can book this slot if  you want to volunteer."
 
             event_id = event['id']
 
@@ -157,6 +159,8 @@ def remove_attendee(service, booking_info : dict):
             message = "Booking Cancelled."
             return True, message
 
+    message = "No booking to cancel."
+    return False, message
 
 
 def booked_event(event) -> bool:
@@ -167,24 +171,22 @@ def booked_event(event) -> bool:
     return False
 
 
-
-
-
 if __name__== '__main__':
     creds = authenticate()
 
-    date_time = '2024-01-30T17:00:00+02:00'
+    date_time = '2024-02-02T16:00:00+02:00'
     description = 'I need help with 2D arrays'
 
     booking_info = dict()
     booking_info['description'] = description
     booking_info['dateTime'] = date_time
 
-    #book_slot(creds, booking_info)
+    #message = book_slot(creds, booking_info)
+
+    message = cancel_booking(creds, booking_info)
 
     
-    cancel_booking(creds, booking_info)
 
-
+    print(message)
     os.remove('token.json')
 
