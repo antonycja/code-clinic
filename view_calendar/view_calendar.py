@@ -46,7 +46,7 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
 
     # Calling the Calendar API
     print(
-        f"Getting the upcoming {days} events for {cal_type}...\n")
+        f"Getting the upcoming event for the next {days} for {cal_type}...\n")
     
     event_list = []
     # Get each calendar from the list of calendars
