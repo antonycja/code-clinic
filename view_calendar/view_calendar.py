@@ -24,8 +24,7 @@ def get_events(service, calender, days):
     events = events_result.get("items", [])
 
     if not events:
-        print("No upcoming events found.")
-        return
+        return "No upcoming events found."
     return events
 
 
