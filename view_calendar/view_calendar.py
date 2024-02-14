@@ -61,17 +61,24 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
             print(f"{cal_type.upper()}: ")
             
         # Prints the start and name of the next max_events events
-        for event in events:
-            start = event["start"].get("dateTime", event["start"].get("date"))
-            start = start.replace("T", " at ")
-            start = start[:19]
-            print(start, "->", event["summary"])
-        print()
+        if events:
+            if isinstance(events, str):
+                print(events)
+            else:
+                for event in events:
+                    start = event["start"].get("dateTime", event["start"].get("date"))
+                    start = start.replace("T", " at ")
+                    start = start[:19]
+                    print(start, "->", event["summary"])
+            print()
 
 
-def get_calendar_results(calendar, max_results):
-    """Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar.
+def get_calendar_results(calendar:int, max_results = 7):
+    """Print the calendar data for the selected calendar.
+
+    Args:
+        calendar (int): the calendar number to be viewed.
+        max_results (int)-> (optional): the number of days to view starting from today
     """
     user_credentials = authenticate_user()
 
