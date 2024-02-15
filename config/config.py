@@ -3,6 +3,7 @@ configuration module
 """
 
 import re
+from getpass import getpass
 
 __all__ = [
     'generate_logIn_cred'
@@ -43,8 +44,8 @@ def generate_logIn_cred():
     
     while True:
 
-        password = input('Please provide a passphrase: ')
-        confirm_password = input('Enter same passphrase: ')
+        password = getpass('Please provide a passphrase: ')
+        confirm_password = getpass('Enter same passphrase: ')
         
         if len(password) == 0 and len(confirm_password) == 0:
             data["password"] = None
