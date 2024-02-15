@@ -84,7 +84,7 @@ def authenticate(cred_path: str, token_path: str):
             flow = InstalledAppFlow.from_client_secrets_file(cred_path, SCOPES)
 
             # generating credentials and token
-            creds = flow.run_local_server(port=0)
+            creds = flow.run_local_server(port=0,authorization_prompt_message= "Launching your default browser",success_message='Authentication complete. You may close this window.')
 
         # saving generated token:
 
