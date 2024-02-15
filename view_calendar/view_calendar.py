@@ -43,39 +43,69 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
     else:
         calendars = [calendar for calendar in calendar_dict.values()]
         cal_type = "ALL calendars"
-        
 
     # Calling the Calendar API
     print(
         f"Getting the upcoming event for the next {days} for {cal_type}...\n")
-    
+
     event_list = []
     # Get each calendar from the list of calendars
     for calendar_id in calendars:
         events = get_events(service, calendar_id, days)
         event_list.append(events)
 
-
     for index, events in enumerate(event_list):
         if calendar != 1 and calendar != 2:
             print(f"{cal_type_list[index].upper()}: ")
         else:
             print(f"{cal_type.upper()}: ")
-            
+
         # Prints the start and name of the next max_events events
         if events:
+            # print(events[0])
             if isinstance(events, str):
                 print(events)
             else:
+                event_info = create_event_info(events)
+                write_to_csv_file(event_info)
                 for event in events:
-                    start = event["start"].get("dateTime", event["start"].get("date"))
+                    date_time = event["start"].get("dateTime").split("T")
+                    date = date_time[0]
+                    time = date_time[1][:5]
+                    print(time)
+                    start = event["start"].get(
+                        "dateTime", event["start"].get("date"))
                     start = start.replace("T", " at ")
                     start = start[:19]
                     print(start, "->", event["summary"])
             print()
 
 
-def get_calendar_results(calendar:int, max_results = 7):
+def create_event_info(events: list):
+    event_info_list = []
+    for event in events:
+        date_time = event["start"].get("dateTime").split("T")
+        date = date_time[0]
+        start_time = date_time[1][:5]
+        end_time = event["end"].get("dateTime").split("T")[1][:5]
+        summary = event["summary"]
+        location = event["location"]
+        organizer = event["organizer"].get("email")
+        attendees = []
+
+        if len(event["attendees"]) > 1:
+            for index, attendee in enumerate(event["attendees"]):
+                if index == 0:
+                    continue
+                attendees.append(attendee["email"].split("@")[0])
+        else:
+            attendees.append(event["organizer"].split("@")[0])
+
+        event_info_list.append({"date": date, "start time": start_time, "end time": end_time,
+                               "summary": summary, "location": location, "organizer": organizer, "attendees": attendees})
+    return event_info_list
+
+def get_calendar_results(calendar: int, max_results=7):
     """Print the calendar data for the selected calendar.
 
     Args:
