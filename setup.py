@@ -137,7 +137,8 @@ def pre_load():
 
         if success == False:
             print('One of more important file is missing.')
-            print('Run: code_clinic --reset')
+            exit('Run: code-clinic --reset')
+            
 
 
         return success, folders
@@ -167,9 +168,6 @@ def generate_creds(folders):
     #creating a tmp file with the decrypted data
     writer.write_to_json('/tmp','.creds',cs)
     
-    
-    
-    # print('written')
 
     if exists(save_path(folders['auth'],'.token.elite')):
         token = decrypt_it(folders,'keys','tk','token','elite')
@@ -182,7 +180,7 @@ def generate_creds(folders):
         with open('/tmp/token.json','r') as file:
             data = file.read()
         encrypt_it(data,folders,'keys','tk','token','recon','token','elite')
-        # token = encrypt_it(folders,'keys','tk','token','elite')
+
 
     return creds
 
