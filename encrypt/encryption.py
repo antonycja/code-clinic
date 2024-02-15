@@ -172,7 +172,7 @@ def data_ablution(data: str):
     # cleaning up the str, so we can store in a dictionary
     
     # this section is for user log in details
-    if not 'installed' in data:
+    if not 'installed' in data and not 'token' in data:
         pattern = re.compile("{|}|'|\s")
 
         filtered_data = re.sub(pattern,"",data)
