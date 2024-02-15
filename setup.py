@@ -118,29 +118,27 @@ def main():
 
         # checking if all necessary files are in place
         auth_dir = ['.config.elite','.credentials.elite']
+
         for file in auth_dir:
             if not exists(save_path(folders['auth'],file)):
                 print('a')
                 success = False
                 break
-        
+
         key_dir = ['.keys.cred','.keys.elite']
         for file in key_dir:
             if not exists(save_path(folders['key'],file)):
                 print('b')
                 success = False
                 break
-        
         recon_dir = ['.creds.recon','.SOS.recon']
         for file in recon_dir:
             if not exists(save_path(folders['recon'],file)):
-                print('c')
                 success = False
                 break
-        
         if success == False:
             print('One of more important file is missing.')
-            print()
+
 
         # creds = decrypt_it()
         # authentication.authenticate()
