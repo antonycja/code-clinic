@@ -23,7 +23,7 @@ def generate_logIn_cred():
     data = dict()
 
     while True:
-        username = input('Enter your username: ').lower().strip()
+        username = input('Please provide your username: ').lower().strip()
         if re.match('^[a-zA-z]+[0-9]{3}$',username):
             data["username"] = username
             break
@@ -33,7 +33,7 @@ def generate_logIn_cred():
 
     while True:
 
-        useremail = input('Enter your email: ').lower().strip()
+        useremail = input('Please provide your email: ').lower().strip()
         if re.match(pattern,useremail):
             data["email"] = useremail
             break
@@ -43,7 +43,7 @@ def generate_logIn_cred():
     
     while True:
 
-        password = input('Enter passphrase: ')
+        password = input('Please provide a passphrase: ')
         confirm_password = input('Enter same passphrase: ')
         
         if len(password) == 0 and len(confirm_password) == 0:
