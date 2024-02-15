@@ -107,7 +107,7 @@ def setup():
     return user_data, folders
     
 
-def main():
+def pre_load():
     """
     Main function
     """
@@ -118,7 +118,6 @@ def main():
 
         # checking if all necessary files are in place
         auth_dir = ['.config.elite','.credentials.elite']
-
         for file in auth_dir:
             if not exists(save_path(folders['auth'],file)):
                 print('a')
@@ -131,22 +130,34 @@ def main():
                 print('b')
                 success = False
                 break
+
         recon_dir = ['.creds.recon','.SOS.recon']
         for file in recon_dir:
             if not exists(save_path(folders['recon'],file)):
                 success = False
                 break
+
         if success == False:
             print('One of more important file is missing.')
+            print('Run: code_clinic --reset')
 
 
-        # creds = decrypt_it()
-        # authentication.authenticate()
+        return success, folders
     else:
+        print('Welcome to Code_Clinic\nYou do not appear to have a config file defined, so let me ask you some questions.')
         setup()
+        exit('\nSetup complete.\nRun: code_clinic')
 
-    
-    
+
+
+
+def generate_creds(folders):
+
+    cs = decrypt_it(folders,'keys','cred','credentials','json')
+    # authentication.authenticate()
+    print(cs)
+    pass
 
 if __name__ == '__main__':
-    main()
+    s,f = pre_load()
+    generate_creds(f)
