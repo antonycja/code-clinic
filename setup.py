@@ -93,9 +93,9 @@ def decrypt_it(dirs: dict,key_name: str, key_ext: str, file_name: str ,file_ext:
     key = encryption.read_key(dirs["key"],f'.{key_name}.{key_ext}')
     data = encryption.read_enc_data(key,save_path(dirs["auth"],f'.{file_name}.{file_ext}'))
     clean_up = encryption.convert_bytes_to_str(data)
-    user_info = encryption.data_ablution(clean_up)
+    info = encryption.data_ablution(clean_up)
 
-    return user_info
+    return info
 
 def setup():
     folders = secure_folder()
@@ -120,14 +120,12 @@ def pre_load():
         auth_dir = ['.config.elite','.credentials.elite']
         for file in auth_dir:
             if not exists(save_path(folders['auth'],file)):
-                print('a')
                 success = False
                 break
 
         key_dir = ['.keys.cred','.keys.elite']
         for file in key_dir:
             if not exists(save_path(folders['key'],file)):
-                print('b')
                 success = False
                 break
 
@@ -152,15 +150,41 @@ def pre_load():
 
 
 def generate_creds(folders):
+    """
+    Generates the credentials object (creds)
+    The creds is an object with methods that can be used alongside the google functions
+    for operations with the google api
+
+    Args:
+        folders (dict): a dictionary containing all the important folders
+
+    Returns:
+        object: returns the credentials object that is used along with google functions
+    """
 
     cs = decrypt_it(folders,'keys','cred','credentials','elite')
     
-    #creating a tmp file with the decrypted data 
-    writer.save_to_json('/tmp','creds',cs)
+    #creating a tmp file with the decrypted data
+    writer.write_to_json('/tmp','.creds',cs)
+    
+    
+    
+    # print('written')
 
-    # authentication.authenticate('/tmp/creds.json','/tmp/token.json')
-    # print(cs)
-    pass
+    if exists(save_path(folders['auth'],'.token.elite')):
+        token = decrypt_it(folders,'keys','tk','token','elite')
+        writer.write_to_json('/tmp','.token',token)
+        
+    creds = authentication.authenticate('/tmp/.creds.json','/tmp/.token.json')
+    
+    if not exists(save_path(folders['auth'],'.token.elite')):
+        # saving an encrypted version of the token
+        with open('/tmp/token.json','r') as file:
+            data = file.read()
+        encrypt_it(data,folders,'keys','tk','token','recon','token','elite')
+        # token = encrypt_it(folders,'keys','tk','token','elite')
+
+    return creds
 
 if __name__ == '__main__':
     s,f = pre_load()
