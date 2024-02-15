@@ -32,7 +32,7 @@ def get_events(service, calender, days):
 
 def get_data_from_calendar_api(service, calendar=1, days=7):
     calendar_dict = {"personal": "primary",
-                 "clinic": "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"}
+                     "clinic": "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"}
     cal_type_list = ["PERSONAL calendar", "CODE CLINIC calendar"]
     if calendar == 1:
         calendars = [calendar_dict["personal"]]
