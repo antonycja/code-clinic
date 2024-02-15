@@ -28,6 +28,37 @@ def login(data: dict):
     print(f'login failed for {data["email"]} because Server returned error response')
     return False
 
+
+def token_exp(login_time: str):
+    """
+    Returns the token expiration time
+    If token expires the user must re-login in order ot use the application
+
+    Args:
+        login_time (str): The current time that the user is login
+    """
+    
+
+    # splitting the string in parts, and retrieving just the time 
+    time = login_time.split(" ")[1]
+    # retrieving current hour
+    hour = time.split(":")[0]
+    
+    # calculating expiration hour
+    exp_hour = int(hour) + 4
+    if exp_hour == 24:
+        exp_hour = 00
+    elif exp_hour > 24:
+        pass
+      
+    # replacing the current hour with expiration hour   
+    exp_time = time.replace(hour,str(exp_hour))
+    
+    logout_time = login_time.replace(time,exp_time)
+
+    return logout_time
+     
+
 def sys_time():
     """
     Returns the current system time in a human readable format
