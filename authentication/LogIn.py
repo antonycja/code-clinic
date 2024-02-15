@@ -6,7 +6,7 @@ __author__ = 'Johnny Ilanga'
 
 
 from getpass import getpass
-
+import time
 
 def login(data: dict):
     """
@@ -27,3 +27,15 @@ def login(data: dict):
 
     print(f'login failed for {data["email"]} because Server returned error response')
     return False
+
+def sys_time():
+    """
+    Returns the current system time in a human readable format
+
+    Returns:
+        str: _The current time
+    """
+
+    curr_time = time.strftime(f"%Y-%m-%d %H:%M:%S %z")
+
+    return curr_time
