@@ -153,9 +153,13 @@ def pre_load():
 
 def generate_creds(folders):
 
-    cs = decrypt_it(folders,'keys','cred','credentials','json')
-    # authentication.authenticate()
-    print(cs)
+    cs = decrypt_it(folders,'keys','cred','credentials','elite')
+    
+    #creating a tmp file with the decrypted data 
+    writer.save_to_json('/tmp','creds',cs)
+
+    # authentication.authenticate('/tmp/creds.json','/tmp/token.json')
+    # print(cs)
     pass
 
 if __name__ == '__main__':
