@@ -51,13 +51,13 @@ def get_credentials():
     return creds
 
 
-def authenticate(cred_path: str, token_path: str):
+def authenticate(cs: dict, token_path: str):
     """
     Validates token and authenticates the user if credentials are valid.
     Ig credentials are not valid, a new token is generated
 
     Args:
-        cred_path (str): the dir path of cred | cred of user
+        cs (dct): the client secret file
         token (str): the dir path of token | token of user
 
 
@@ -81,7 +81,7 @@ def authenticate(cred_path: str, token_path: str):
             # failure to refresh token, leads creation of a new token
 
             # creating flow object used for token generation with permissions specified in scopes
-            flow = InstalledAppFlow.from_client_secrets_file(cred_path, SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(cs, SCOPES)
 
             # generating credentials and token
             creds = flow.run_local_server(port=0)
