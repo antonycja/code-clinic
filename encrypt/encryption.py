@@ -170,15 +170,32 @@ def data_ablution(data: str):
     credentials = dict()
     
     # cleaning up the str, so we can store in a dictionary
-    pattern = re.compile("{|}|'|\s")
+    
+    # this section is for user log in details
+    if not 'installed' in data:
+        pattern = re.compile("{|}|'|\s")
 
-    filtered_data = re.sub(pattern,"",data)
-    clean_up = filtered_data.split(',')
+        filtered_data = re.sub(pattern,"",data)
+        clean_up = filtered_data.split(',')
 
-    for sequence in clean_up:
-        meta = sequence.split(':')
-        credentials[meta[0]] = meta[1]
+        for sequence in clean_up:
+            meta = sequence.split(':')
+            credentials[meta[0]] = meta[1]
+            
+    else:
+        # this section is for credentials (client secret)
+        # removing the '(single quotes) and replacing it with " (double quotes)
+        data = list(data)
         
+        for char in data:
+            if char == "'":
+                data[data.index(char)] = '"'
+            elif char =="'":
+                data[data.index(char)] = '"'
+                
+        credentials = "".join(data)
+
+            
     return credentials
 
 def convert_bytes_to_str(data: bytes):
