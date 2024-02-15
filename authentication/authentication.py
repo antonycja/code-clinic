@@ -62,7 +62,7 @@ def authenticate(cred_path: str, token_path: str):
 
 
     Returns:
-        _type_: _description_
+        object: returns the credentials object that is used along with google functions
     """
 
     creds = None
