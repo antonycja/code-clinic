@@ -21,12 +21,19 @@ def login(data: dict):
     """
 
     password = getpass(f'Logging in as {data["email"]} to Code-Clinic\npassword: ')
+
+    # replacing none with empty string incase there is no password set by user
+    if data["password"] == 'None' or data["password"] == None:
+        data["password"] = ""
+
     if password == data["password"]:
-        print('Login successful. Token expires in 0 days 3 hours 59 minutes at 2024-02-15 19:48:06 +02:00')
-        return True
+        current_time = sys_time()
+        exp = token_exp(current_time)
+        print(f'Login successful. Token expires in 0 days 3 hours 59 minutes at {exp}')
+        return True,[current_time,exp]
 
     print(f'login failed for {data["email"]} because Server returned error response')
-    return False
+    return False, ["",""]
 
 def token_exp(login_time: str):
     """
