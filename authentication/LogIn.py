@@ -127,3 +127,62 @@ def timeshift(time: str):
 
     return data
 
+def fix_date(date: str):
+    """
+    Fixes the token expiration date, ensuring a smooth login process
+
+    Args:
+        date (str): The token expiration date
+
+    Returns:
+        _str_: the newly formatted date
+    """
+
+    # retrieving month and day
+    month = date.split("-")[1]
+    day = date.split("-")[2]
+
+    months_30days = ["04","06","09","11"]
+    months_31days=["01","03","05","07","08","10","12"]
+
+    # the new date of the new day
+    new_day = int(day) + 1
+
+    if month in months_30days and new_day > 30:
+        new_month = int(month) + 1
+        if new_month < 10:
+            new_month = f'{0}{new_month}'
+        elif new_month > 12:
+            new_month = f'{0}{1}'
+        else:
+            new_month = str(new_month)
+        new_day = f'{0}{1}'
+
+    elif month in months_31days and new_day > 31:
+        new_month = int(month) + 1
+        if new_month < 10:
+            new_month = f'{0}{new_month}'
+        elif new_month > 12:
+            new_month = f'{0}{1}'
+        else:
+            new_month = str(new_month)
+        new_day = f'{0}{1}'
+
+    elif month == "02" and new_day > 28:
+        new_month = f'{0}{3}'
+        new_day = f'{0}{1}'
+
+    else:
+        # date remains the same
+        new_month = month
+
+        if new_day < 10:
+            new_day = f'{0}{new_day}'
+        else:
+            new_day = f'{new_day}'
+
+    # the new/old date formatted.s
+    new_date = date.replace(date.split("-")[1],new_month)
+    new_date = new_date.replace(new_date.split("-")[2],new_day)
+
+    return new_date
