@@ -7,11 +7,12 @@ __author__ = 'Johnny Ilanga'
 
 from getpass import getpass
 import time
+from helpers import writer
 
 def login(data: dict):
     """
     authenticates the user and ensures that the correct user is logging in
-    
+
     Args:
         folders (dict): folder containing important files such as user config
         data (dict): the config data
@@ -35,6 +36,8 @@ def login(data: dict):
     print(f'login failed for {data["email"]} because Server returned error response')
     return False, ["",""]
 
+
+# Token
 def token_exp(login_time: str):
     """
     Returns the token expiration time
@@ -70,6 +73,26 @@ def token_exp(login_time: str):
         logout_time = login_time.replace(time,exp_time)
 
     return logout_time
+
+
+def dump_token(access: bool, expiration_data: str):
+    """
+    Creates a snapshot of the access token and dumps it in a file.
+    The token snapshot saves user time from by eliminating the login process
+    if the token has not expired.
+
+    Args:
+        access (bool): access to application
+        expiration_data (str): expiration date and time of the token
+    """
+
+    logIn_token = {"access" : access, "start" : expiration_data[0], "expiration" : expiration_data[1]}
+    writer.save_to_json('/tmp','.logIn_token',logIn_token)
+
+    return
+
+
+# Time related concepts
 
 def sys_time():
     """
