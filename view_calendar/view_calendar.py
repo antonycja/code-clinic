@@ -102,11 +102,13 @@ def create_event_info(events: list, cal_name):
                     continue
                 attendees.append(attendee["email"].split("@")[0])
         else:
-            attendees.append(event["organizer"].split("@")[0])
+            attendees.append(event["organizer"].get("email").split("@")[0])
 
-        event_info_list.append({"date": date, "start time": start_time, "end time": end_time,
+        event_info_list.append({"Calendar": cal_name, "date": date, "start time": start_time, "end time": end_time,
                                "summary": summary, "location": location, "organizer": organizer, "attendees": attendees})
+    # event_info_list = [{cal_name:event_info_list}]
     return event_info_list
+
 
 def get_calendar_results(calendar: int, max_results=7):
     """Print the calendar data for the selected calendar.
