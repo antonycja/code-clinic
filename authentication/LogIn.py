@@ -38,6 +38,19 @@ def login(data: dict):
     return False, ["",""]
 
 
+def code_clinic_login(data: dict):
+    """
+    The main log in function for code clinic
+
+    Args:
+        data (dict): a dict containing important user related data
+    """
+    access, exp = login(data)
+    dump_token(data["email"],access,exp)
+
+
+    return access
+
 # Token
 def token_exp(login_time: str):
     """
