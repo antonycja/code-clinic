@@ -124,9 +124,11 @@ def get_calendar_results(calendar: int, max_results=7):
     user_credentials = authenticate_user()
 
     try:
+        filename = "calendar_data.csv"
         service = build("calendar", "v3", credentials=user_credentials)
         all_events_info_list = get_data_from_calendar_api(service, calendar, max_results)
-        write_to_csv_file(all_events_info_list)
+        write_to_csv_file(all_events_info_list, filename)
+        
         
 
     except HttpError as error:
