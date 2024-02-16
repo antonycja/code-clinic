@@ -105,3 +105,25 @@ def sys_time():
     curr_time = time.strftime(f"%Y-%m-%d %H:%M:%S %z")
 
     return curr_time
+
+def timeshift(time: str):
+    """
+    returns the date, hour and minutes of a given timestamp
+
+    Args:
+        time (str): timestamp of the time we want formate
+
+    Returns:
+        dict : formatted timestamp data
+    """
+
+    data = dict()
+
+    time_data = time.split(" ")[1]
+
+    data["date"]= time.split(" ")[0]
+    data["hours"] = time_data.split(":")[0]
+    data["mins"] = time_data.split(":")[1]
+
+    return data
+
