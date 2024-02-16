@@ -1,5 +1,5 @@
 
-import os.path
+import os.path, sys
 import datetime as dt
 
 from google.auth.transport.requests import Request
@@ -18,10 +18,6 @@ USER_EMAIL = 'btshulisi023@student.wethinkcode.co.za'
 def book_slot(creds, booking_info : dict):
     try:
         service = build('calendar', 'v3', credentials=creds)
-        
-        #display_events(service, CLINIC_CALENDAR_ID)
-
-        #create_event(service)
 
         return update_event(service, booking_info)
 
@@ -84,11 +80,11 @@ def create_event(service):
         'description': 'You can book this slot if  you want to volunteer.',
         'colorId' : 6,
         'start': {
-            'dateTime': '2024-02-02T17:00:00+02:00',
+            'dateTime': '2024-02-16T16:00:00+02:00',
             'timeZone': 'Africa/Johannesburg',
         },
         'end': {
-            'dateTime': '2024-02-02T17:30:00+02:00',
+            'dateTime': '2024-02-16T16:30:00+02:00',
             'timeZone': 'Africa/Johannesburg'
         },
         'recurrence': [
@@ -169,24 +165,44 @@ def booked_event(event) -> bool:
             return True
     
     return False
+def get_date_time(user_input):
+    day = user_input.split("T")[0]
+    time = user_input.split("T")[1]
+
+    return f"2024-02-{day}T{time}:00+02:00"
+
 
 
 if __name__== '__main__':
     creds = authenticate()
 
-    date_time = '2024-02-02T16:00:00+02:00'
+    date_time = '2024-02-13T17:00:00+02:00'
     description = 'I need help with 2D arrays'
 
     booking_info = dict()
-    booking_info['description'] = description
-    booking_info['dateTime'] = date_time
-
-    #message = book_slot(creds, booking_info)
-
-    message = cancel_booking(creds, booking_info)
 
     
 
-    print(message)
+
+
+    arguments = sys.argv
+
+    if arguments[1] == 'book':
+        start_date_time = get_date_time(arguments[2])
+        print(start_date_time)
+        description = arguments[3]
+
+        booking_info['dateTime'] = start_date_time
+        booking_info['description'] = description
+
+        message = book_slot(creds, booking_info)
+        print(message)
+    elif arguments[1] == 'cancel_booking':
+
+        start_date_time = get_date_time(arguments[2])
+        booking_info['dateTime'] = start_date_time
+        message = cancel_booking(creds, booking_info)
+
+        print(message)
     os.remove('token.json')
 
