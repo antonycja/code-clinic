@@ -189,3 +189,38 @@ def fix_date(date: str):
     new_date = new_date.replace(new_date.split("-")[2],new_day)
 
     return new_date
+
+
+def IsValidToken(token_data: dict, current_date: str = timeshift(sys_time())):
+    """
+    Validates the token. Checks whether your current login time lies within the 4 hour window
+    from when the token was created
+
+    Args:
+        token_data (dict): token data. Dict contains access status, created timestamp and expiration timestamp
+        current_date (str, optional): Current system timestamp. Defaults to timeshift(sys_time()).
+
+    Returns:
+        bool : Validates the token and returns True or False
+    """
+
+    token_start = timeshift(token_data["start"])
+    token_expiration = timeshift(token_data["expiration"])
+
+    # checking if the date is the same
+    if not current_date["date"] == token_start["date"]:
+        return False
+
+    # start hour less(<) than current hour and exp less (<) than current hour
+    if int(token_start["hours"]) < int(current_date["hours"]) and int(
+        token_expiration["hours"]
+    ) < int(current_date["hours"]):
+        return False
+
+    # if the current hour is the same as the exp hour, we validate based of minutes
+    if token_expiration["hours"] == current_date["hours"] and int(
+        token_expiration["mins"]
+    ) <= int(current_date["mins"]):
+        return False
+
+    return True
