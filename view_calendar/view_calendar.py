@@ -92,17 +92,22 @@ def create_event_info(events: list, cal_name):
         start_time = date_time[1][:5]
         end_time = event["end"].get("dateTime").split("T")[1][:5]
         summary = event["summary"]
-        location = event["location"]
+        try:
+            location = event["location"]
+        except KeyError:
+            location = "TBC"
         organizer = event["organizer"].get("email")
         attendees = []
-
-        if len(event["attendees"]) > 1:
-            for index, attendee in enumerate(event["attendees"]):
-                if index == 0:
-                    continue
-                attendees.append(attendee["email"].split("@")[0])
-        else:
-            attendees.append(event["organizer"].get("email").split("@")[0])
+        try:
+            if len(event["attendees"]) > 1:
+                for index, attendee in enumerate(event["attendees"]):
+                    if index == 0:
+                        continue
+                    attendees.append(attendee["email"].split("@")[0])
+            else:
+                attendees.append(event["organizer"].get("email").split("@")[0])
+        except KeyError:
+            attendees.append("TBC")
 
         event_info_list.append({"Calendar": cal_name, "date": date, "start time": start_time, "end time": end_time,
                                "summary": summary, "location": location, "organizer": organizer, "attendees": attendees})
