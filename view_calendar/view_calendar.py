@@ -80,8 +80,7 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
                     start = start[:19]
                     print(start, "->", event["summary"])
             print()
-    # print(all_events_info_list)
-    write_to_csv_file(all_events_info_list)
+    return all_events_info_list
 
 
 def create_event_info(events: list, cal_name):
@@ -126,7 +125,9 @@ def get_calendar_results(calendar: int, max_results=7):
 
     try:
         service = build("calendar", "v3", credentials=user_credentials)
-        get_data_from_calendar_api(service, calendar, max_results)
+        all_events_info_list = get_data_from_calendar_api(service, calendar, max_results)
+        write_to_csv_file(all_events_info_list)
+        
 
     except HttpError as error:
         print(f"An error occurred: {error}")
