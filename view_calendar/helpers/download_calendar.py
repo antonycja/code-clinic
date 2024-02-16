@@ -11,9 +11,8 @@ def calendar_data_changed(data_list, filename):
         pass
     pass
 
-def write_to_csv_file(data_list):
+def write_to_csv_file(data_list, filename):
     fields = [name for name in data_list[0].keys()]
-    filename = "calendar_data.csv"
     with open(filename, "w") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fields)
         
