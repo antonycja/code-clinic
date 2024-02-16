@@ -59,7 +59,10 @@ def token_exp(login_time: str):
     if exp_hour > 23:
         exp_hour =  f'{0}{exp_hour - 24}'
     else:
-        exp_hour = f'0{exp_hour}'
+        if exp_hour < 10:
+            exp_hour = f'0{exp_hour}'
+        else:
+            exp_hour = f'{exp_hour}'
 
     # replacing the current hour with expiration hour
     exp_time = time.replace(hour,str(exp_hour))
