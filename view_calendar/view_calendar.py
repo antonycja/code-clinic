@@ -69,22 +69,22 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
             if isinstance(events, str):
                 print(events)
             else:
-                event_info = create_event_info(events)
-                write_to_csv_file(event_info)
+                event_info = create_event_info(events, cal_name)
+
+                # all_events_info_list.append(event_info)
+                [all_events_info_list.append(event) for event in event_info]
                 for event in events:
-                    date_time = event["start"].get("dateTime").split("T")
-                    date = date_time[0]
-                    time = date_time[1][:5]
-                    print(time)
                     start = event["start"].get(
                         "dateTime", event["start"].get("date"))
                     start = start.replace("T", " at ")
                     start = start[:19]
                     print(start, "->", event["summary"])
             print()
+    # print(all_events_info_list)
+    write_to_csv_file(all_events_info_list)
 
 
-def create_event_info(events: list):
+def create_event_info(events: list, cal_name):
     event_info_list = []
     for event in events:
         date_time = event["start"].get("dateTime").split("T")
