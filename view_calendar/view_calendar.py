@@ -7,6 +7,7 @@ from auth.auth import authenticate_user
 
 from .helpers.download_calendar import write_to_csv_file
 
+
 def get_events(service, calender, days):
     now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
     end = (datetime.datetime.utcnow() + datetime.timedelta(days=days)
