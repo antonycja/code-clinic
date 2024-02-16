@@ -1,3 +1,6 @@
+#python3 booking.py book dayTtime description
+#python3 booking.py cancel_booking dayTtime
+
 
 import os.path, sys
 import datetime as dt
