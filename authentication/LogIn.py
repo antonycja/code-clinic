@@ -8,6 +8,7 @@ __author__ = 'Johnny Ilanga'
 from getpass import getpass
 import time
 from helpers import writer
+from os.path import exists
 
 def login(data: dict):
     """
@@ -222,5 +223,42 @@ def IsValidToken(token_data: dict, current_date: str = timeshift(sys_time())):
         token_expiration["mins"]
     ) <= int(current_date["mins"]):
         return False
+
+    return True
+
+def check_token(path:str, data: dict ):
+    """
+    Checks whether the given token is valid. If the token is valid, we will skip
+    the login menu. If token is not valid, the program gets terminated.
+    
+    Args:
+        path (str): The dir of the token
+        data (dict): valuable user data
+        
+    Returns:
+        bool: True/False if their is a valid token
+    """
+    
+    
+    err_message = f"""Token not present: for user '{data["email"]}' : No matching entry found in secure storage.
+Please login using
+  code-clinic login"""
+  
+    exp_message = f"""Token expired: for user '{data["email"]}'.
+Please login using
+  code-clinic login"""
+
+    # if access == False:
+    if exists("/tmp/.logIn_token.json"):
+        # reading the username to see if it has a token
+        token = writer.read_from_json(path)[f'{data["email"]}']
+
+        if not token["access"]:
+            exit(err_message)  # get error from wtc_lms
+
+
+        if not IsValidToken(token):
+            exit(exp_message) # get from lms
+
 
     return True
