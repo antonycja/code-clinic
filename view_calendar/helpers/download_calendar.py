@@ -14,13 +14,10 @@ def calendar_data_changed(data_list, filename):
                 return False
             else:
                 return True
-            pass
-        pass
+        
         
     except FileNotFoundError:
         return True
-        pass
-    pass
 
 def write_to_csv_file(data_list, filename):
     fields = [name for name in data_list[0].keys()]
