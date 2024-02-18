@@ -127,9 +127,12 @@ def get_calendar_results(calendar: int, max_results=7):
         filename = "calendar_data.csv"
         service = build("calendar", "v3", credentials=user_credentials)
         all_events_info_list = get_data_from_calendar_api(service, calendar, max_results)
-        write_to_csv_file(all_events_info_list, filename)
+        
+        if calendar_data_changed(all_events_info_list, filename):
+            write_to_csv_file(all_events_info_list, filename)
         
         # TODO: Check if the file is already up to date
+        # print(calendar_data_changed(all_events_info_list, filename))
         
         
 
