@@ -92,21 +92,26 @@ def token_exp(login_time: str):
     return logout_time
 
 
-def dump_token(access: bool, expiration_data: str):
+def dump_token(user_name: str, access: bool, expiration_data: str):
     """
     Creates a snapshot of the access token and dumps it in a file.
     The token snapshot saves user time from by eliminating the login process
     if the token has not expired.
 
     Args:
+        user_name (str): the username of the user the token belongs too
         access (bool): access to application
         expiration_data (str): expiration date and time of the token
     """
 
-    logIn_token = {"access" : access, "start" : expiration_data[0], "expiration" : expiration_data[1]}
-    writer.save_to_json('/tmp','.logIn_token',logIn_token)
-
-    return
+    logIn_token = {
+        f"{user_name}": {
+            "access": access,
+            "start": expiration_data[0],
+            "expiration": expiration_data[1],
+        }
+    }
+    writer.save_to_json("/tmp", ".logIn_token", logIn_token)
 
 
 # commit first: added token clearing before exiting if token data is not valid
