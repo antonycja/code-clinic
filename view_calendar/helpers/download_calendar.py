@@ -18,6 +18,7 @@ def calendar_data_changed(data_list, filename):
         pass
         
     except FileNotFoundError:
+        return True
         pass
     pass
 
