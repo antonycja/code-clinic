@@ -50,7 +50,7 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
         f"Getting the upcoming event for the next {days} for {cal_type}...\n")
 
     event_list = []
-    all_events_info_list = []
+    selected_events_info_list = []
     # Get each calendar from the list of calendars
     for calendar_id in calendars:
         events = get_events(service, calendar_id, days)
@@ -71,8 +71,8 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
             else:
                 event_info = create_event_info(events, cal_name)
 
-                # all_events_info_list.append(event_info)
-                [all_events_info_list.append(event) for event in event_info]
+                # selected_events_info_list.append(event_info)
+                [selected_events_info_list.append(event) for event in event_info]
                 for event in events:
                     start = event["start"].get(
                         "dateTime", event["start"].get("date"))
@@ -80,7 +80,7 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
                     start = start[:19]
                     print(start, "->", event["summary"])
             print()
-    return all_events_info_list
+    return selected_events_info_list
 
 
 def create_event_info(events: list, cal_name):
@@ -126,10 +126,10 @@ def get_calendar_results(calendar: int, max_results=7):
     try:
         filename = "calendar_data.csv"
         service = build("calendar", "v3", credentials=user_credentials)
-        all_events_info_list = get_data_from_calendar_api(service, calendar, max_results)
+        selected_events_info_list = get_data_from_calendar_api(service, calendar, max_results)
 
-        if calendar_data_changed(all_events_info_list, filename):
-            write_to_csv_file(all_events_info_list, filename)
+        if calendar_data_changed(selected_events_info_list, filename):
+            write_to_csv_file(selected_events_info_list, filename)
         
     except HttpError as error:
         print(f"An error occurred: {error}")
