@@ -26,7 +26,7 @@ def generate_logIn_cred(username: str = None, useremail: str = None, password:st
 
     if username == None or not re.match(r'^[a-zA-z]+[0-9]{3}$',username):
         while True:
-            if not re.match(r'^[a-zA-z]+[0-9]{3}$',username) and username != None:
+            if username != None and not re.match('^[a-zA-z]+[0-9]{3}$',username):
                 print('Incorrect username format: (johndoe023).')
 
             username = input('Please provide your username: ').lower().strip()
