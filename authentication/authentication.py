@@ -89,8 +89,8 @@ def authenticate(cred_path: str, token_path: str):
         # saving generated token:
 
         # dir_path = os.path.dirname(token_path)
-        # with open(token_path,"w") as file:
-        #     file.write(creds.to_json())
-        #     file.close()
+        with open(token_path,"w") as file:
+            file.write(creds.to_json())
+            file.close()
 
     return creds
