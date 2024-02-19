@@ -1,4 +1,6 @@
 #python3 booking.py book dayTtime description
+#python3 booking.py book 16T14:00 python
+#python3 booking.py cancel_booking 16T14:00
 #python3 booking.py cancel_booking dayTtime
 
 
@@ -59,21 +61,6 @@ def update_event(service, booking_info : dict) -> bool:
     message = "There is no volunteer for the slot you selected. TRY ANOTHER."
     return False, message
 
-
-def display_events(service, calendar_id):
-
-        now = dt.datetime.utcnow().isoformat() + "Z"
-
-        event_result = service.events().list(calendarId=CLINIC_CALENDAR_ID, timeMin=now, maxResults=10, singleEvents=True, orderBy='startTime').execute()
-        events = event_result.get('items', [])
-
-        if not events:
-            print("No upcoming events found!")
-            return
-
-        for event in events:
-            start = event['start'].get('dateTime', event['start'].get('date'))
-            print(start, event['summary'])
 
 
 def create_event(service):
@@ -168,11 +155,26 @@ def booked_event(event) -> bool:
             return True
     
     return False
-def get_date_time(user_input):
-    day = user_input.split("T")[0]
+def get_start_date_time(user_input):
+    now = dt.datetime.utcnow().isoformat() + "Z"
+    items = now.split("-")
+
+    current_month = int(items[1])
+    current_day = int(items[2][0:2])
+
+    
+    day = int(user_input.split("T")[0])
     time = user_input.split("T")[1]
 
-    return f"2024-02-{day}T{time}:00+02:00"
+
+    if day < current_day:
+        current_month += 1
+    
+
+    if 1<=current_month<=9:
+        current_month = f"0{current_month}" 
+
+    return f"2024-{current_month}-{day}T{time}:00+02:00"
 
 
 
@@ -191,7 +193,7 @@ if __name__== '__main__':
     arguments = sys.argv
 
     if arguments[1] == 'book':
-        start_date_time = get_date_time(arguments[2])
+        start_date_time = get_start_date_time(arguments[2])
         print(start_date_time)
         description = arguments[3]
 
@@ -202,7 +204,7 @@ if __name__== '__main__':
         print(message)
     elif arguments[1] == 'cancel_booking':
 
-        start_date_time = get_date_time(arguments[2])
+        start_date_time = get_start_date_time(arguments[2])
         booking_info['dateTime'] = start_date_time
         message = cancel_booking(creds, booking_info)
 
