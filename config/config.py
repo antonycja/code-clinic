@@ -40,7 +40,7 @@ def generate_logIn_cred(username: str = None, useremail: str = None, password:st
     if useremail == None or not re.match(pattern,useremail):
         while True:
 
-            if not re.match(pattern,useremail) and useremail != None:
+            if useremail != None and not re.match(pattern,useremail):
                 print('Incorrect email format: (johndoe023@student.wethinkcode.co.za).')
 
             useremail = input('Please provide your email: ').lower().strip()
