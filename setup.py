@@ -141,7 +141,7 @@ def pre_load():
             
 
 
-        return success, folders
+        return success 
     else:
         print('Welcome to Code_Clinic\nYou do not appear to have a config file defined, so let me ask you some questions.')
         setup()
