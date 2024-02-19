@@ -185,5 +185,6 @@ def generate_creds(folders):
     return creds
 
 if __name__ == '__main__':
+    # ADDING PRELOAD
     s,f = pre_load()
     generate_creds(f)
