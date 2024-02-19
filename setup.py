@@ -137,7 +137,7 @@ def pre_load():
 
         if success == False:
             print('One of more important file is missing.')
-            exit('Run: code-clinic --reset')
+            exit('Run: code-clinic configure')
             
 
 
