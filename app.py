@@ -147,19 +147,17 @@ app.add_command(login)
 
 
 if __name__ == '__main__':
-    folders = setup.secure_folder()
-    data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
 
-
-
-    # if setup.pre_load() is False and not 'configure' in sys.argv:
-    #     exit('Run: code-clinic configure')
     success, message = setup.pre_load()
-    if success is False and not 'configure' in sys.argv:
+    if success == False and not 'configure' in sys.argv:
         print(message)
         exit('Run: code-clinic configure')
+    elif 'configure' in sys.argv:
+        app()
 
-    if 'configure' or 'login' or LogIn.check_token("/tmp/.logIn_token.json",data):
+    folders = setup.secure_folder()
+    data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
+    if 'login' or LogIn.check_token("/tmp/.logIn_token.json",data):
         app()
 
 
