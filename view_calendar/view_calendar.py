@@ -84,6 +84,26 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
     return selected_events_info_list
 
 
+def display_events(events):
+    print(events)
+    for event in events:
+        event["attendees"] = ", ".join(event["attendees"])
+        
+        # Add a for loop to loop through the values of the map and add a width to a list
+        print(type(event["attendees"]))
+        print(event["attendees"])
+        print(event["Calendar"])
+        
+        
+        
+    table = tabulate(events, headers="keys", tablefmt="fancy_grid",
+                     colalign=("center"), maxcolwidths=[8, None])
+    # table = [["Sun",696000,1989100000],["Earth",6371,5973.6], ["Moon",1737,73.5],["Mars",3390,641.85]]
+    # table = tabulate(table, headers=["where", "from", "until"])
+    print(table)
+    pass
+
+
 def create_event_info(events: list, cal_name):
     event_info_list = []
     for event in events:
