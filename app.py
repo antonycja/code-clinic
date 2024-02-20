@@ -2,21 +2,21 @@
 This will be my main module. Using click to create the cli
 """
 
+"""
+This will be my main module. Using click to create the cli
+"""
+
 import click
 from authentication import authentication, LogIn
 from config import config
 from file_handling import files
 import setup
-from getpass import getpass
-from authentication.LogIn import sys_time
-import re
 from helpers import writer
 from os.path import exists, join as save_path
 from calendar_logic import booking
 
 
-# validate if the user is in the organization
-# mine
+
 def gen_creds():
     """
     Generates the Google credentials object via oauth2 authentication.
@@ -81,15 +81,16 @@ def login():
 
 
 # booking
+# add meeting area to the volunteer function and pass it as param
 @click.command(help= ': schedule a code clinic session.')
 @click.option('-d','--day',prompt = "Enter the date on which you would like to book",help="The date you would want to book the meeting; [USECASE: -d/--day 24]")
-@click.option('-t','--time',prompt ="Enter the time of the session you want to reserve",help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
-@click.option('-D','--desc',prompt = 'Provide a meeting summary',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
-def make_booking(day,time,desc):
+@click.option('-t','--time',prompt ="Enter the time of the session you want to reserve",help="When you want the session to take place; [USECASE: -t/--time 08:30]")
+@click.option('-D','--Desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
+def make_booking(day,time,Desc):
 
     user_input = f'{day}T{time}'
     date_time = booking.get_start_date_time(user_input)
-    booking_info = {"dateTime": f"{date_time}","description" : f"{desc}"}
+    booking_info = {"dateTime": f"{date_time}","description" : f"{Desc}"}
 
     creds,user_data = gen_creds()
     signal, message = booking.book_slot(creds,booking_info,user_data['email'])
@@ -146,46 +147,6 @@ app.add_command(login)
 
 
 if __name__ == '__main__':
-    # I want to first run the preload and check to make sure that all the files are in place
-
-    # I also want to run the click app, this is troubling because we cant combine the too
-    # if I can not sort it, I will need ot run the cli in TR style
-    # It will work and I will have more control but It will be more complex to write
-
-    # now we can design the booking system using click
-    # but then that means I will have to desert many functions
-
-    # These includes the token function, unless I call all these functions in each app function
-    # So we can call each individual function such as the checking of the token and cs in each function
-    # that then builds redundancy, which is what we are avoiding
-
-    # so either we build the cli manually and handle each flag and each arg s manually or use click 
-
-    # Manual: Pro
-    # better control on how the app runs
-    # fluidity I guess, and less redundant code
-    # an understanding structure to a certain extent
-    
-    # Manual: Cons
-    # Help function, gotta make it myself
-    # argument handling,I will have to handle that too
-    
-    # Click: Pro
-    # It will handle the arguments being passed, thats a bonus
-    # I do not need to control the flow of commands
-    # 
-
-    # Click: Cons
-    # no control over code flow
-    # can gotta discard many functions
-
-
-
-
-#    if 'configure' in sys.argv or setup.pre_load() == True:
-#         app()
-#    else:
-    #    print('blue')
     app()
-    # make_booking()
+
 
