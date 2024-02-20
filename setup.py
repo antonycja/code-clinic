@@ -136,12 +136,12 @@ def pre_load():
                 break
 
         if success == False:
-            print('One of more important file is missing.')
-            exit('Run: code-clinic configure')
-            
+            message = 'One of more important file is missing.'
+            # exit('Run: code-clinic configure')
 
 
-        return success 
+
+        return success,message
     else:
         print('Welcome to Code_Clinic\nYou do not appear to have a config file defined, so let me ask you some questions.')
         setup()
