@@ -72,7 +72,8 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
                 event_info = create_event_info(events, cal_name)
 
                 # selected_events_info_list.append(event_info)
-                [selected_events_info_list.append(event) for event in event_info]
+                [selected_events_info_list.append(
+                    event) for event in event_info]
                 for event in events:
                     start = event["start"].get(
                         "dateTime", event["start"].get("date"))
