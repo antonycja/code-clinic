@@ -54,14 +54,16 @@ def gen_creds():
     return creds, data
 
 
+# groups the click command to the specific app
 @click.group
 def app():
     pass
 
 
-@click.command(help = ": re-configures/resets the code-clinic app.")
-@click.option('-n','--name',help = 'Your username')
-@click.option('-e','--email',help = 'Your cooperate email address')
+# configuration
+@click.command(help = ": reconfigures/resets the code-clinic application.")
+@click.option('-n','--name',help = 'Your username; [USECASE: -n/--name "username"]')
+@click.option('-e','--email',help = 'Your cooperate email address; [USECASE: -e/--email "email"]')
 def configure(name: str = None,email: str = None):
     folders = setup.secure_folder()
     data = config.generate_logIn_cred(name,email)
@@ -69,6 +71,8 @@ def configure(name: str = None,email: str = None):
     cs = authentication.get_credentials()
     setup.encrypt_it(cs,folders,'keys','elite','SOS','recon','cs','elite')
 
+
+#login
 @click.command()
 def login():
     folders = setup.secure_folder()
@@ -77,28 +81,25 @@ def login():
 
 
 # booking
-@click.command(help= '": creates a booking for a code clinic session')
-@click.option('-d','--day',prompt = "Enter the day you want to book",help="")
-@click.option('-t','--time',prompt ='Enter the time for the slot you wish to book',help = "date and time to create booking")
-@click.option('-D','--desc',prompt = 'Enter meeting summary',help = "A short summary that explains the purpose off the meeting")
-# day/ time, description
-def make_booking(day,time,desc):
+@click.command(help= ': schedule a code clinic session.')
+@click.option('-d','--day',prompt = "Enter the date on which you would like to book.",help="The date you would want to book the meeting; [USECASE: -d/--day 24]")
+@click.option('-t','--time',prompt ="Enter the time of the session you want to reserve.",help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
+@click.option('-D','--Desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
+def make_booking(day,time,Desc):
 
     user_input = f'{day}T{time}'
     date_time = booking.get_start_date_time(user_input)
-    booking_info = {"dateTime": f"{date_time}","description" : f"{desc}"}
+    booking_info = {"dateTime": f"{date_time}","description" : f"{Desc}"}
 
     creds,user_data = gen_creds()
     signal, message = booking.book_slot(creds,booking_info,user_data['email'])
     exit(message)
 
-    pass
 
-@click.command(help = 'cancel')
-@click.option('-d','--day',prompt = "Enter the day you want to book",help="")
-@click.option('-t','--time',prompt ='Enter the time for the slot you wish to book',help = "date and time to create booking")
-# day/ time, description
-# day/ time, description
+
+@click.command(help = ': cancel a code clinic session')
+@click.option('-d','--day',prompt = "Enter the date you want to cancel the booking.",help="The date of the presently booked meeting that you wish to cancel; [USECASE: -d/--day 24]")
+@click.option('-t','--time',prompt ='Enter the time of the session you wish to cancel.',help = "The time of the currently planned meeting that you wish to cancel; [USECASE: -t/--time 08:30]")
 def cancel_booking(day,time):
 
     user_input = f'{day}T{time}'
