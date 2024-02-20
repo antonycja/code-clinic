@@ -14,7 +14,7 @@ import setup
 from helpers import writer
 from os.path import exists, join as save_path
 from calendar_logic import booking
-
+import sys
 
 
 def gen_creds():
@@ -86,11 +86,11 @@ def login():
 @click.option('-d','--day',prompt = "Enter the date on which you would like to book",help="The date you would want to book the meeting; [USECASE: -d/--day 24]")
 @click.option('-t','--time',prompt ="Enter the time of the session you want to reserve",help="When you want the session to take place; [USECASE: -t/--time 08:30]")
 @click.option('-D','--Desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
-def make_booking(day,time,Desc):
+def make_booking(day,time,desc):
 
     user_input = f'{day}T{time}'
     date_time = booking.get_start_date_time(user_input)
-    booking_info = {"dateTime": f"{date_time}","description" : f"{Desc}"}
+    booking_info = {"dateTime": f"{date_time}","description" : f"{desc}"}
 
     creds,user_data = gen_creds()
     signal, message = booking.book_slot(creds,booking_info,user_data['email'])
@@ -147,6 +147,19 @@ app.add_command(login)
 
 
 if __name__ == '__main__':
-    app()
+    folders = setup.secure_folder()
+    data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
+
+
+
+    # if setup.pre_load() is False and not 'configure' in sys.argv:
+    #     exit('Run: code-clinic configure')
+    success, message = setup.pre_load()
+    if success is False and not 'configure' in sys.argv:
+        print(message)
+        exit('Run: code-clinic configure')
+
+    if 'configure' or 'login' or LogIn.check_token("/tmp/.logIn_token.json",data):
+        app()
 
 
