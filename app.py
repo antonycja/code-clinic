@@ -82,14 +82,14 @@ def login():
 
 # booking
 @click.command(help= ': schedule a code clinic session.')
-@click.option('-d','--day',prompt = "Enter the date on which you would like to book.",help="The date you would want to book the meeting; [USECASE: -d/--day 24]")
-@click.option('-t','--time',prompt ="Enter the time of the session you want to reserve.",help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
-@click.option('-D','--Desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
-def make_booking(day,time,Desc):
+@click.option('-d','--day',prompt = "Enter the date on which you would like to book",help="The date you would want to book the meeting; [USECASE: -d/--day 24]")
+@click.option('-t','--time',prompt ="Enter the time of the session you want to reserve",help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
+@click.option('-D','--desc',prompt = 'Provide a meeting summary',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
+def make_booking(day,time,desc):
 
     user_input = f'{day}T{time}'
     date_time = booking.get_start_date_time(user_input)
-    booking_info = {"dateTime": f"{date_time}","description" : f"{Desc}"}
+    booking_info = {"dateTime": f"{date_time}","description" : f"{desc}"}
 
     creds,user_data = gen_creds()
     signal, message = booking.book_slot(creds,booking_info,user_data['email'])
@@ -98,8 +98,8 @@ def make_booking(day,time,Desc):
 
 
 @click.command(help = ': cancel a code clinic session')
-@click.option('-d','--day',prompt = "Enter the date you want to cancel the booking.",help="The date of the presently booked meeting that you wish to cancel; [USECASE: -d/--day 24]")
-@click.option('-t','--time',prompt ='Enter the time of the session you wish to cancel.',help = "The time of the currently planned meeting that you wish to cancel; [USECASE: -t/--time 08:30]")
+@click.option('-d','--day',prompt = "Enter the date you want to cancel the booking",help="The date of the presently booked meeting that you wish to cancel; [USECASE: -d/--day 24]")
+@click.option('-t','--time',prompt ='Enter the time of the session you wish to cancel',help = "The time of the currently planned meeting that you wish to cancel; [USECASE: -t/--time 08:30]")
 def cancel_booking(day,time):
 
     user_input = f'{day}T{time}'
