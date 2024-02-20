@@ -147,10 +147,12 @@ def get_calendar_results(calendar: int, max_results=7):
     try:
         filename = "calendar_data.csv"
         service = build("calendar", "v3", credentials=user_credentials)
-        selected_events_info_list = get_data_from_calendar_api(service, calendar, max_results)
-
+        selected_events_info_list = get_data_from_calendar_api(
+            service, calendar, max_results)
+        # print(selected_events_info_list)
         if calendar_data_changed(selected_events_info_list, filename):
             write_to_csv_file(selected_events_info_list, filename)
-        
+
+        display_events(selected_events_info_list)
     except HttpError as error:
         print(f"An error occurred: {error}")
