@@ -20,18 +20,19 @@ YEAR = 2024
 USER_EMAIL = 'btshulisi023@student.wethinkcode.co.za'
 
 
-def book_slot(creds, booking_info : dict):
+def book_slot(creds, booking_info : dict, USER_EMAIL):
     try:
         service = build('calendar', 'v3', credentials=creds)
 
-        return update_event(service, booking_info)
+
+        return update_event(service, booking_info, USER_EMAIL)
 
 
     except HttpError as error:
         print("An error occured:", error) 
 
 
-def update_event(service, booking_info : dict) -> bool:
+def update_event(service, booking_info : dict, USER_EMAIL) -> bool:
     now = dt.datetime.utcnow().isoformat() + "Z"
 
     events_result = service.events().list(calendarId=CLINIC_CALENDAR_ID, timeMin=now, maxResults=10, singleEvents=True, orderBy='startTime').execute()
@@ -70,11 +71,11 @@ def create_event(service):
         'description': 'You can book this slot if  you want to volunteer.',
         'colorId' : 6,
         'start': {
-            'dateTime': '2024-02-16T16:00:00+02:00',
+            'dateTime': '2024-02-22T16:00:00+02:00',
             'timeZone': 'Africa/Johannesburg',
         },
         'end': {
-            'dateTime': '2024-02-16T16:30:00+02:00',
+            'dateTime': '2024-02-22T16:30:00+02:00',
             'timeZone': 'Africa/Johannesburg'
         },
         'recurrence': [
@@ -110,12 +111,12 @@ def authenticate():
     return creds
 
 
-def cancel_booking(creds, booking_info):
+def cancel_booking(creds, booking_info, USER_EMAIL):
     try:
 
         service = build('calendar', 'v3', credentials=creds)
 
-        return remove_attendee(service, booking_info)
+        return remove_attendee(service, booking_info, USER_EMAIL)
 
 
     except HttpError as err:
@@ -123,7 +124,7 @@ def cancel_booking(creds, booking_info):
         print(message)
 
 
-def remove_attendee(service, booking_info : dict):
+def remove_attendee(service, booking_info : dict, USER_EMAIL):
     date_time = booking_info['dateTime']
 
     now = dt.datetime.utcnow().isoformat() + "Z"
@@ -133,7 +134,7 @@ def remove_attendee(service, booking_info : dict):
     events = events_result.get("items", [])
 
     for event in events:
-        if event['start']['dateTime'] == booking_info['dateTime'] and booked_event(event):
+        if event['start']['dateTime'] == booking_info['dateTime'] and booked_event(event, USER_EMAIL):
             event['attendees'].pop()
             event['summary'] = "VOLUNTEER SLOT"
             event['description'] = "You can book this slot if  you want to volunteer."
@@ -149,7 +150,7 @@ def remove_attendee(service, booking_info : dict):
     return False, message
 
 
-def booked_event(event) -> bool:
+def booked_event(event, USER_EMAIL) -> bool:
     for attendee in event['attendees']:
         if attendee['email'] == USER_EMAIL:
             return True
@@ -179,35 +180,39 @@ def get_start_date_time(user_input):
 
 
 if __name__== '__main__':
+
     creds = authenticate()
 
-    date_time = '2024-02-13T17:00:00+02:00'
-    description = 'I need help with 2D arrays'
+    service = build('calendar', 'v3', credentials=creds)
+    create_event(service)
 
-    booking_info = dict()
+    # date_time = '2024-02-13T17:00:00+02:00'
+    # description = 'I need help with 2D arrays'
+
+    # booking_info = dict()
 
     
 
 
 
-    arguments = sys.argv
+    # arguments = sys.argv
 
-    if arguments[1] == 'book':
-        start_date_time = get_start_date_time(arguments[2])
-        print(start_date_time)
-        description = arguments[3]
+    # if arguments[1] == 'book':
+    #     start_date_time = get_start_date_time(arguments[2])
+    #     print(start_date_time)
+    #     description = arguments[3]
 
-        booking_info['dateTime'] = start_date_time
-        booking_info['description'] = description
+    #     booking_info['dateTime'] = start_date_time
+    #     booking_info['description'] = description
 
-        message = book_slot(creds, booking_info)
-        print(message)
-    elif arguments[1] == 'cancel_booking':
+    #     message = book_slot(creds, booking_info)
+    #     print(message)
+    # elif arguments[1] == 'cancel_booking':
 
-        start_date_time = get_start_date_time(arguments[2])
-        booking_info['dateTime'] = start_date_time
-        message = cancel_booking(creds, booking_info)
+    #    start_date_time = get_start_date_time(arguments[2])
+        #  booking_info['dateTime'] = start_date_time
+        #  message = cancel_booking(creds, booking_info)
 
-        print(message)
-    os.remove('token.json')
+    #     print(message)
+    # os.remove('token.json')
 
