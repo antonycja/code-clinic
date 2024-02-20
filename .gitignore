@@ -1,0 +1,8 @@
+# Beware of the sand
+sand* 
+
+# files 
+*.json
+*.bin
+*.pick*
+__pycache__
