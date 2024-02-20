@@ -1,8 +1,8 @@
 import datetime
+from tabulate import tabulate
 
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-
 from auth.auth import authenticate_user
 
 from .helpers.download_calendar import write_to_csv_file, calendar_data_changed
