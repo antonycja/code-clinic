@@ -38,6 +38,7 @@ def login(data: dict):
     return False, ["",""]
 
 
+
 def code_clinic_login(data: dict):
     """
     The main log in function for code clinic
