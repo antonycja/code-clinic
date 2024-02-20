@@ -1,0 +1,10 @@
+# Beware of the sand
+sand* 
+booking.py
+
+
+# files 
+*.json
+*.bin
+*.pick*
+__pycache__
