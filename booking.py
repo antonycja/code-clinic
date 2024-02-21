@@ -21,6 +21,11 @@ USER_EMAIL = 'btshulisi023@student.wethinkcode.co.za'
 
 
 def book_slot(creds, booking_info : dict, USER_EMAIL):
+    """
+    Books a slot specified by the user.
+
+    booking_info dict : Contains information about the booking {'dateTime': '', 'description': ''}
+    """
     try:
         service = build('calendar', 'v3', credentials=creds)
 
