@@ -12,4 +12,12 @@ try:
 except HttpError as error:
         print("An error occured:", error) 
 
-create_volunteer_slot(service, calendar_id)
+event_description = 'Join this event if you want to book a session with a volunteer.'
+volunteer_email = 'cthomas023@student.wethinkcode.co.za'
+date_time = datetime(2024, 2, 22, 8, 0, 0)
+campus = 'WTC CPT'
+
+
+create_volunteer_slot(service, calendar_id, volunteer_email, event_description, date_time, campus)
+
+        
