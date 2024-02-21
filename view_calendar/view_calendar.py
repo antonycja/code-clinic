@@ -86,7 +86,19 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
 
 
 def display_events(events):
-    print(events)
+    
+    
+    terminal_size =  os.get_terminal_size()
+    
+    # print(events)
+    # for event in events:
+    #     event["attendees"] = ", ".join(event["attendees"])
+
+        # TODO: Add a for loop to loop through the values of the map and add a width to a list
+
+
+
+    calendar_events = defaultdict(list)
     for event in events:
         event["attendees"] = ", ".join(event["attendees"])
         
