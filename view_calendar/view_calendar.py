@@ -146,7 +146,7 @@ def create_event_info(events: list, cal_name):
                 for index, attendee in enumerate(event["attendees"]):
                     if index == 0:
                         continue
-                    attendees.append(attendee["email"].split("@")[0])
+                    attendees.append(attendee.get("displayName", attendee.get("email", "TBC")).split("@")[0])
             else:
                 attendees.append(event["organizer"].get("email").split("@")[0])
         except KeyError:
