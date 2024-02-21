@@ -12,4 +12,4 @@ try:
 except HttpError as error:
         print("An error occured:", error) 
 
-create_open_slots(service, calendar_id)
+create_volunteer_slot(service, calendar_id)

@@ -1,15 +1,8 @@
-from google.oauth2.credentials import Credentials
-
-from google_auth_oauthlib.flow import InstalledAppFlow
-
-from google.auth.transport.requests import Request
-
-from googleapiclient.discovery import build
-
+from googleapiclient.errors import HttpError
 from datetime import datetime, timedelta
 
 
-def create_open_slots(service, calendar_id):
+def create_volunteer_slot(service, calendar_id):
     start_time = datetime(2023, 3, 1, 9, 0, 0) - timedelta(hours=2)  # Start time (Year, Month, Day, Hour, Minute, Second)
 
     end_time = datetime(2023, 3, 1, 10, 0, 0)  - timedelta(hours=2) #1 End time (Year, Month, Day, Hour, Minute, Second)
