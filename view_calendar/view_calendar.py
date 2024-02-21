@@ -62,7 +62,7 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
             cal_name = cal_type_list[index].upper()
         else:
             cal_name = cal_type.upper()
-        print(f"{cal_name}: ")
+        # print(f"{cal_name}: ")
 
         # Prints the start and name of the next max_events events
         if events:
