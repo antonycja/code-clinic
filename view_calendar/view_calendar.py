@@ -100,20 +100,30 @@ def display_events(events):
 
     calendar_events = defaultdict(list)
     for event in events:
-        event["attendees"] = ", ".join(event["attendees"])
-        
-        # Add a for loop to loop through the values of the map and add a width to a list
-        print(type(event["attendees"]))
-        print(event["attendees"])
-        print(event["Calendar"])
-        
-        
-        
-    table = tabulate(events, headers="keys", tablefmt="fancy_grid",
-                     colalign=("center"), maxcolwidths=[8, None])
-    # table = [["Sun",696000,1989100000],["Earth",6371,5973.6], ["Moon",1737,73.5],["Mars",3390,641.85]]
-    # table = tabulate(table, headers=["where", "from", "until"])
-    print(table)
+        calendar_events[event['Calendar']].append(event)
+
+    # Print each calendar's events
+    for calendar, events in calendar_events.items():
+        table_events = []
+        print(f"{calendar}:")
+        for event in events:
+            if event["Calendar"] != "PERSONAL CALENDAR":
+                event["organizer"] = "username023@student.wethinkcode.co.za"
+                event["organizer"] = "username023@student.wethinkcode.co.za"
+            event_details = {"Date": event["date"], "Time": f'{event["start time"]} - {event["end time"]}',
+                             "Summary": event["summary"], "Location": event["location"], "Organizer": event["organizer"], "Attendees": ', '.join(event["attendees"])}
+            table_events.append(event_details)
+            
+        row_span = [terminal_size.columns // len(event_details.keys()) for _ in event_details.keys()]   
+        # print(row_span) 
+        row_span[-2] = None
+        table = tabulate(table_events, headers="keys", tablefmt="fancy_grid",
+                     colalign=("center"), maxcolwidths=row_span)
+        print(table)
+        print()
+        print()
+
+
     pass
 
 
