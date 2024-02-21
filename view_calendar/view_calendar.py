@@ -116,7 +116,7 @@ def display_events(events):
             
         row_span = [terminal_size.columns // len(event_details.keys()) for _ in event_details.keys()]   
         # print(row_span) 
-        row_span[-2] = None
+        # row_span[-2] = None
         table = tabulate(table_events, headers="keys", tablefmt="fancy_grid",
                      colalign=("center"), maxcolwidths=row_span)
         print(table)
