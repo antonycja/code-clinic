@@ -17,6 +17,7 @@ from calendar_logic import booking
 import sys
 
 
+# pusg this code: added a dot(.),to make files hidden
 def gen_creds():
     """
     Generates the Google credentials object via oauth2 authentication.
@@ -31,23 +32,23 @@ def gen_creds():
 
     if LogIn.check_token("/tmp/.logIn_token.json",data):
 
-        if not exists("/tmp/elite.json"):
+        if not exists("/tmp/.elite.json"):
             cs = setup.decrypt_it(folders,'keys','elite','cs','elite')
-            writer.write_to_json("/tmp",'elite',cs)
+            writer.write_to_json("/tmp",'.elite',cs)
 
         if exists(save_path(folders['auth'],'.creds.token')):
             token = setup.decrypt_it(folders, "keys", "token", "creds", "token")
-            writer.write_to_json("/tmp","creds",token)
+            writer.write_to_json("/tmp",".creds",token)
             write_token = False
         else:
             write_token = True
 
         # token authentication
-        creds = authentication.authenticate("/tmp/elite.json","/tmp/creds.json")
+        creds = authentication.authenticate("/tmp/.elite.json","/tmp/.creds.json")
 
         # writing an encrypted version of the token
         if write_token:
-            with open('/tmp/creds.json','r') as file:
+            with open('/tmp/.creds.json','r') as file:
                 data = file.read()
             setup.encrypt_it(data,folders,"keys","token","SOS","token","creds","token")
 
