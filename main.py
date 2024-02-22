@@ -20,5 +20,4 @@ campus = 'WTC CPT'
 
 
 create_volunteer_slot(service, calendar_id, volunteer_email, event_description, starttime, endtime, campus)
-
-        
+# cancel_event(service, calendar_id, starttime, endtime)

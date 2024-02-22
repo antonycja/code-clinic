@@ -21,6 +21,8 @@ def create_volunteer_slot(service, calendar_id, volunteer_email, event_descripti
                 },
                 'attendees': [
                     {'email': volunteer_email,
+                    'responseStatus': 'accepted'},
+                    {'email': 'amaposa023@student.wethinkcode.co.za',
                     'responseStatus': 'accepted'}
                 ],
                 'reminders': {
@@ -33,7 +35,7 @@ def create_volunteer_slot(service, calendar_id, volunteer_email, event_descripti
                 }
 
             event = service.events().insert(calendarId=calendar_id, body=event).execute()
-            print('Events created: %s' % (event.get('htmlLink')))
+            print("Slot successfully created.")
         except HttpError as error:
             print("An error occured:", error)
     else:
@@ -57,17 +59,35 @@ def is_booked(starttime, endtime, email, service, calendar_id) -> bool:
 
 
 def get_event(service, calendar_id, starttime, endtime):
-
-    events_result = (
-        service.events()
-        .list(
-            calendarId=calendar_id,
-            timeMin=starttime,
-            timeMax=endtime,
-            singleEvents=True,
-            orderBy='startTime'
+    
+    try:
+        events_result = (
+            service.events()
+            .list(
+                calendarId=calendar_id,
+                timeMin=starttime,
+                timeMax=endtime,
+                singleEvents=True,
+                orderBy='startTime'
+            )
+        .execute()
         )
-    .execute()
-    )
-    event = events_result.get('items', [])
-    return event[0]['id']
+        event = events_result.get('items', [])
+        return event[0]['id']
+    except IndexError as error:
+        print(f'There are not slots booked for the specified time')
+        return None
+
+def cancel_event(service, calendar_id, starttime, endtime):
+
+    try:
+        event_id = get_event(service, calendar_id, starttime, endtime)
+        event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+        if len(event['attendees']) > 1:
+            print('You cannot cancel a fully booked meeting.')
+        else:
+            service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
+            print('Slot successfully cancelled.')
+
+    except TypeError as error:
+        print('You cannot cancel a slot that does not exist.')
