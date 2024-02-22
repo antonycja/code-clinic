@@ -14,10 +14,11 @@ except HttpError as error:
 
 event_description = 'Join this event if you want to book a session with a volunteer.'
 volunteer_email = 'cthomas023@student.wethinkcode.co.za'
-date_time = datetime(2024, 2, 22, 8, 0, 0)
+starttime = '2024-02-22T08:00:00+02:00'
+endtime = '2024-02-22T08:30:00+02:00'
 campus = 'WTC CPT'
 
 
-create_volunteer_slot(service, calendar_id, volunteer_email, event_description, date_time, campus)
+create_volunteer_slot(service, calendar_id, volunteer_email, event_description, starttime, endtime, campus)
 
         
