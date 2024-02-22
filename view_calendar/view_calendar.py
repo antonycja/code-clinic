@@ -143,8 +143,9 @@ def create_event_info(events: list, cal_name):
                         if creator not in [event["email"].split("@")[0] for event in event["attendees"]]:
                             attendees.append(creator)
                         continue
-                    attendees.append(attendee.get(
-                        "displayName", attendee.get("email", "TBC").split("@")[0]))
+                    else:
+                        attendees.append(attendee.get(
+                            "displayName", attendee.get("email", "TBC").split("@")[0]))
             else:
                 # if event["organizer"].get("email").split("@")[0] ==
                 attendees.append(event["organizer"].get("displayName", "TBC"))
