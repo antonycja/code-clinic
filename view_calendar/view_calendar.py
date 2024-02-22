@@ -142,7 +142,7 @@ def create_event_info(events: list, cal_name):
                     attendees.append(attendee.get(
                         "displayName", attendee.get("email", "TBC").split("@")[0]))
             else:
-                # if event["organizer"].get("email").split("@")[0] == 
+                # if event["organizer"].get("email").split("@")[0] ==
                 attendees.append(event["organizer"].get("displayName", "TBC"))
         except KeyError:
             attendees.append("TBC")
