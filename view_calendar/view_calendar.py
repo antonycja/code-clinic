@@ -88,10 +88,9 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
 
 
 def display_events(events):
-    
-    
-    terminal_size =  os.get_terminal_size()
-    
+
+    terminal_size = os.get_terminal_size()
+
     calendar_events = defaultdict(list)
     for event in events:
         calendar_events[event['Calendar']].append(event)
