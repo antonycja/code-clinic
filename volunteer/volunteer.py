@@ -3,7 +3,21 @@ from datetime import datetime, timedelta
 
 
 def create_volunteer_slot(service, calendar_id, volunteer_email, event_description, starttime, endtime, campus):
-    
+    """
+    Create a volunteer slot event on the specified Google Calendar.
+
+    Args:
+        service - (googleapiclient.discovery.Resource): Google Calendar service instance.
+        calendar_id (str): ID of the Google Calendar.
+        volunteer_email (str): Email of the volunteer.
+        event_description (str): Description of the event.
+        starttime (str): Start time of the event in 'YYYY-MM-DDTHH:MM:SS' format.
+        endtime (str): End time of the event in 'YYYY-MM-DDTHH:MM:SS' format.
+        campus (str): Location or campus of the event.
+
+    Returns:
+        None
+    """
 
     if not is_booked(starttime, endtime, volunteer_email, service, calendar_id):
         try:
@@ -43,7 +57,19 @@ def create_volunteer_slot(service, calendar_id, volunteer_email, event_descripti
 
 
 def is_booked(starttime, endtime, email, service, calendar_id) -> bool:
+    """
+    Check if the volunteer is already booked for a session during the specified time.
 
+    Args:
+        starttime (str): Start time of the event in 'YYYY-MM-DDTHH:MM:SS' format.
+        endtime (str): End time of the event in 'YYYY-MM-DDTHH:MM:SS' format.
+        email (str): Email of the volunteer.
+        service (googleapiclient.discovery.Resource): Google Calendar service instance.
+        calendar_id (str): ID of the Google Calendar.
+
+    Returns:
+        bool: True if the volunteer is booked; False otherwise.
+    """
     event_id = get_event(service, calendar_id, starttime, endtime)
     if not event_id:
         return False
@@ -58,8 +84,19 @@ def is_booked(starttime, endtime, email, service, calendar_id) -> bool:
     return False
 
 
-def get_event(service, calendar_id, starttime, endtime):
-    
+def get_event(service, calendar_id, starttime, endtime) -> str:
+    """
+    Retrieve the event ID for the event within the specified time frame.
+
+    Args:
+        service (googleapiclient.discovery.Resource): Google Calendar service instance.
+        calendar_id (str): ID of the Google Calendar.
+        starttime (str): Start time of the event in 'YYYY-MM-DDTHH:MM:SS' format.
+        endtime (str): End time of the event in 'YYYY-MM-DDTHH:MM:SS' format.
+
+    Returns:
+        str: Event ID if an event is found within the specified time frame; None otherwise.
+    """
     try:
         events_result = (
             service.events()
@@ -79,7 +116,18 @@ def get_event(service, calendar_id, starttime, endtime):
         return None
 
 def cancel_event(service, calendar_id, starttime, endtime):
+    """
+    Cancel the event within the specified time frame.
 
+    Args:
+        service (googleapiclient.discovery.Resource): Google Calendar service instance.
+        calendar_id (str): ID of the Google Calendar.
+        starttime (str): Start time of the event in 'YYYY-MM-DDTHH:MM:SS' format.
+        endtime (str): End time of the event in 'YYYY-MM-DDTHH:MM:SS' format.
+
+    Returns:
+        None
+    """
     try:
         event_id = get_event(service, calendar_id, starttime, endtime)
         event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
