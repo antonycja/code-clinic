@@ -100,13 +100,12 @@ def display_events(events):
         table_events = []
         print(f"{calendar}:")
         for event in events:
-            if event["Calendar"] != "PERSONAL CALENDAR":
-                event["organizer"] = "username023@student.wethinkcode.co.za"
-                event["organizer"] = "username023@student.wethinkcode.co.za"
+            # if event["Calendar"] != "PERSONAL CALENDAR":
+            #     event["organizer"] = "username023@student.wethinkcode.co.za"
             event_details = {"Date": event["date"], "Time": f'{event["start time"]} - {event["end time"]}',
                              "Summary": event["summary"], "Location": event["location"], "Organizer": event["organizer"], "Attendees": ', '.join(event["attendees"])}
             table_events.append(event_details)
-
+    
         row_span = [(terminal_size.columns-10) // len(event_details.keys())
                     for _ in event_details.keys()]
         # print(row_span)
