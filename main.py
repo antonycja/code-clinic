@@ -21,6 +21,17 @@ def get_user_input():
         if days.isdigit():
             days = int(days)
             break
+        
+    while True:
+        filter_evt = input("Would you like to filter the events/calendar? (leave blank if NOT).\n(0). Available Times.\n(1). NOT BOOKED.\nEnter the filter number here: ")
+        print()
+        if len(filter_evt) == 0:
+            filter_evt = None
+            break
+        if filter_evt.isdigit():
+            filter_evt = int(filter_evt)
+            break
+        
     return calendar, days
 
 calendar, days = get_user_input()
