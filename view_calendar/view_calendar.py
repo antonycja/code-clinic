@@ -131,7 +131,7 @@ def create_event_info(events: list, cal_name):
             location = event["location"]
         except KeyError:
             location = "TBC"
-        organizer = event["organizer"].get("email")
+        organizer = event["creator"].get("email")
         attendees = []
         try:
             if len(event["attendees"]) > 1:
