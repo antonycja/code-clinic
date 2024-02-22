@@ -71,7 +71,7 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
                 print(events)
             else:
                 # print(events)
-                
+
                 event_info = create_event_info(events, cal_name)
 
                 # selected_events_info_list.append(event_info)
@@ -112,11 +112,10 @@ def display_events(events):
         # print(row_span)
         row_span[-2] = row_span[-2]+5
         table = tabulate(table_events, headers="keys", tablefmt="fancy_grid",
-                     colalign=("center"), maxcolwidths=row_span)
+                         colalign=("center"), maxcolwidths=row_span)
         print(table)
         print()
         print()
-
 
     pass
 
