@@ -134,6 +134,8 @@ def create_event_info(events: list, cal_name):
         organizer = event["creator"].get("email")
         attendees = []
         try:
+            # print(len(event["attendees"]), event["attendees"])
+            
             if len(event["attendees"]) > 1:
                 for index, attendee in enumerate(event["attendees"]):
                     if index == 0:
