@@ -106,10 +106,11 @@ def display_events(events):
             event_details = {"Date": event["date"], "Time": f'{event["start time"]} - {event["end time"]}',
                              "Summary": event["summary"], "Location": event["location"], "Organizer": event["organizer"], "Attendees": ', '.join(event["attendees"])}
             table_events.append(event_details)
-            
-        row_span = [(terminal_size.columns-4) // len(event_details.keys()) for _ in event_details.keys()]   
-        # print(row_span) 
-        # row_span[-2] = None
+
+        row_span = [(terminal_size.columns-10) // len(event_details.keys())
+                    for _ in event_details.keys()]
+        # print(row_span)
+        row_span[-2] = row_span[-2]+5
         table = tabulate(table_events, headers="keys", tablefmt="fancy_grid",
                      colalign=("center"), maxcolwidths=row_span)
         print(table)
