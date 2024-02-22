@@ -70,6 +70,8 @@ def get_data_from_calendar_api(service, calendar=1, days=7):
             if isinstance(events, str):
                 print(events)
             else:
+                # print(events)
+                
                 event_info = create_event_info(events, cal_name)
 
                 # selected_events_info_list.append(event_info)
