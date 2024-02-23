@@ -13,7 +13,7 @@ from file_handling import files
 import setup
 from helpers import writer
 from os.path import exists, join as save_path
-from calender_logic import booking
+from calendar_logic import booking
 import sys
 
 
@@ -86,7 +86,7 @@ def login():
 @click.command(help= ': schedule a code clinic session.')
 @click.option('-d','--day',prompt = "Enter the date on which you would like to book",help="The date you would want to book the meeting; [USECASE: -d/--day 24]")
 @click.option('-t','--time',prompt ="Enter the time of the session you want to reserve",help="When you want the session to take place; [USECASE: -t/--time 08:30]")
-@click.option('-D','--Desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
+@click.option('-D','--desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
 def make_booking(day,time,desc):
 
     user_input = f'{day}T{time}'
