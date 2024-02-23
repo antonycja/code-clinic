@@ -102,7 +102,7 @@ def setup():
     cs = authentication.get_credentials()
     user_data = config.generate_logIn_cred()
     encrypt_it(user_data,folders,'keys','elite','SOS','recon','config','elite')
-    encrypt_it(cs,folders,'keys','cred','creds','recon','credentials','elite')
+    encrypt_it(cs,folders,'keys','creds','creds','recon','credentials','elite')
     
     return user_data, folders
     
