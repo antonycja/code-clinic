@@ -70,7 +70,7 @@ def configure(name: str = None,email: str = None):
     data = config.generate_logIn_cred(name,email)
     setup.encrypt_it(data,folders,'keys','creds','creds','recon','config','creds')
     cs = authentication.get_credentials()
-    setup.encrypt_it(cs,folders,'keys','elite','SOS','recon','cs','elite')
+    setup.encrypt_it(cs,folders,'keys','elite','cs','recon','cs','elite')
 
 
 #login
