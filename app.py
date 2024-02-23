@@ -153,12 +153,12 @@ if __name__ == '__main__':
     if success == False and not 'configure' in sys.argv:
         print(message)
         exit('Run: code-clinic configure')
-    elif 'configure' in sys.argv:
+    elif 'configure' in sys.argv or '--help' in sys.argv or '-h' in sys.argv:
         app()
 
     folders = setup.secure_folder()
     data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
-    if 'login' or LogIn.check_token("/tmp/.logIn_token.json",data):
+    if 'login' in sys.argv or LogIn.check_token("/tmp/.logIn_token.json",data):
         app()
 
 
