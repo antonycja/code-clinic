@@ -2,20 +2,16 @@
 This module is designed for booking functions
 """
 
-import os.path, sys
-import datetime as dt
 
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
+import datetime as dt
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 
-SCOPES = ["https://www.googleapis.com/auth/calendar"]
+
 CLINIC_CALENDAR_ID = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 YEAR = 2024
-USER_EMAIL = 'btshulisi023@student.wethinkcode.co.za'
+
 
 
 def book_slot(creds, booking_info : dict, USER_EMAIL) -> tuple:
@@ -111,25 +107,6 @@ def create_event(service):
 
     print(f'event created: {event.get("htmlLink")}')
 
-
-def authenticate():
-    creds = None
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json')
-
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        
-
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-        
-    return creds
 
 
 def cancel_booking(creds, booking_info, USER_EMAIL):
