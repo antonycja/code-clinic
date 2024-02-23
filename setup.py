@@ -117,7 +117,7 @@ def pre_load():
         success,message = True, None
 
         # checking if all necessary files are in place
-        auth_dir = ['.config.creds','.cs.elite']
+        auth_dir = ['.config.elite','.cs.elite']
         for file in auth_dir:
             if not exists(save_path(folders['auth'],file)):
                 success = False
