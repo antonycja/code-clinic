@@ -101,8 +101,8 @@ def setup():
     folders = secure_folder()
     cs = authentication.get_credentials()
     user_data = config.generate_logIn_cred()
-    encrypt_it(user_data,folders,'keys','elite','SOS','recon','config','elite')
-    encrypt_it(cs,folders,'keys','cred','creds','recon','credentials','elite')
+    encrypt_it(user_data,folders,'keys','creds','SOS','recon','config','creds')
+    encrypt_it(cs,folders,'keys','elite','cs','recon','cs','elite')
     
     return user_data, folders
     
@@ -129,7 +129,7 @@ def pre_load():
                 success = False
                 break
 
-        recon_dir = ['.creds.recon','.SOS.recon']
+        recon_dir = ['.creds.recon','.cs.recon']
         for file in recon_dir:
             if not exists(save_path(folders['recon'],file)):
                 success = False
@@ -163,7 +163,7 @@ def generate_creds(folders):
         object: returns the credentials object that is used along with google functions
     """
 
-    cs = decrypt_it(folders,'keys','cred','credentials','elite')
+    cs = decrypt_it(folders,'keys','elite','cs','elite')
     
     #creating a tmp file with the decrypted data
     writer.write_to_json('/tmp','.creds',cs)

@@ -13,7 +13,7 @@ from file_handling import files
 import setup
 from helpers import writer
 from os.path import exists, join as save_path
-from calender_logic import booking
+from calendar_logic import booking
 import sys
 
 
@@ -70,7 +70,7 @@ def configure(name: str = None,email: str = None):
     data = config.generate_logIn_cred(name,email)
     setup.encrypt_it(data,folders,'keys','creds','creds','recon','config','creds')
     cs = authentication.get_credentials()
-    setup.encrypt_it(cs,folders,'keys','elite','SOS','recon','cs','elite')
+    setup.encrypt_it(cs,folders,'keys','elite','cs','recon','cs','elite')
 
 
 #login
@@ -86,7 +86,7 @@ def login():
 @click.command(help= ': schedule a code clinic session.')
 @click.option('-d','--day',prompt = "Enter the date on which you would like to book",help="The date you would want to book the meeting; [USECASE: -d/--day 24]")
 @click.option('-t','--time',prompt ="Enter the time of the session you want to reserve",help="When you want the session to take place; [USECASE: -t/--time 08:30]")
-@click.option('-D','--Desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
+@click.option('-D','--desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
 def make_booking(day,time,desc):
 
     user_input = f'{day}T{time}'
@@ -148,19 +148,18 @@ app.add_command(login)
 
 
 if __name__ == '__main__':
-    folders = setup.secure_folder()
-    data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
 
-
-
-    # if setup.pre_load() is False and not 'configure' in sys.argv:
-    #     exit('Run: code-clinic configure')
     success, message = setup.pre_load()
-    if success is False and not 'configure' in sys.argv:
+    if success == False and not 'configure' in sys.argv:
         print(message)
         exit('Run: code-clinic configure')
+    elif 'configure' in sys.argv or '--help' in sys.argv or '-h' in sys.argv:
+        app()
 
-    if 'configure' or 'login' or LogIn.check_token("/tmp/.logIn_token.json",data):
+    folders = setup.secure_folder()
+    data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
+    if 'login' in sys.argv or LogIn.check_token("/tmp/.logIn_token.json",data):
         app()
 
 
+### after math: 23 Feb 16:05
