@@ -13,7 +13,7 @@ from file_handling import files
 import setup
 from helpers import writer
 from os.path import exists, join as save_path
-from calendar_logic import booking
+from calender_logic import booking
 import sys
 
 
