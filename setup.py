@@ -114,16 +114,16 @@ def pre_load():
     if exists(save_path(files.get_home(),'.elite')):
 
         folders = secure_folder()
-        success = True
+        success,message = True, None
 
         # checking if all necessary files are in place
-        auth_dir = ['.config.elite','.credentials.elite']
+        auth_dir = ['.config.creds','.cs.elite']
         for file in auth_dir:
             if not exists(save_path(folders['auth'],file)):
                 success = False
                 break
 
-        key_dir = ['.keys.cred','.keys.elite']
+        key_dir = ['.keys.creds','.keys.elite']
         for file in key_dir:
             if not exists(save_path(folders['key'],file)):
                 success = False
