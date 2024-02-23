@@ -12,10 +12,10 @@ try:
 except HttpError as error:
         print("An error occured:", error) 
 
-event_description = 'Join this event if you want to book a session with a volunteer.'
-volunteer_email = 'cthomas023@student.wethinkcode.co.za'
-starttime = '2024-02-22T08:00:00+02:00'
-endtime = '2024-02-22T08:30:00+02:00'
+event_description = 'Join this event if you need help.'
+volunteer_email = 'amaposa023@student.wethinkcode.co.za'
+starttime = '2024-02-23T08:30:00+02:00'
+endtime = '2024-02-23T09:00:00+02:00'
 campus = 'WTC CPT'
 
 
