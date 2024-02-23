@@ -105,7 +105,7 @@ def display_events(events):
             event_details = {"Date": event["date"], "Time": f'{event["start time"]} - {event["end time"]}',
                              "Summary": event["summary"], "Location": event["location"], "Organizer": event["organizer"], "Attendees": ', '.join(event["attendees"])}
             table_events.append(event_details)
-    
+
         row_span = [(terminal_size.columns-10) // len(event_details.keys())
                     for _ in event_details.keys()]
         # print(row_span)
@@ -135,13 +135,16 @@ def create_event_info(events: list, cal_name):
         attendees = []
         try:
             # print(len(event["attendees"]), event["attendees"])
-            
+
             if len(event["attendees"]) > 1:
                 for index, attendee in enumerate(event["attendees"]):
                     if index == 0:
-                        creator = event["creator"].get("email").split("@")[0]
-                        if creator not in [event["email"].split("@")[0] for event in event["attendees"]]:
-                            attendees.append(creator)
+                        # creator = event["creator"].get("email").split("@")[0]
+                        if event["creator"].get("email") != event["organizer"].get("email"):
+                            attendees.append(attendee.get(
+                                "email", "TBC").split("@")[0])
+                        # if creator not in [event["email"].split("@")[0] for event in event["attendees"]]:
+                        #     attendees.append(creator)
                         continue
                     else:
                         attendees.append(attendee.get(
