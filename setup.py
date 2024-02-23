@@ -102,7 +102,7 @@ def setup():
     cs = authentication.get_credentials()
     user_data = config.generate_logIn_cred()
     encrypt_it(user_data,folders,'keys','elite','SOS','recon','config','elite')
-    encrypt_it(cs,folders,'keys','creds','creds','recon','credentials','elite')
+    encrypt_it(cs,folders,'keys','creds','creds','recon','cs','elite')
     
     return user_data, folders
     
@@ -117,7 +117,7 @@ def pre_load():
         success,message = True, None
 
         # checking if all necessary files are in place
-        auth_dir = ['.config.creds','.cs.elite']
+        auth_dir = ['.config.elite','.cs.elite']
         for file in auth_dir:
             if not exists(save_path(folders['auth'],file)):
                 success = False
