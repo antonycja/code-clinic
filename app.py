@@ -88,12 +88,15 @@ def login():
 @click.option('-D','--desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
 def make_booking(day,time,desc):
 
+    "TODO: fix booking of an already booked session"
+    
     user_input = f'{day}T{time}'
     date_time = booking.get_start_date_time(user_input)
     booking_info = {"dateTime": f"{date_time}","description" : f"{desc}"}
 
     creds,user_data = gen_creds()
     signal, message = booking.book_slot(creds,booking_info,user_data['email'])
+    
     exit(message)
 
 
@@ -117,9 +120,22 @@ def cancel_booking(day,time):
 @click.command()
 @click.option('-d','--day',prompt = 'Enter the date on which you would like to volunteer',help ='A date that you are available and able to help others; [USECASE: -d/--day 24]')
 @click.option('-t','--time',prompt= 'Enter the time of the session you want to volunteer',help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
-@click.option('-c','-campus',prompt = 'Enter the name of the campus that you attend (optional)', help = 'The campus you attend, (CPT, JHB, DBN, CJC); [USECASE: -c/--campus CPT]' )
-def volunteer():
-    print('vol')
+@click.option('-c','--campus',prompt = 'Enter the name of the campus that you attend (optional)', help = 'The campus you attend, (CPT, JHB, DBN, CJC); [USECASE: -c/--campus CPT]' )
+def volunteer(day,time,campus):
+
+    user_input = f'{day}T{time}'
+    gen_end_time = volunteering.end_time(time)
+    campus = volunteering.campus_abb(campus)
+
+    start_time = booking.get_start_date_time(user_input)
+    end_time = booking.get_start_date_time(f'{day}T{gen_end_time}')
+
+    # just need to fix prompts, run through quill bot
+    creds, user_data = gen_creds()
+    message = volunteering.create_volunteer_slot(creds,user_data['email'],start_time,end_time,campus)
+    exit(message)
+
+
     pass
 
 
