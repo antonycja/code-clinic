@@ -98,7 +98,6 @@ def get_data_from_calendar_api(service: object, calendar: int = 1, days: int = 7
 
         # Prints the start and name of the next max_events events
         if events:
-            # print(events[0])
             if isinstance(events, str):
                 print(events)
             else:
