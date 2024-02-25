@@ -140,8 +140,6 @@ def display_events(events:list) -> None:
         print()
         print()
 
-    pass
-
 
 def create_event_info(events: list, cal_name):
     event_info_list = []
