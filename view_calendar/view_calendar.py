@@ -184,7 +184,7 @@ def create_event_info(events: list, cal_name):
     return event_info_list
 
 
-def get_calendar_results(calendar: int, max_results=7):
+def get_calendar_results(calendar: int, max_results=7) -> None:
     """Print the calendar data for the selected calendar.
 
     Args:
