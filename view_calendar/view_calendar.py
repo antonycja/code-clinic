@@ -109,7 +109,12 @@ def get_data_from_calendar_api(service: object, calendar: int = 1, days: int = 7
     return selected_events_info_list
 
 
-def display_events(events):
+def display_events(events:list) -> None:
+    """print out the results on the terminal.
+
+    Args:
+        events (list): a list containing the event data to be shown to the user.
+    """
 
     terminal_size = os.get_terminal_size()
 
