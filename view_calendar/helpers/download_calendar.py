@@ -28,7 +28,13 @@ def calendar_data_changed(data_list:list, filename:str) -> bool:
     except FileNotFoundError:
         return True
 
-def write_to_csv_file(data_list, filename):
+def write_to_csv_file(data_list:list, filename:str) -> None:
+    """save the data to a csv file.
+
+    Args:
+        data_list (list): a list containing the data to be saved
+        filename (str): the name of the file where the data will be stored
+    """
     fields = [name for name in data_list[0].keys()]
     with open(filename, "w") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fields)
