@@ -64,6 +64,21 @@ def determine_calendar(calendar: int) -> tuple:
         calendars = [calendar for calendar in calendar_dict.values()]
         cal_type = "ALL calendars"
 
+    return calendars, cal_type, cal_type_list
+
+
+def get_data_from_calendar_api(service: object, calendar: int = 1, days: int = 7) -> list:
+    """get the data from the calendar api and return a list containing the calendar data.
+
+    Args:
+        service (object): the google calendar api response.
+        calendar (int, optional): the calendar ID of the calendar to be viewed. Defaults to 1.
+        days (int, optional): the number of days to check. Defaults to 7 days.
+
+    Returns:
+        list: a list containing dictionaries of events.
+    """
+    calendars, cal_type, cal_type_list = determine_calendar(calendar)
     # Calling the Calendar API
     print(
         f"Getting the upcoming event for the next {days} for {cal_type}...\n")
