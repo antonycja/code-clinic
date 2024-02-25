@@ -1,5 +1,14 @@
 import csv
-def calendar_data_changed(data_list, filename):
+def calendar_data_changed(data_list:list, filename:str) -> bool:
+    """check whether the calendar data has changed compared to the data in the filename.
+
+    Args:
+        data_list (list): the new updated data.
+        filename (str): the filename of the currently saved data.
+
+    Returns:
+        bool: true if the data has changed and false if it hasn't
+    """
     try:
         with open(filename, "r") as cal_data:
             csv_file = csv.reader(cal_data)
