@@ -54,3 +54,6 @@ def run_view_calendars() -> None:
 
 # get_calendar_results(0, 7)
 
+
+if __name__ == "__main__":
+    run_view_calendars()
