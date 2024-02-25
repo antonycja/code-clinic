@@ -8,14 +8,15 @@ def get_user_input() -> tuple[int, int]:
         tuple[int,int]: the calendar option to be viewed and the number of days to view.
     """
     while True:
-        calendar = input("Which calendar would you like to view? \n(0). All Calendars.\n(1). Personal Calendar Only.\n(2). Code Clinics Calendar Only.\nEnter the number of the calendar here: ")
+        calendar = input(
+            "Which calendar would you like to view? \n(0). All Calendars.\n(1). Personal Calendar Only.\n(2). Code Clinics Calendar Only.\nEnter the number of the calendar here: ")
         print()
         if len(calendar) == 0:
             break
         if calendar.isdigit():
             calendar = int(calendar)
             break
-        
+
     while True:
         days = input(
             "Enter the number of days you would like to view, leave empty for (default = 7).\nEnter a number here: ")
