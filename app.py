@@ -88,8 +88,8 @@ def login():
 @click.option('-D','--desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
 def make_booking(day,time,desc):
 
-    "TODO: fix booking of an already booked session"
-    
+    "TODO: fix booking of an already booked session. Check if booker is allowed to cancel a session that a volunteer is in."
+
     user_input = f'{day}T{time}'
     date_time = booking.get_start_date_time(user_input)
     booking_info = {"dateTime": f"{date_time}","description" : f"{desc}"}
@@ -117,7 +117,7 @@ def cancel_booking(day,time):
 
 # volunteering
 
-@click.command()
+@click.command(help = ': volunteer to host a code clinic session')
 @click.option('-d','--day',prompt = 'Enter the date on which you would like to volunteer',help ='A date that you are available and able to help others; [USECASE: -d/--day 24]')
 @click.option('-t','--time',prompt= 'Enter the time of the session you want to volunteer',help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
 @click.option('-c','--campus',prompt = 'Enter the name of the campus that you attend (optional)', help = 'The campus you attend, (CPT, JHB, DBN, CJC); [USECASE: -c/--campus CPT]' )
@@ -135,6 +135,9 @@ def volunteer(day,time,campus):
     message = volunteering.create_volunteer_slot(creds,user_data['email'],start_time,end_time,campus)
     exit(message)
 
+
+@click.command()
+def cancel_booking():
 
     pass
 
