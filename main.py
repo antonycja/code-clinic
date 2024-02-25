@@ -41,12 +41,16 @@ def get_user_input() -> tuple[int, int]:
 
     return calendar, days
 
-calendar, days = get_user_input()
 
-if days != 0:
-    get_calendar_results(calendar, days)
-else:
-    get_calendar_results(calendar)
-    
+def run_view_calendars() -> None:
+    """Run the view calendars 
+    """
+    calendar, days = get_user_input()
+
+    if days != 0:
+        get_calendar_results(calendar, days)
+    else:
+        get_calendar_results(calendar)
+
 # get_calendar_results(0, 7)
 
