@@ -9,10 +9,20 @@ from auth.auth import authenticate_user
 from .helpers.download_calendar import write_to_csv_file, calendar_data_changed
 
 
-def get_events(service, calender, days):
+def get_events(service: object, calender: str, days: int) -> list:
+    """get the events on the specified period from the google calendars api.
+
+    Args:
+        service (object): the google calendar api response.
+        calender (str): the calendar ID of the calendar to be viewed.
+        days (int): the number of days to check.
+
+    Returns:
+        list: a list of events for the specified period.
+    """
     now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
     end = (datetime.datetime.utcnow() + datetime.timedelta(days=days)
-           ).isoformat() + "Z"  # 'Date in <days> amount of days
+           ).isoformat() + "Z"  # Get the date in <days> amount of days
     events_result = (
         service.events()
         .list(
