@@ -1,7 +1,12 @@
 from view_calendar.view_calendar import get_calendar_results
 
 
-def get_user_input():
+def get_user_input() -> tuple[int, int]:
+    """get user input to optimize the viewing experience of the user by only displaying what the user chooses to output.
+
+    Returns:
+        tuple[int,int]: the calendar option to be viewed and the number of days to view.
+    """
     while True:
         calendar = input("Which calendar would you like to view? \n(0). All Calendars.\n(1). Personal Calendar Only.\n(2). Code Clinics Calendar Only.\nEnter the number of the calendar here: ")
         print()
