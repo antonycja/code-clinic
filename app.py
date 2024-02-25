@@ -9,11 +9,10 @@ This will be my main module. Using click to create the cli
 import click
 from authentication import authentication, LogIn
 from config import config
-from file_handling import files
 import setup
 from helpers import writer
 from os.path import exists, join as save_path
-from calendar_logic import booking
+from calendar_logic import booking, volunteer as volunteering
 import sys
 
 
@@ -116,12 +115,17 @@ def cancel_booking(day,time):
 # volunteering
 
 @click.command()
+@click.option('-d','--day',prompt = 'Enter the date on which you would like to volunteer',help ='A date that you are available and able to help others; [USECASE: -d/--day 24]')
+@click.option('-t','--time',prompt= 'Enter the time of the session you want to volunteer',help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
+@click.option('-c','-campus',prompt = 'Enter the name of the campus that you attend (optional)', help = 'The campus you attend, (CPT, JHB, DBN, CJC); [USECASE: -c/--campus CPT]' )
 def volunteer():
     print('vol')
     pass
 
 
 # view calendar
+''' TODO: fix the break if user does not have a token created
+delete the token to find out'''
 
 @click.command(help = "Displays the calenders")
 @click.option('-p','--personal',default=False,help = "Display personal calendar only; [default = FALSE] [USECASE: -p True]")
