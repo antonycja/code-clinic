@@ -51,18 +51,18 @@ def get_user_input() -> tuple[int, int]:
     #         filter_evt = int(filter_evt)
     #         break
 
-    return calendar, days
+    return calendar, days, filter_keyword_list
 
 
 def run_view_calendars() -> None:
     """Run the view calendars 
     """
-    calendar, days = get_user_input()
+    calendar, days, filter_keyword_list = get_user_input()
 
     if days != 0:
-        get_calendar_results(calendar, days)
+        get_calendar_results(filter_keyword_list, calendar, days)
     else:
-        get_calendar_results(calendar)
+        get_calendar_results(filter_keyword_list, calendar)
 
 # get_calendar_results(0, 7)
 
