@@ -236,6 +236,7 @@ def get_calendar_results(filter_keywords: list, calendar: int = 1, days: int = 7
     """Print the calendar data for the selected calendar.
 
     Args:
+        filter_keywords (list): a list containing the keywords if any were given.
         calendar (int, optional): the calendar ID of the calendar to be viewed. Defaults to 1.
         days (int, optional): the number of days to check. Defaults to 7 days.
     """
