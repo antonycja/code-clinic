@@ -68,7 +68,9 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
             if number_of_attendees == 2:
                 message = "Slot is already booked. TRY ANOTHER."
                 return False, message
-                
+            elif is_volunteer(event, USER_EMAIL):
+                message = "You are a volunteer for this slot. You cannot book it!"
+                return False, message
             
             event['attendees'].append({'email': USER_EMAIL})
             event["summary"] = "Code Clinic Meeting"
@@ -85,6 +87,16 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
 
     message = "There is no volunteer for the slot you selected. TRY ANOTHER."
     return False, message
+
+
+def is_volunteer(event, USER_EMAIL) -> bool:
+    return is_attendee(event, USER_EMAIL)
+
+
+def is_attendee(event, USER_EMAIL):
+    attendee = event['attendees'][0]
+
+    return attendee['email'] == USER_EMAIL
 
 
 def create_event(service):
