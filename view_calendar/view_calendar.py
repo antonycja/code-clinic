@@ -149,7 +149,16 @@ def display_events(events: list) -> None:
         print()
 
 
-def create_event_info(events: list, cal_name):
+def create_event_info(events: list, cal_name: str) -> list:
+    """create a list of dictionaries containing the relevant data to be used and stored by other functions.
+
+    Args:
+        events (list): the list of all events unfiltered.
+        cal_name (str): the name of the calendar being created currently.
+
+    Returns:
+        list: a list containing dictionaries of relevant data.
+    """
     event_info_list = []
     for event in events:
         date_time = event["start"].get("dateTime").split("T")
