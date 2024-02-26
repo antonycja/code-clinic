@@ -9,11 +9,10 @@ This will be my main module. Using click to create the cli
 import click
 from authentication import authentication, LogIn
 from config import config
-from file_handling import files
 import setup
 from helpers import writer
 from os.path import exists, join as save_path
-from calendar_logic import booking
+from calendar_logic import booking, volunteer as volunteering
 import sys
 
 
@@ -83,11 +82,13 @@ def login():
 
 # booking
 # add meeting area to the volunteer function and pass it as param
-@click.command(help= ': schedule a code clinic session.')
+@click.command(help= ': schedule/book a code clinic session.')
 @click.option('-d','--day',prompt = "Enter the date on which you would like to book",help="The date you would want to book the meeting; [USECASE: -d/--day 24]")
 @click.option('-t','--time',prompt ="Enter the time of the session you want to reserve",help="When you want the session to take place; [USECASE: -t/--time 08:30]")
 @click.option('-D','--desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
 def make_booking(day,time,desc):
+
+    "TODO: fix booking of an already booked session. Check if booker is allowed to cancel a session that a volunteer is in."
 
     user_input = f'{day}T{time}'
     date_time = booking.get_start_date_time(user_input)
@@ -95,6 +96,7 @@ def make_booking(day,time,desc):
 
     creds,user_data = gen_creds()
     signal, message = booking.book_slot(creds,booking_info,user_data['email'])
+
     exit(message)
 
 
@@ -115,15 +117,48 @@ def cancel_booking(day,time):
 
 # volunteering
 
-@click.command()
-def volunteer():
-    print('vol')
-    pass
+@click.command(help = ': volunteer to host a code clinic session')
+@click.option('-d','--day',prompt = 'Enter the date on which you would like to volunteer',help ='A date that you are available and able to help others; [USECASE: -d/--day 24]')
+@click.option('-t','--time',prompt= 'Enter the time of the session you want to volunteer',help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
+@click.option('-c','--campus',prompt = 'Enter the name of the campus that you attend (optional)', help = 'The campus you attend, (CPT, JHB, DBN, CJC); [USECASE: -c/--campus CPT]')
+def volunteer(day,time,campus):
+
+    user_input = f'{day}T{time}'
+    gen_end_time = volunteering.end_time(time)
+    campus = volunteering.campus_abb(campus)
+
+    start_time = booking.get_start_date_time(user_input)
+    end_time = booking.get_start_date_time(f'{day}T{gen_end_time}')
+
+    # just need to fix prompts, run through quill bot
+    creds, user_data = gen_creds()
+    message = volunteering.create_volunteer_slot(creds,user_data['email'],start_time,end_time,campus)
+    exit(message)
+
+# push this tomorrow first, added body for canceling
+@click.command(help = ": cancel a code clinic session hosted by you. NB booked sessions can't be canceled.")
+@click.option('-d','--day',prompt = 'Enter the date on which you would like to volunteer',help ='A date that you are available and able to help others; [USECASE: -d/--day 24]')
+@click.option('-t','--time',prompt= 'Enter the time of the session you want to volunteer',help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
+def cancel_volunteering(day,time):
+
+    user_input = f'{day}T{time}'
+    gen_end_time = volunteering.end_time(time)
+
+    start_time = booking.get_start_date_time(user_input)
+    end_time = booking.get_start_date_time(f'{day}T{gen_end_time}')
+
+    creds, user_data = gen_creds()
+
+    message = volunteering.cancel_event(creds,start_time,end_time)
+    exit(message)
+
 
 
 # view calendar
+''' TODO: fix the break if user does not have a token created
+delete the token to find out'''
 
-@click.command(help = "Displays the calenders")
+@click.command(help = ": displays the calenders")
 @click.option('-p','--personal',default=False,help = "Display personal calendar only; [default = FALSE] [USECASE: -p True]")
 @click.option('-c','--clinic',default = False, help = "Display code-clinic calendar only; [default = FALSE]  [USECASE: -c True]")
 def view_calendar(personal: bool,clinic: bool):
@@ -142,6 +177,7 @@ app.add_command(configure)
 app.add_command(make_booking)
 app.add_command(cancel_booking)
 app.add_command(volunteer)
+app.add_command(cancel_volunteering)
 app.add_command(view_calendar)
 app.add_command(login)
 
@@ -150,11 +186,11 @@ app.add_command(login)
 if __name__ == '__main__':
 
     success, message = setup.pre_load()
-    if success == False and not 'configure' in sys.argv:
+    if 'configure' in sys.argv or '--help' in sys.argv or '-h' in sys.argv or len(sys.argv):
+        app()
+    elif success == False and not 'configure' in sys.argv:
         print(message)
         exit('Run: code-clinic configure')
-    elif 'configure' in sys.argv or '--help' in sys.argv or '-h' in sys.argv:
-        app()
 
     folders = setup.secure_folder()
     data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
