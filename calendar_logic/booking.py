@@ -271,12 +271,12 @@ def get_start_date_time(user_input:str)-> str:
 
     if 1<=current_month<=9:
         current_month = f"0{current_month}" 
-    
+
     if 1 <= day <= 9:
         day = f"0{day}"
-    
-    
-    
+
+
+
     return f"2024-{booking_month}-{day}T{time}:00+02:00"
 
 
@@ -297,19 +297,19 @@ def format_time(time : str):
 
         if 8 <= hh <= 9:
             hh = f"0{hh}"
-        
+
         if mm == 0:
             mm = "00"
-        
+
         time = f"{hh}:{mm}"
     else:
         hh = int(time)
 
         if 8 <= hh <= 9:
             hh = f"0{hh}"
-        
+
         time = f"{hh}:00"
-    
+
     return time
 
 
