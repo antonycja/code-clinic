@@ -209,7 +209,7 @@ def get_calendar_results(calendar: int = 1, days:int = 7) -> None:
         filename = "calendar_data.csv"
         service = build("calendar", "v3", credentials=user_credentials)
         selected_events_info_list = get_data_from_calendar_api(
-            service, calendar, max_results)
+            service, calendar, days)
         # print(selected_events_info_list)
         if calendar_data_changed(selected_events_info_list, filename):
             write_to_csv_file(selected_events_info_list, filename)
