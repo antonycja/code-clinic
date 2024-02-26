@@ -132,11 +132,18 @@ def display_events(events: list) -> None:
                              "Summary": event["summary"], "Location": event["location"], "Organizer": event["organizer"], "Attendees": ', '.join(event["attendees"])}
             table_events.append(event_details)
 
+        # the max row span of each row in the table
         row_span = [(terminal_size.columns-10) // len(event_details.keys())
                     for _ in event_details.keys()]
+
+        # the max row span of the organizer -> [-2] row in the table
         row_span[-2] = row_span[-2]+5
+
+        # Create the table using table events list created above
         table = tabulate(table_events, headers="keys", tablefmt="fancy_grid",
                          colalign=("center"), maxcolwidths=row_span)
+        
+        # Display the table and add spaces after
         print(table)
         print()
         print()
