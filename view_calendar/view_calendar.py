@@ -6,7 +6,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from auth.auth import authenticate_user
 
-from .helpers.download_calendar import write_to_csv_file, calendar_data_changed
+from .helpers.download_calendar import write_to_csv_file, calendar_data_changed, convert_csv_to_dict
 
 
 def get_events(service: object, calender: str, days: int) -> list:
