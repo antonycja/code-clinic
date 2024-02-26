@@ -17,7 +17,7 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 CLINIC_CALENDAR_ID = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 YEAR = 2024
-USER_EMAIL = 'btshulisi023@student.wethinkcode.co.za'
+USER_EMAIL = 'amaposa023@student.wethinkcode.co.za'
 
 
 def book_slot(creds, booking_info : dict, USER_EMAIL) -> tuple:
@@ -182,7 +182,7 @@ def remove_attendee(service, booking_info : dict, USER_EMAIL):
         if event['start']['dateTime'] == booking_info['dateTime'] and booked_event(event, USER_EMAIL):
             event['attendees'].pop()
             event['summary'] = "VOLUNTEER SLOT"
-            event['description'] = "You can book this slot if  you want to volunteer."
+            event['description'] = "You can book this slot if you need help."
 
             event_id = event['id']
 
@@ -246,39 +246,35 @@ def get_start_date_time(user_input:str)-> str:
     return f"2024-{current_month}-{day}T{time}:00+02:00"
 
 
-# if __name__== '__main__':
+if __name__== '__main__':
 
-#     creds = authenticate()
+    creds = authenticate()
 
-#     service = build('calendar', 'v3', credentials=creds)
-#     create_event(service)
+    service = build('calendar', 'v3', credentials=creds)
+    create_event(service)
 
-#     date_time = '2024-02-23T15:00:00+02:00'
-#     description = 'I need help with 2D arrays'
+    date_time = '2024-02-23T15:00:00+02:00'
+    description = 'I need help with 2D arrays'
 
-#     booking_info = dict()
+    booking_info = dict()
 
-    
+    arguments = sys.argv
 
+    if arguments[1] == 'book':
+        start_date_time = get_start_date_time(arguments[2])
+        description = arguments[3]
 
+        booking_info['dateTime'] = start_date_time
+        booking_info['description'] = description
 
-#     arguments = sys.argv
+        message = book_slot(creds, booking_info, USER_EMAIL)
+        print(message)
+    elif arguments[1] == 'cancel_booking':
 
-#     if arguments[1] == 'book':
-#         start_date_time = get_start_date_time(arguments[2])
-#         description = arguments[3]
+        start_date_time = get_start_date_time(arguments[2])
+        booking_info['dateTime'] = start_date_time
+        message = cancel_booking(creds, booking_info, USER_EMAIL)
 
-#         booking_info['dateTime'] = start_date_time
-#         booking_info['description'] = description
-
-#         message = book_slot(creds, booking_info, USER_EMAIL)
-#         print(message)
-#     elif arguments[1] == 'cancel_booking':
-
-#         start_date_time = get_start_date_time(arguments[2])
-#         booking_info['dateTime'] = start_date_time
-#         message = cancel_booking(creds, booking_info, USER_EMAIL)
-
-#         print(message)
-#     os.remove('token.json')
+        print(message)
+    os.remove('token.json')
 
