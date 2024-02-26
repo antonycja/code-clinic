@@ -67,13 +67,13 @@ def determine_calendar(calendar: int) -> tuple:
     return calendars, cal_type, cal_type_list
 
 
-def get_data_from_calendar_api(service: object, calendar: int = 1, days: int = 7) -> list:
+def get_data_from_calendar_api(service: object, calendar: int, days: int) -> list:
     """get the data from the calendar api and return a list containing the calendar data.
 
     Args:
         service (object): the google calendar api response.
-        calendar (int, optional): the calendar ID of the calendar to be viewed. Defaults to 1.
-        days (int, optional): the number of days to check. Defaults to 7 days.
+        calendar (int): the calendar ID of the calendar to be viewed.
+        days (int): the number of days to check.
 
     Returns:
         list: a list containing dictionaries of events.
