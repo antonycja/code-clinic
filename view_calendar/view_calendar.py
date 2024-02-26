@@ -142,7 +142,7 @@ def display_events(events: list) -> None:
         # Create the table using table events list created above
         table = tabulate(table_events, headers="keys", tablefmt="fancy_grid",
                          colalign=("center"), maxcolwidths=row_span)
-        
+
         # Display the table and add spaces after
         print(table)
         print()
