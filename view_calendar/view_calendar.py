@@ -109,15 +109,16 @@ def get_data_from_calendar_api(service: object, calendar: int = 1, days: int = 7
     return selected_events_info_list
 
 
-def display_events(events:list) -> None:
+def display_events(events: list) -> None:
     """print out the results on the terminal.
 
     Args:
         events (list): a list containing the event data to be shown to the user.
     """
-
+    # get the current terminal size
     terminal_size = os.get_terminal_size()
 
+    # Prevent a keyerror by defaulting to a list if the value still needs to be generated.
     calendar_events = defaultdict(list)
     for event in events:
         calendar_events[event['Calendar']].append(event)
