@@ -96,7 +96,7 @@ def get_data_from_calendar_api(service: object, calendar: int = 1, days: int = 7
         else:
             cal_name = cal_type.upper()
 
-        # Prints the start and name of the next max_events events
+        # Check if there is are events or not on each calendar, if there are no events on the specified time period, let the user know.
         if events:
             if isinstance(events, str):
                 print(events)
