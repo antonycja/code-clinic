@@ -172,32 +172,27 @@ def create_event_info(events: list, cal_name: str) -> list:
             location = "TBC"
         organizer = event["creator"].get("email")
         attendees = []
+        
+        # First try to check the number of attendees if attendees is a key in event other handles keyerror
         try:
-            # print(len(event["attendees"]), event["attendees"])
-
             if len(event["attendees"]) > 1:
                 for index, attendee in enumerate(event["attendees"]):
                     if index == 0:
-                        # creator = event["creator"].get("email").split("@")[0]
                         if event["creator"].get("email") != event["organizer"].get("email"):
                             attendees.append(attendee.get(
                                 "email", "TBC").split("@")[0])
-                        # if creator not in [event["email"].split("@")[0] for event in event["attendees"]]:
-                        #     attendees.append(creator)
                         continue
                     else:
                         attendees.append(attendee.get(
                             "displayName", attendee.get("email", "TBC").split("@")[0]))
             else:
-                # if event["organizer"].get("email").split("@")[0] ==
                 attendees.append("NOT BOOKED")
-        except KeyError:
+        except KeyError:  # Error handling for when no attendees are setup, which can only be caused by a manual entry.
             attendees.append("TBC")
 
+        # Finally adding the relevant data to the event info list once we have handled the errors if any occurred
         event_info_list.append({"Calendar": cal_name, "date": date, "start time": start_time, "end time": end_time,
                                "summary": summary, "location": location, "organizer": organizer, "attendees": attendees})
-    # event_info_list = [{cal_name:event_info_list}]
-    # print(event_info_list)
     return event_info_list
 
 
