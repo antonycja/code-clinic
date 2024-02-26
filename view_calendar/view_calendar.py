@@ -251,7 +251,12 @@ def get_calendar_results(filter_keywords: list, calendar: int = 1, days: int = 7
         # checking if the current saved data is up to date, if not updating it.
         if calendar_data_changed(selected_events_info_list, filename):
             write_to_csv_file(selected_events_info_list, filename)
-
+        
+        # Check if filtering must be applied or not.
+        if filter_keywords:
+            selected_events_info_list = filter_calendar_events(filter_keywords, filename)
+            
         display_events(selected_events_info_list)
+        
     except HttpError as error:
         print(f"An error occurred: {error}")
