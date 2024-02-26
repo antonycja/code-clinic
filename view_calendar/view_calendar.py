@@ -243,7 +243,8 @@ def get_calendar_results(filter_keywords: list, calendar: int = 1, days: int = 7
     user_credentials = authenticate_user()
 
     try:
-        filename = "calendar_data.csv" # The name of the file where the data should be stored.
+        # The name of the file where the data should be stored.
+        filename = "calendar_data.csv"
         service = build("calendar", "v3", credentials=user_credentials)
         selected_events_info_list = get_data_from_calendar_api(
             service, calendar, days)
