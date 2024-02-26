@@ -196,12 +196,12 @@ def create_event_info(events: list, cal_name: str) -> list:
     return event_info_list
 
 
-def get_calendar_results(calendar: int, max_results=7) -> None:
+def get_calendar_results(calendar: int = 1, days:int = 7) -> None:
     """Print the calendar data for the selected calendar.
 
     Args:
-        calendar (int): the calendar number to be viewed.
-        max_results (int)-> (optional): the number of days to view starting from today
+        calendar (int, optional): the calendar ID of the calendar to be viewed. Defaults to 1.
+        days (int, optional): the number of days to check. Defaults to 7 days.
     """
     user_credentials = authenticate_user()
 
