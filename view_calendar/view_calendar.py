@@ -196,7 +196,43 @@ def create_event_info(events: list, cal_name: str) -> list:
     return event_info_list
 
 
-def get_calendar_results(calendar: int = 1, days:int = 7) -> None:
+def filter_calendar_events(filter_by: list, filename: str) -> list:
+    """filter the events by looking for the given keywords and only return those events.
+
+    Args:
+        filter_by (list): the filter keywords you would like to search for in the calendar.
+        filename (str): the name of the file the data is being stored in.
+
+    Returns:
+        list: a list containing only the events that meet the filter criteria.
+    """
+    file = convert_csv_to_dict(filename)
+    if not filter_by:
+        return file
+
+    filtered_data_list = []
+    for event in file:
+        is_valid_for_filter = []
+        for value in event.values():
+            for f in filter_by:
+                if isinstance(value, list):
+                    value = [value.lower() for value in value]
+                    if f.lower() not in value:
+                        continue
+                elif f.lower() != value.lower():
+                    continue
+                is_valid_for_filter.append(True)
+
+            if len(is_valid_for_filter) == len(filter_by):
+                filtered_data_list.append(event)
+    if not filtered_data_list:
+        print("No Data was found matching your Filter Criteria. Here is all the data.\n")
+        return file
+
+    return filtered_data_list
+
+
+def get_calendar_results(filter_keywords: list, calendar: int = 1, days: int = 7) -> None:
     """Print the calendar data for the selected calendar.
 
     Args:
