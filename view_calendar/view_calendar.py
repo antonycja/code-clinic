@@ -206,11 +206,11 @@ def get_calendar_results(calendar: int = 1, days:int = 7) -> None:
     user_credentials = authenticate_user()
 
     try:
-        filename = "calendar_data.csv"
+        filename = "calendar_data.csv" # The name of the file where the data should be stored.
         service = build("calendar", "v3", credentials=user_credentials)
         selected_events_info_list = get_data_from_calendar_api(
             service, calendar, days)
-        # print(selected_events_info_list)
+        # checking if the current saved data is up to date, if not updating it.
         if calendar_data_changed(selected_events_info_list, filename):
             write_to_csv_file(selected_events_info_list, filename)
 
