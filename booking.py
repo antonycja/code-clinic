@@ -259,32 +259,83 @@ def get_start_date_time(user_input:str)-> str:
     current_day = int(items[2][0:2])
 
     if "T" not in user_input:
-        return "invalid input."
+        return "invalid input. No 'T' seperator."
     
     if not user_input.split("T")[0].isdigit():
-        return "invalid input."
+        return "invalid input. Day is not a digit."
     
     day = int(user_input.split("T")[0])
     time = user_input.split("T")[1]
 
     if not time_valid(time):
-        return "invalid time"
+        return "invalid time."
+    
+    time = format_time(time)
 
 
     if day < current_day:
-        current_month += 1
+        booking_month = current_month + 1
+    else:
+        booking_month = current_month
+
+    if day > months[int(current_month)]:
+        return "invalid date."
     
+    current_date = dt.datetime(2024, current_month, current_day )
+    booking_date = dt.datetime(2024, booking_month, day )
+
+    delta = booking_date - current_date
+
+    difference_in_days = delta.days
+
+    if difference_in_days > 6:
+        print(difference_in_days)
+        return "invalid date. Out of range."
+
 
     if 1<=current_month<=9:
         current_month = f"0{current_month}" 
     
-    if day > months[current_month]:
-        return "invalid date"
+    if 1 <= day <= 9:
+        day = f"0{day}"
     
+    
+    
+    return f"2024-{booking_month}-{day}T{time}:00+02:00"
 
 
-    return f"2024-{current_month}-{day}T{time}:00+02:00"
+def format_time(time : str):
+    """
+    Formats time from user into the hh:mm format
 
+    Parameters:
+    time (str): can be in the hh:mm format or hh
+
+    Returns:
+    time (str): in the format hh:mm
+    """
+    if ":" in time:
+        times = time.split(":")
+        hh = int(times[0])
+        mm = int(times[1])
+
+        if 8 <= hh <= 9:
+            hh = f"0{hh}"
+        
+        if mm == 0:
+            mm = "00"
+        
+        time = f"{hh}:{mm}"
+    else:
+        hh = int(time)
+
+        if 8 <= hh <= 9:
+            hh = f"0{hh}"
+        
+        time = f"{hh}:00"
+    
+    return time
+     
 
 def time_valid(time : str)->bool:
     """
@@ -305,7 +356,7 @@ def time_valid(time : str)->bool:
         mm = times[1]
         if hh.isdigit():
             hh = int(hh)
-            hour_valid = 8 <= hh <= 5
+            hour_valid = 8 <= hh <= 17
         
         if mm.isdigit():
             mm = int(mm)
@@ -314,46 +365,43 @@ def time_valid(time : str)->bool:
         minute_valid = True
         if time.isdigit():
             hh = int(time)
-            hour_valid = 8 <= hh <= 5
+            hour_valid = 8 <= hh <= 17
     
     is_time_valid = minute_valid and hour_valid
 
-    return is_time_valid
-        
-
-        
-
+    return is_time_valid      
 
 
 if __name__== '__main__':
+ 
+    #print(get_start_date_time("12"))
+    # creds = authenticate()
 
-    creds = authenticate()
+    # service = build('calendar', 'v3', credentials=creds)
+    # create_event(service)
 
-    service = build('calendar', 'v3', credentials=creds)
-    create_event(service)
+    # date_time = '2024-02-23T15:00:00+02:00'
+    # description = 'I need help with 2D arrays'
 
-    date_time = '2024-02-23T15:00:00+02:00'
-    description = 'I need help with 2D arrays'
+    # booking_info = dict()
 
-    booking_info = dict()
+    # arguments = sys.argv
 
-    arguments = sys.argv
+    # if arguments[1] == 'book':
+    #     start_date_time = get_start_date_time(arguments[2])
+    #     description = arguments[3]
 
-    if arguments[1] == 'book':
-        start_date_time = get_start_date_time(arguments[2])
-        description = arguments[3]
+    #     booking_info['dateTime'] = start_date_time
+    #     booking_info['description'] = description
 
-        booking_info['dateTime'] = start_date_time
-        booking_info['description'] = description
+    #     message = book_slot(creds, booking_info, USER_EMAIL)
+    #     print(message)
+    # elif arguments[1] == 'cancel_booking':
 
-        message = book_slot(creds, booking_info, USER_EMAIL)
-        print(message)
-    elif arguments[1] == 'cancel_booking':
+    #     start_date_time = get_start_date_time(arguments[2])
+    #     booking_info['dateTime'] = start_date_time
+    #     message = cancel_booking(creds, booking_info, USER_EMAIL)
 
-        start_date_time = get_start_date_time(arguments[2])
-        booking_info['dateTime'] = start_date_time
-        message = cancel_booking(creds, booking_info, USER_EMAIL)
-
-        print(message)
-    os.remove('token.json')
-
+    #     print(message)
+    # os.remove('token.json')
+    pass
