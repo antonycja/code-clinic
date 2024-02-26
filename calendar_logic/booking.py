@@ -11,6 +11,21 @@ from googleapiclient.errors import HttpError
 
 CLINIC_CALENDAR_ID = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 YEAR = 2024
+months = {
+    1 : 31,
+    2 : 29,
+    3 : 31,
+    4 : 30,
+    5 : 31,
+    6 : 30,
+    7 : 31,
+    8 : 31,
+    9 : 30,
+    10: 31,
+    11: 30,
+    12: 31,
+}
+
 
 
 
@@ -38,6 +53,7 @@ def book_slot(creds, booking_info : dict, USER_EMAIL) -> tuple:
         print("An error occured:", error) 
 
 
+
 def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
     """
     Updates an existing event in order to book a slot.
@@ -62,7 +78,9 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
             if number_of_attendees == 2:
                 message = "Slot is already booked. TRY ANOTHER."
                 return False, message
-                
+            elif is_volunteer(event, USER_EMAIL):
+                message = "You are a volunteer for this slot. You cannot book it!"
+                return False, message
             
             event['attendees'].append({'email': USER_EMAIL})
             event["summary"] = "Code Clinic Meeting"
@@ -79,6 +97,16 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
 
     message = "There is no volunteer for the slot you selected. TRY ANOTHER."
     return False, message
+
+def is_volunteer(event, USER_EMAIL) -> bool:
+    return is_attendee(event, USER_EMAIL)
+
+
+def is_attendee(event, USER_EMAIL):
+    attendee = event['attendees'][0]
+
+    return attendee['email'] == USER_EMAIL
+
 
 
 def create_event(service):
@@ -108,7 +136,6 @@ def create_event(service):
     print(f'event created: {event.get("htmlLink")}')
 
 
-
 def cancel_booking(creds, booking_info, USER_EMAIL):
     """
     Cancels the booking made by the user.
@@ -129,7 +156,7 @@ def cancel_booking(creds, booking_info, USER_EMAIL):
 
 
     except HttpError as err:
-        message = f"An error occured: {err}"
+        message = f"An error occurred: {err}"
         print(message)
 
 
@@ -157,7 +184,7 @@ def remove_attendee(service, booking_info : dict, USER_EMAIL):
         if event['start']['dateTime'] == booking_info['dateTime'] and booked_event(event, USER_EMAIL):
             event['attendees'].pop()
             event['summary'] = "VOLUNTEER SLOT"
-            event['description'] = "You can book this slot if  you want to volunteer."
+            event['description'] = "You can book this slot if you need help."
 
             event_id = event['id']
 
@@ -168,6 +195,7 @@ def remove_attendee(service, booking_info : dict, USER_EMAIL):
 
     message = "No booking to cancel."
     return False, message
+
 
 
 def booked_event(event, USER_EMAIL: str) -> bool:
@@ -206,16 +234,115 @@ def get_start_date_time(user_input:str)-> str:
     current_month = int(items[1])
     current_day = int(items[2][0:2])
 
+    if "T" not in user_input:
+        return "invalid input. No 'T' seperator."
+    
+    if not user_input.split("T")[0].isdigit():
+        return "invalid input. Day is not a digit."
     
     day = int(user_input.split("T")[0])
     time = user_input.split("T")[1]
 
+    if not time_valid(time):
+        return "invalid time."
+    
+    time = format_time(time)
+
 
     if day < current_day:
-        current_month += 1
+        booking_month = current_month + 1
+    else:
+        booking_month = current_month
+
+    if day > months[int(current_month)]:
+        return "invalid date."
     
+    current_date = dt.datetime(2024, current_month, current_day )
+    booking_date = dt.datetime(2024, booking_month, day )
+
+    delta = booking_date - current_date
+
+    difference_in_days = delta.days
+
+    if difference_in_days > 6:
+        print(difference_in_days)
+        return "invalid date. Out of range."
+
 
     if 1<=current_month<=9:
         current_month = f"0{current_month}" 
+    
+    if 1 <= day <= 9:
+        day = f"0{day}"
+    
+    
+    
+    return f"2024-{booking_month}-{day}T{time}:00+02:00"
 
-    return f"2024-{current_month}-{day}T{time}:00+02:00"
+
+def format_time(time : str):
+    """
+    Formats time from user into the hh:mm format
+
+    Parameters:
+    time (str): can be in the hh:mm format or hh
+
+    Returns:
+    time (str): in the format hh:mm
+    """
+    if ":" in time:
+        times = time.split(":")
+        hh = int(times[0])
+        mm = int(times[1])
+
+        if 8 <= hh <= 9:
+            hh = f"0{hh}"
+        
+        if mm == 0:
+            mm = "00"
+        
+        time = f"{hh}:{mm}"
+    else:
+        hh = int(time)
+
+        if 8 <= hh <= 9:
+            hh = f"0{hh}"
+        
+        time = f"{hh}:00"
+    
+    return time
+
+
+def time_valid(time : str)->bool:
+    """
+    Check if the time provided by the user is valid.
+
+    Parameters:
+    time (str): Time provided by the user in the format hh:mm or hh
+
+    Returns:
+    is_time_valid (bool): Returns True if the time is valid False otherwise.
+    """
+
+    hour_valid = False
+    minute_valid = False
+    if ':' in time:
+        times = time.split(":")
+        hh = times[0]
+        mm = times[1]
+        if hh.isdigit():
+            hh = int(hh)
+            hour_valid = 8 <= hh <= 17
+        
+        if mm.isdigit():
+            mm = int(mm)
+            minute_valid = mm in [0, 30]
+    else:
+        minute_valid = True
+        if time.isdigit():
+            hh = int(time)
+            hour_valid = 8 <= hh <= 17
+    
+    is_time_valid = minute_valid and hour_valid
+
+    return is_time_valid      
