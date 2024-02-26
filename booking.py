@@ -7,6 +7,7 @@
 import os.path, sys
 import datetime as dt
 
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -17,7 +18,21 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 CLINIC_CALENDAR_ID = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 YEAR = 2024
-USER_EMAIL = 'amaposa023@student.wethinkcode.co.za'
+USER_EMAIL = 'cthomas023@student.wethinkcode.co.za'
+months = {
+    1 : 31,
+    2 : 29,
+    3 : 31,
+    4 : 30,
+    5 : 31,
+    6 : 30,
+    7 : 31,
+    8 : 31,
+    9 : 30,
+    10: 31,
+    11: 30,
+    12: 31,
+}
 
 
 def book_slot(creds, booking_info : dict, USER_EMAIL) -> tuple:
@@ -243,9 +258,17 @@ def get_start_date_time(user_input:str)-> str:
     current_month = int(items[1])
     current_day = int(items[2][0:2])
 
+    if "T" not in user_input:
+        return "invalid input."
+    
+    if not user_input.split("T")[0].isdigit():
+        return "invalid input."
     
     day = int(user_input.split("T")[0])
     time = user_input.split("T")[1]
+
+    if not time_valid(time):
+        return "invalid time"
 
 
     if day < current_day:
@@ -254,8 +277,52 @@ def get_start_date_time(user_input:str)-> str:
 
     if 1<=current_month<=9:
         current_month = f"0{current_month}" 
+    
+    if day > months[current_month]:
+        return "invalid date"
+    
+
 
     return f"2024-{current_month}-{day}T{time}:00+02:00"
+
+
+def time_valid(time : str)->bool:
+    """
+    Check if the time provided by the user is valid.
+
+    Parameters:
+    time (str): Time provided by the user in the format hh:mm or hh
+
+    Returns:
+    is_time_valid (bool): Returns True if the time is valid False otherwise.
+    """
+
+    hour_valid = False
+    minute_valid = False
+    if ':' in time:
+        times = time.split(":")
+        hh = times[0]
+        mm = times[1]
+        if hh.isdigit():
+            hh = int(hh)
+            hour_valid = 8 <= hh <= 5
+        
+        if mm.isdigit():
+            mm = int(mm)
+            minute_valid = mm in [0, 30]
+    else:
+        minute_valid = True
+        if time.isdigit():
+            hh = int(time)
+            hour_valid = 8 <= hh <= 5
+    
+    is_time_valid = minute_valid and hour_valid
+
+    return is_time_valid
+        
+
+        
+
 
 
 if __name__== '__main__':
