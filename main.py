@@ -29,6 +29,18 @@ def get_user_input() -> tuple[int, int]:
             break
 
     # TODO: Make filter function to do the functionality below
+    
+    while True:
+        filter_evt = input("Would you like to filter the events/calendar? (leave blank if NOT).\nEnter the filter ',' separated keyword(s) here : ")
+        print()
+        if not filter_evt:
+            filter_keyword_list = None
+            break
+        
+        filter_keyword_list = filter_evt.split(",")
+        break
+
+        
     # while True:
     #     filter_evt = input("Would you like to filter the events/calendar? (leave blank if NOT).\n(0). Available Times.\n(1). NOT BOOKED.\nEnter the filter number here: ")
     #     print()
