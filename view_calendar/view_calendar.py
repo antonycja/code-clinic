@@ -172,7 +172,7 @@ def create_event_info(events: list, cal_name: str) -> list:
             location = "TBC"
         organizer = event["creator"].get("email")
         attendees = []
-        
+
         # First try to check the number of attendees if attendees is a key in event other handles keyerror
         try:
             if len(event["attendees"]) > 1:
