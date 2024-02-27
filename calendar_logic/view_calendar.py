@@ -4,7 +4,7 @@ from collections import defaultdict
 import os
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from auth.auth import authenticate_user
+# from auth.auth import authenticate_user
 
 from ..helpers.download_calendar import write_to_csv_file, calendar_data_changed, convert_csv_to_dict
 
