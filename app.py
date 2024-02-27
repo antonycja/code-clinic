@@ -12,7 +12,7 @@ from config import config
 import setup
 from helpers import writer
 from os.path import exists, join as save_path
-from calendar_logic import booking, volunteer as volunteering
+from calendar_logic import booking, volunteer as volunteering, view_calendar as viewing_calendar
 import sys
 
 
