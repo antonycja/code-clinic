@@ -1,10 +1,12 @@
+
 # Beware of the sand
 sand* 
-
-
 
 # files 
 *.json
 *.bin
 *.pick*
 __pycache__
+*.csv
+token.json
+dummy.py
