@@ -162,15 +162,23 @@ delete the token to find out'''
 @click.option('-p','--personal',default=False,help = "Display personal calendar only; [default = FALSE] [USECASE: -p True]")
 @click.option('-c','--clinic',default = False, help = "Display code-clinic calendar only; [default = FALSE]  [USECASE: -c True]")
 
-    if personal == True:
-        print("pass")
-    if clinic == True:
-        print("cc")
-    else:
-        print("show all")
+# Authored by Antony
+@click.option('-d','--days', default = 7, prompt= 'Enter the number of days to view, leave empty for [default = 7 days]',help = "The number of days you would like to view from today [default = 7]; [USECASE: -d/--days 10]")
+@click.option('-f','--filtered',prompt= 'Enter the filter keywords ("," separated for multiple keywords)',help = "Display only the data that contains the filter keywords; [USECASE: -f/--filtered cpt,not booked,10:00]")
 
-
-    pass
+# TODO: Think about making creds and data a global variable 
+def view_calendar(personal: bool,clinic: bool, days:str, filtered:str=None):
+    creds, data = gen_creds()
+    if personal == True and clinic == False: # Only personal is True
+        calendar_id = 1
+    elif clinic == True and personal == False: # Only clinic is True
+        calendar_id = 2
+    
+    else: # If both of them are the same then just show both calendars
+        calendar_id = 0
+        
+    viewing_calendar.get_calendar_results(creds, filtered, calendar_id, days)
+        
 
 app.add_command(configure)
 app.add_command(make_booking)
