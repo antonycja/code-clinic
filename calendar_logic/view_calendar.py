@@ -256,6 +256,7 @@ def get_calendar_results(user_credentials: object, filter_keywords: str, calenda
         
         # Check if filtering must be applied or not.
         if filter_keywords:
+            filter_keywords = filter_keywords.split(",")
             selected_events_info_list = filter_calendar_events(filter_keywords, filename)
             
         display_events(selected_events_info_list)
