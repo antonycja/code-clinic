@@ -49,6 +49,11 @@ def book_slot(creds, booking_info : dict, USER_EMAIL) -> tuple:
 
     """
     try:
+        booking_info['dateTime'] = get_start_date_time(booking_info['dateTime'])
+        if 'invalid' in booking_info['dateTime']:
+            message =  booking_info['dateTime']
+            return False, message
+        
         service = build('calendar', 'v3', credentials=creds)
         success, message = update_event(service, booking_info, USER_EMAIL)
 
@@ -92,6 +97,7 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
             event['description'] = booking_info['description']
 
             event_id = event['id']
+            
 
             updated_event = service.events().update(calendarId= CLINIC_CALENDAR_ID, eventId=event_id, body=event).execute()
 
@@ -197,6 +203,11 @@ def remove_attendee(service, booking_info : dict, USER_EMAIL):
     Returns:
         (success, message) (tuple): (var)success(boolean) is whether the removing was a success or not. (var)message(str) is the appropriate message to display.
     """
+    booking_info['dateTime'] = get_start_date_time(booking_info['dateTime'])
+    if 'invalid' in booking_info['dateTime']:
+        message = booking_info['dateTime']
+        return False, message
+    
     date_time = booking_info['dateTime']
 
     now = dt.datetime.utcnow().isoformat() + "Z"
@@ -217,6 +228,9 @@ def remove_attendee(service, booking_info : dict, USER_EMAIL):
 
             message = "Booking Cancelled."
             return True, message
+        elif event['start']['dateTime'] == booking_info['dateTime'] and not booked_event(event, USER_EMAIL):
+            message = "You cannot cancel this. You did not book it."
+            return False, message
 
     message = "No booking to cancel."
     return False, message
@@ -234,9 +248,9 @@ def booked_event(event, USER_EMAIL: str) -> bool:
         booked (bool): True is the user is the one who booked the event, otherwise returns False.
     """
     booked = False
-    for attendee in event['attendees']:
-        if attendee['email'] == USER_EMAIL:
-            booked = True
+    attendee = event['attendees'][-1]
+    if attendee['email'] == USER_EMAIL:
+        booked = True
     
     return booked
 
@@ -293,8 +307,8 @@ def get_start_date_time(user_input:str)-> str:
         return "invalid date. Out of range."
 
 
-    if 1<=current_month<=9:
-        current_month = f"0{current_month}" 
+    if 1<=booking_month<=9:
+        booking_month = f"0{booking_month}" 
     
     if 1 <= day <= 9:
         day = f"0{day}"
@@ -374,34 +388,31 @@ def time_valid(time : str)->bool:
 
 if __name__== '__main__':
  
-    #print(get_start_date_time("12"))
-    # creds = authenticate()
+    # print(get_start_date_time("12"))
+
+    creds = authenticate()
 
     # service = build('calendar', 'v3', credentials=creds)
     # create_event(service)
 
-    # date_time = '2024-02-23T15:00:00+02:00'
-    # description = 'I need help with 2D arrays'
+    date_time = '2024-02-23T15:00:00+02:00'
+    description = 'I need help with 2D arrays'
 
-    # booking_info = dict()
+    booking_info = dict()
 
-    # arguments = sys.argv
+    start_date_time = "28T10:00"
+    description = "Arrays"
 
-    # if arguments[1] == 'book':
-    #     start_date_time = get_start_date_time(arguments[2])
-    #     description = arguments[3]
+    # booking_info['dateTime'] = start_date_time
+    # booking_info['description'] = description
 
-    #     booking_info['dateTime'] = start_date_time
-    #     booking_info['description'] = description
+    # message = book_slot(creds, booking_info, USER_EMAIL)
+    # print(message)
 
-    #     message = book_slot(creds, booking_info, USER_EMAIL)
-    #     print(message)
-    # elif arguments[1] == 'cancel_booking':
+    start_date_time = "28T10:00"
+    booking_info['dateTime'] = start_date_time
+    message = cancel_booking(creds, booking_info, USER_EMAIL)
 
-    #     start_date_time = get_start_date_time(arguments[2])
-    #     booking_info['dateTime'] = start_date_time
-    #     message = cancel_booking(creds, booking_info, USER_EMAIL)
-
-    #     print(message)
-    # os.remove('token.json')
+    print(message)
+    os.remove('token.json')
     pass
