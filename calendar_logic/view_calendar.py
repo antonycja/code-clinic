@@ -214,17 +214,20 @@ def filter_calendar_events(filter_by: list, filename: str) -> list:
     for event in file:
         is_valid_for_filter = []
         for value in event.values():
-            for f in filter_by:
+            tmp_filter = []
+            for filter_word in filter_by:
                 if isinstance(value, list):
                     value = [value.lower() for value in value]
-                    if f.lower() not in value:
+                    if filter_word.lower() not in value:
                         continue
-                elif f.lower() != value.lower():
+                elif filter_word.lower() != value.lower() and filter_word.lower() not in value.lower().split(" "):
                     continue
-                is_valid_for_filter.append(True)
+                tmp_filter.append(True)
 
-            if len(is_valid_for_filter) == len(filter_by):
-                filtered_data_list.append(event)
+            if tmp_filter:
+                is_valid_for_filter.append(True)
+                if len(is_valid_for_filter) == len(filter_by):
+                    filtered_data_list.append(event)
     if not filtered_data_list:
         print("No Data was found matching your Filter Criteria. Here is all the data.\n")
         return file
