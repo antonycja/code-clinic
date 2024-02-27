@@ -161,7 +161,6 @@ delete the token to find out'''
 @click.command(help = ": displays the calenders")
 @click.option('-p','--personal',default=False,help = "Display personal calendar only; [default = FALSE] [USECASE: -p True]")
 @click.option('-c','--clinic',default = False, help = "Display code-clinic calendar only; [default = FALSE]  [USECASE: -c True]")
-def view_calendar(personal: bool,clinic: bool):
 
     if personal == True:
         print("pass")
