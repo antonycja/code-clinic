@@ -103,7 +103,7 @@ def is_booked(starttime, endtime, email, service, calendar_id):
     return False
 
 
-def get_event(service, calendar_id, starttime, endtime):
+def get_event(service, calendar_id, starttime, endtime, volunteer_email):
     """
     Retrieve the event ID for the event within the specified time frame.
 
