@@ -1,5 +1,6 @@
 import datetime
 from tabulate import tabulate
+from curses import newpad
 from collections import defaultdict
 import os
 from googleapiclient.discovery import build
