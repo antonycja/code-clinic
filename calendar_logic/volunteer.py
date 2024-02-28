@@ -153,9 +153,9 @@ def cancel_event(creds, starttime, endtime, volunteer_email, calendar_id = calen
     service = build_service(creds)
 
     try:
-        event_id = get_event(service, calendar_id, starttime, endtime)
+        event_id = get_event(service, calendar_id, starttime, endtime, volunteer_email)
         event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
-        if len(event['attendees']) > 1:
+        if len(event['attendees']) > 1 or event['attendees'][0]['email'] != volunteer_email:
             message = 'You cannot cancel a slot that has already been booked by a student.'
         else:
             service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
