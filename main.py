@@ -21,6 +21,6 @@ endtime = '2024-01-01T17:30:00+02:00'
 # endtime = '2024-02-26T17:30:00+02:00'
 campus = 'WTC CPT'
 
-
-create_volunteer_slot(service, calendar_id, volunteer_email, event_description, starttime, endtime, campus)
-# cancel_event(service, calendar_id, starttime, endtime)
+if __name__ == '__main__':
+    # create_volunteer_slot(creds, volunteer_email, starttime, endtime, campus)
+    cancel_event(creds, starttime, endtime, volunteer_email)
