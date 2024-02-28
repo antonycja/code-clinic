@@ -42,10 +42,14 @@ def write_to_csv_file(data_list: list, filename: str) -> None:
         data_list (list): a list containing the data to be saved
         filename (str): the name of the file where the data will be stored
     """
-    fields = [name for name in data_list[0].keys()]
-    with open(filename, "w") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fields)
+    try:
+        fields = [name for name in data_list[0].keys()]
+        with open(filename, "w") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=fields)
 
-        writer.writeheader()
-        writer.writerows(data_list)
+            writer.writeheader()
+            writer.writerows(data_list)
+            pass
+    except IndexError:
+        print()
         pass
