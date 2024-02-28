@@ -99,13 +99,12 @@ def get_data_from_calendar_api(service: object, calendar: int, days: int) -> lis
 
         # Check if there is are events or not on each calendar, if there are no events on the specified time period, let the user know.
         if events:
-            if isinstance(events, str):
-                print(events)
-            else:
-                # print(events)
-                event_info = create_event_info(events, cal_name)
-                [selected_events_info_list.append(
-                    event) for event in event_info]
+            # print(events)
+            event_info = create_event_info(events, cal_name)
+            [selected_events_info_list.append(
+                event) for event in event_info]
+        else:
+            print(tabulate([[f"No upcoming events for this {cal_name} calendar."]], tablefmt="double_grid"))
 
     return selected_events_info_list
 
