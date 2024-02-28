@@ -45,7 +45,7 @@ def create_volunteer_slot(creds, volunteer_email, starttime, endtime, campus, ca
             event = {
                 'summary': 'VOLUNTEER SLOT',
                 'location': campus,
-                'description': "Join this event for a code-clinic session",
+                'description': "Join this event for a code-clinic session with a volunteer.",
                 'start': {
                     'dateTime': starttime,
                     'timeZone': 'Africa/Johannesburg'
