@@ -137,7 +137,7 @@ def get_event(service, calendar_id, starttime, endtime, volunteer_email):
         print(f'There is not a slot booked for the specified time')
         return None
 
-def cancel_event(creds, starttime, endtime, calendar_id = calendar_id):
+def cancel_event(creds, starttime, endtime, volunteer_email, calendar_id = calendar_id):
     """
     Cancel the event within the specified time frame.
 
