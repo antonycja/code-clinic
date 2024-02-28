@@ -197,7 +197,6 @@ def end_time(start_time:str):
     if min < 10:
         min = f'0{min}'
     
-    
     return f'{hours}:{min}'
 
 
@@ -231,3 +230,4 @@ def campus_abb(campus: str):
 
     return campus
 
+# def store_volunteer_data(event_id, ):
