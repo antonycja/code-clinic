@@ -134,7 +134,7 @@ def get_event(service, calendar_id, starttime, endtime, volunteer_email):
                 if event['attendees'][0]['email'] == volunteer_email:
                     return event['id']
     except IndexError as error:
-        print(f'There is not a slots booked for the specified time')
+        print(f'There is not a slot booked for the specified time')
         return None
 
 def cancel_event(creds, starttime, endtime, calendar_id = calendar_id):
