@@ -254,7 +254,7 @@ def get_calendar_results(user_credentials: object, filter_keywords: str, calenda
         selected_events_info_list = get_data_from_calendar_api(
             service, calendar, days)
         # checking if the current saved data is up to date, if not updating it.
-        if calendar_data_changed(selected_events_info_list, filename):
+        if calendar_data_changed(selected_events_info_list, filename) :
             write_to_csv_file(selected_events_info_list, filename)
 
         # Check if filtering must be applied or not.
