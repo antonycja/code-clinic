@@ -39,7 +39,7 @@ def get_events(service: object, calender: str, days: int) -> list:
     events = events_result.get("items", [])
 
     if not events:
-        return "No upcoming events found."
+        return None
     return events
 
 
