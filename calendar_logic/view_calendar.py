@@ -82,7 +82,7 @@ def get_data_from_calendar_api(service: object, calendar: int, days: int) -> lis
     calendars, cal_type, cal_type_list = determine_calendar(calendar)
     # Calling the Calendar API
     print(
-        f"Getting the upcoming event for the next {days} for {cal_type}...\n")
+        f"Getting the upcoming event(s) for the next {days} day(s) for {cal_type}...\n")
 
     event_list = []
     selected_events_info_list = []
