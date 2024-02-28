@@ -91,7 +91,7 @@ def is_booked(starttime, endtime, email, service, calendar_id):
     Returns:
         bool: True if the volunteer is booked; False otherwise.
     """
-    event_id = get_event(service, calendar_id, starttime, endtime)
+    event_id = get_event(service, calendar_id, starttime, endtime, email)
     if not event_id:
         return False
     event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
