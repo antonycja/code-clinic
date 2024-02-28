@@ -12,8 +12,10 @@ class TestVolunteerFunctions(unittest.TestCase):
         self.endtime = '2024-01-01T17:30:00+02:00'
         self.campus = 'WTC CPT'
 
-except HttpError as error:
-        print("An error occured:", error)
+    def test_build_service(self):
+        creds = authenticate_user()
+        service = build_service(creds)
+        self.assertIsNotNone(service)
 
 class Test_Volunteer(unittest.TestCase):
     
