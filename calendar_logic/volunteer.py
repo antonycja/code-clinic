@@ -128,8 +128,11 @@ def get_event(service, calendar_id, starttime, endtime, volunteer_email):
             )
         .execute()
         )
-        event = events_result.get('items', [])
-        return event[0]['id']
+        events = events_result.get('items', [])
+        if events:
+            for event in events:
+                if event['attendees'][0]['email'] == volunteer_email:
+                    return event['id']
     except IndexError as error:
         print(f'There is not a slots booked for the specified time')
         return None
