@@ -3,8 +3,14 @@ import datetime
 from main import *
 import time
 
-try:
-    service = build('calendar', 'v3', credentials=creds)
+class TestVolunteerFunctions(unittest.TestCase):
+    
+    def setUp(self):
+        self.calendar_id = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
+        self.volunteer_email = "cthomas@student.wethinkcode.co.za"
+        self.starttime = '2024-01-01T17:00:00+02:00'
+        self.endtime = '2024-01-01T17:30:00+02:00'
+        self.campus = 'WTC CPT'
 
 except HttpError as error:
         print("An error occured:", error)
