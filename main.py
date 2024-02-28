@@ -1,5 +1,5 @@
 from authentication.auth import *
-from volunteer.volunteer import *
+from calendar_logic.volunteer import *
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
