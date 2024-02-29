@@ -107,11 +107,34 @@ def configure(name: str = None,email: str = None):
 
 
 #login
-@click.command()
-def login():
-    folders = setup.secure_folder()
+@click.command(context_settings=dict(ignore_unknown_options=True,allow_extra_args = False))
+def login(log_file = save_path(files.get_home(),'.elite','.systems.log')):
+
+    log_data = dict()
+    if exists(log_file):
+        log_data = writer.load_pickle(save_path(files.get_home(),'.elite'),'.systems.log')
+        if log_data["username"] == None:
+            exit("""No active user found. Please login using
+
+  code-clinic signin""")
+        username = log_data["username"]
+
+    else:
+        username = get_profile()
+        log_data["username"] = username
+
+
+    folders = setup.secure_folder(log_data["username"])
     data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
-    LogIn.code_clinic_login(data)
+    # added folders to this function so we can know where to write the token to
+    access = LogIn.code_clinic_login(data,folders)
+
+    # saving the last signed in users
+    if access:
+        log_data["username"] = username
+    else:
+        log_data["username"] = None
+    writer.capture_pickle(folders["main"],".systems","log",log_data)
 
 
 # booking
