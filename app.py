@@ -136,6 +136,18 @@ def login(log_file = save_path(files.get_home(),'.elite','.systems.log')):
         log_data["username"] = None
     writer.capture_pickle(folders["main"],".systems","log",log_data)
 
+@click.command(help=": Allows a new user to sign-in. Signs out the currently logged on user.")
+@click.pass_context # allows me to invoke a click command without its decorations
+def signin(ctx):
+
+    # log_data = dict()
+    username = get_profile()
+    # if the user does have a folder in the system we write the username to log
+    writer.capture_pickle(save_path(files.get_home(),'.elite'),".systems","log",{"username":f'{username}'})
+
+    # then we call the login function o log them in
+    ctx.invoke(login)
+
 
 # booking
 # add meeting area to the volunteer function and pass it as param
