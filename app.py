@@ -10,9 +10,10 @@ import click
 from authentication import authentication, LogIn
 from config import config
 import setup
+from file_handling import files
 from helpers import writer
 from os.path import exists, join as save_path
-from calendar_logic import booking, volunteer as volunteering, view_calendar as viewing_calendar
+from calendar_logic import booking, volunteer as volunteering
 import sys
 
 
@@ -56,6 +57,23 @@ def gen_creds(username):
             setup.encrypt_it(enc_data,folders,"keys","token","SOS","token","creds","token")
 
     return creds, data
+
+def get_profile():
+    """
+    Checks whether the given username contains a profile in the system.
+    If the user does have a profile and dir it will return the username.
+
+    Returns:
+        _type_: _description_
+    """
+
+    username = input("Enter your username: ")
+    if files.check_user_profile(username):
+        pass
+    else:
+        exit(f"profile '{username}' does not exists. run code-clinic configure")
+
+    return username
 
 # groups the click command to the specific app
 @click.group
