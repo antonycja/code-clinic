@@ -1,5 +1,5 @@
 from unittest import TestCase, main
-from booking import book_slot, get_start_date_time, authenticate, CLINIC_CALENDAR_ID
+from booking import book_slot,cancel_booking, get_start_date_time, authenticate, CLINIC_CALENDAR_ID, export_to_ical
 import datetime
 import os
 
@@ -91,7 +91,7 @@ class TestBooking(TestCase):
         
         self.assertEqual(desired_output, actual_output)
 
-    def test_get_start_date_time_book_slot(self):
+    def test_book_slot(self):
         service = service = build('calendar', 'v3', credentials=creds)
         
         #Create a volunteer slot
@@ -132,7 +132,54 @@ class TestBooking(TestCase):
         service.events().delete(calendarId=CLINIC_CALENDAR_ID, eventId=event['id']).execute()
 
 
+    def test_cancel_booking(self):
+        service = service = build('calendar', 'v3', credentials=creds)
+        
+        #Create a volunteer slot
+        event = {
+        "summary" : "VOLUNTEER SLOT",
+        'location': "CPT",
+        'description': 'You can book this slot if  you want to volunteer.',
+        'colorId' : 6,
+        'start': {
+            'dateTime': f"2024-{month_now_str}-{day_now_str}T16:00:00+02:00",
+            'timeZone': 'Africa/Johannesburg',
+        },
+        'end': {
+            'dateTime': f'2024-{month_now_str}-{day_now_str}T16:30:00+02:00',
+            'timeZone': 'Africa/Johannesburg'
+        },
+        'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=1'
+        ],
+        'attendees': [
+            {'email': 'bulelatshulisi@gmail.com'}
+        ],
+    }
 
+        event = service.events().insert(calendarId=CLINIC_CALENDAR_ID, body=event).execute()
+
+        booking_info = dict()
+        booking_info['dateTime'] = f"{day_now_str}T16:00"
+        booking_info['description'] = "Help me with arrays."
+
+        success, message = book_slot(creds, booking_info, USER_EMAIL)
+        desired_success, desired_message = True, "Booking Successful!"
+
+        self.assertEqual(desired_success, success)
+        self.assertEqual(desired_message, message)
+
+        #Cancel Booking
+
+        success, message = cancel_booking(creds, booking_info, USER_EMAIL)
+        desired_success, desired_message = True, "Booking Cancelled."
+
+        #Delete the event
+        service.events().delete(calendarId=CLINIC_CALENDAR_ID, eventId=event['id']).execute()
+
+
+    def test_export_to_ical(self):
+        pass
 
 if __name__=="__main__":
     main()
