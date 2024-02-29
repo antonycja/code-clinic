@@ -42,14 +42,16 @@ def get_events(service: object, calender: str, days: int) -> list:
     return events
 
 
-def determine_calendar(calendar: int) -> tuple:
+def determine_calendar(calendar: int, cal_type_list: list, calendar_dict: dict) -> tuple:
     """determine which calendar to get the data from depending on which calendar option the user chose.
 
     Args:
         calendar (int): the number option of the calendar.
-
+        cal_type_list (list): a list with the names of the calendars.
+        calendar_dict (dict): a dictionary with the calendar IDs.
+        
     Returns:
-        tuple: a tuple containing the calendars, cal_type and cal_type_list.
+        tuple: a tuple containing the cal_type, calendars.
     """
     calendar_dict = {"personal": "primary",
                      "clinic": "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"}
