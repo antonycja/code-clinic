@@ -101,7 +101,8 @@ def get_data_from_calendar_api(service: object, calendar: int, days: int, cal_ty
             [selected_events_info_list.append(
                 event) for event in event_info]
         else:
-            print(tabulate([[f"No upcoming events for this {cal_name} calendar."]], tablefmt="double_grid"))
+            print(tabulate(
+                [[f"No upcoming events for this {cal_name} calendar."]], tablefmt="double_grid"))
 
     return selected_events_info_list
 
