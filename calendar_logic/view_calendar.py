@@ -53,9 +53,7 @@ def determine_calendar(calendar: int, cal_type_list: list, calendar_dict: dict) 
     Returns:
         tuple: a tuple containing the cal_type, calendars.
     """
-    calendar_dict = {"personal": "primary",
-                     "clinic": "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"}
-    cal_type_list = ["PERSONAL calendar", "CODE CLINIC calendar"]
+
     if calendar == 1:
         calendars = [calendar_dict["personal"]]
         cal_type = cal_type_list[0]
