@@ -68,14 +68,16 @@ def determine_calendar(calendar: int, cal_type_list: list, calendar_dict: dict) 
     return cal_type, calendars
 
 
-def get_data_from_calendar_api(service: object, calendar: int, days: int) -> list:
+def get_data_from_calendar_api(service: object, calendar: int, days: int, cal_type: str, calendars: list,  cal_type_list: list) -> list:
     """get the data from the calendar api and return a list containing the calendar data.
 
     Args:
         service (object): the google calendar api response.
         calendar (int): the calendar ID of the calendar to be viewed.
         days (int): the number of days to check.
-
+        cal_type (str): the type of calendar.
+        calendars (list): a list with the name(s) of the calendar(s).
+        cal_type_list (list): a list with the calendar headers.
     Returns:
         list: a list containing dictionaries of events.
     """
