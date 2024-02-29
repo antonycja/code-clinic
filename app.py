@@ -200,8 +200,8 @@ def volunteer(day,time,campus):
     start_time = booking.get_start_date_time(user_input)
     end_time = booking.get_start_date_time(f'{day}T{gen_end_time}')
 
-    # just need to fix prompts, run through quill bot
-    creds, user_data = gen_creds()
+    username = current_logged_profile()["username"]
+    creds,user_data = gen_creds(username)
     message = volunteering.create_volunteer_slot(creds,user_data['email'],start_time,end_time,campus)
     exit(message)
 
