@@ -33,3 +33,22 @@ def create_dir(dir_path: str, dir_name: str):
     return dir
 
 
+# commit first
+def check_user_profile(user_name: str):
+    """
+    Checks if the user has a profile on this pc
+
+    Args:
+        user_name (str): the username of the user
+
+    Returns:
+        bool : if the user has a profile
+    """
+    username = f'.{user_name}'
+    data = os.listdir(os.path.join(get_home(),'.elite'))
+
+    if username in data:
+        return True
+
+    return False
+
