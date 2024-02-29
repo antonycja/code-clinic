@@ -260,7 +260,11 @@ def get_calendar_results(user_credentials: object, filter_keywords: str, calenda
         
         # get event in the specified 
         selected_events_info_list = get_data_from_calendar_api(
-            service, calendar, days)
+            service, calendar, days, cal_type, calendars, cal_type_list)
+        
+        # Get events in the next 7 days 
+        all_calendar_ids = [calendar for calendar in calendar_dict.values()]
+        next_7_days = get_data_from_calendar_api(service, 0, 7, cal_type, all_calendar_ids, cal_type_list)
         # checking if the current saved data is up to date, if not updating it.
         if calendar_data_changed(selected_events_info_list, filename) :
             write_to_csv_file(selected_events_info_list, filename)
