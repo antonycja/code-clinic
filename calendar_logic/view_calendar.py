@@ -246,7 +246,12 @@ def get_calendar_results(user_credentials: object, filter_keywords: str, calenda
     try:
         # The name of the file where the data should be stored.
         filename = "calendar_data.csv"
+        calendar_dict = {"personal": "primary",
+                     "clinic": "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"}
+        cal_type_list = ["PERSONAL calendar", "CODE CLINIC calendar"]
+        
         days = int(days)
+        
         service = build("calendar", "v3", credentials=user_credentials)
         selected_events_info_list = get_data_from_calendar_api(
             service, calendar, days)
