@@ -242,7 +242,6 @@ def get_calendar_results(user_credentials: object, filter_keywords: str, calenda
         calendar (int, optional): the calendar ID of the calendar to be viewed. Defaults to 1.
         days (int, optional): the number of days to check. Defaults to 7 days.
     """
-    # user_credentials = authenticate_user()
 
     try:
         # The name of the file where the data should be stored.
