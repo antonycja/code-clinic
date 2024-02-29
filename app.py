@@ -236,10 +236,11 @@ delete the token to find out'''
 # Authored by Antony
 @click.option('-d','--days', default = 7, prompt= 'Enter the number of days to view, leave empty for [default = 7 days]',help = "The number of days you would like to view from today [default = 7]; [USECASE: -d/--days 10]")
 @click.option('-f','--filtered',default = None, prompt= 'Enter the filter keywords ("," separated for multiple keywords)',help = "Display only the data that contains the filter keywords; [USECASE: -f/--filtered cpt,not booked,10:00]")
-
-# TODO: Think about making creds and data a global variable 
 def view_calendar(personal: bool,clinic: bool, days:str, filtered:str=None):
-    creds, data = gen_creds()
+
+    username = current_logged_profile()["username"]
+    creds,user_data = gen_creds(username)
+
     if personal == True and clinic == False: # Only personal is True
         calendar_id = 1
     elif clinic == True and personal == False: # Only clinic is True
