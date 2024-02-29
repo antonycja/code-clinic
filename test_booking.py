@@ -179,7 +179,15 @@ class TestBooking(TestCase):
 
 
     def test_export_to_ical(self):
-        pass
+        file_path = "bookings.ics"
+        actual_message = export_to_ical(creds, file_path)
+        desired_message = f"Bookings exported to {file_path}"
+
+        self.assertEqual(desired_message, actual_message)
+        self.assertTrue(os.path.exists(file_path))
+
+        os.remove(file_path)
+
 
 if __name__=="__main__":
     main()
