@@ -253,6 +253,12 @@ def get_calendar_results(user_credentials: object, filter_keywords: str, calenda
         days = int(days)
         
         service = build("calendar", "v3", credentials=user_credentials)
+        cal_type, calendars = determine_calendar(calendar, cal_type_list, calendar_dict)
+        
+        print(
+        f"Getting the upcoming event(s) for the next {days} day(s) for {cal_type}...\n")
+        
+        # get event in the specified 
         selected_events_info_list = get_data_from_calendar_api(
             service, calendar, days)
         # checking if the current saved data is up to date, if not updating it.
