@@ -259,21 +259,34 @@ app.add_command(volunteer)
 app.add_command(cancel_volunteering)
 app.add_command(view_calendar)
 app.add_command(login)
+app.add_command(signin)
+
 
 
 
 if __name__ == '__main__':
 
-    success, message = setup.pre_load()
-    if 'configure' in sys.argv or '--help' in sys.argv or '-h' in sys.argv or len(sys.argv):
+    usern = current_logged_profile()["username"]
+    if usern == None and not 'signin' in sys.argv:
+        exit("""No active user found. Please login using
+
+  code-clinic signin""")
+
+    if usern == None and 'signin' in sys.argv:
+        # only if user name is none and user wants to signin 
+        app()
+
+
+    success, message, folders = setup.pre_load(usern)
+    if 'configure' in sys.argv or '--help' in sys.argv or '-h' in sys.argv or len(sys.argv) < 2:
         app()
     elif success == False and not 'configure' in sys.argv:
         print(message)
         exit('Run: code-clinic configure')
 
-    folders = setup.secure_folder()
+
     data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
-    if 'login' in sys.argv or LogIn.check_token("/tmp/.logIn_token.json",data):
+    if 'login' in sys.argv or 'signin' in sys.argv or LogIn.check_token(save_path(folders["tmp"],f'.{usern}',".logIn_token.json"),data):
         app()
 
 
