@@ -16,8 +16,7 @@ from calendar_logic import booking, volunteer as volunteering, view_calendar as 
 import sys
 
 
-# pusg this code: added a dot(.),to make files hidden
-def gen_creds():
+def gen_creds(username):
     """
     Generates the Google credentials object via oauth2 authentication.
     The credentials (creds) is then used for viewing, creating and deleting events
@@ -26,33 +25,37 @@ def gen_creds():
         object: google object
     """
 
-    folders = setup.secure_folder()
+    folders = setup.secure_folder(username)
     data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
 
-    if LogIn.check_token("/tmp/.logIn_token.json",data):
+    # custom user dir
+    dir = folders["usertmp"]
 
-        if not exists("/tmp/.elite.json"):
+
+
+    if LogIn.check_token(save_path(dir,".logIn_token.json"),data):
+
+        if not exists(save_path(dir,".elite.json")):
             cs = setup.decrypt_it(folders,'keys','elite','cs','elite')
-            writer.write_to_json("/tmp",'.elite',cs)
+            writer.write_to_json(dir,'.elite',cs)
 
         if exists(save_path(folders['auth'],'.creds.token')):
             token = setup.decrypt_it(folders, "keys", "token", "creds", "token")
-            writer.write_to_json("/tmp",".creds",token)
+            writer.write_to_json(dir,".creds",token)
             write_token = False
         else:
             write_token = True
 
         # token authentication
-        creds = authentication.authenticate("/tmp/.elite.json","/tmp/.creds.json")
+        creds = authentication.authenticate(save_path(dir,".elite.json"),save_path(dir,".creds.json"))
 
         # writing an encrypted version of the token
         if write_token:
-            with open('/tmp/.creds.json','r') as file:
-                data = file.read()
-            setup.encrypt_it(data,folders,"keys","token","SOS","token","creds","token")
+            with open(save_path(dir,'.creds.json'),'r') as file:
+                enc_data = file.read()
+            setup.encrypt_it(enc_data,folders,"keys","token","SOS","token","creds","token")
 
     return creds, data
-
 
 # groups the click command to the specific app
 @click.group
