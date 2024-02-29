@@ -126,8 +126,9 @@ class TestBooking(TestCase):
         success, message = book_slot(creds, booking_info, USER_EMAIL)
         desired_success, desired_message = True, "Booking Successful!"
 
-        self.assertEqual(desired_success, success)
         self.assertEqual(desired_message, message)
+        self.assertEqual(desired_success, success)
+        
 
         #Delete the event
         service.events().delete(calendarId=CLINIC_CALENDAR_ID, eventId=event['id']).execute()
@@ -221,6 +222,26 @@ class TestBooking(TestCase):
         service.events().delete(calendarId=CLINIC_CALENDAR_ID, eventId=event['id']).execute()
     
     
+    
+    def test_book_slot_no_volunteer(self):
+        service = service = build('calendar', 'v3', credentials=creds)
+        
+
+
+        booking_info = dict()
+        booking_info['dateTime'] = f"{day_now_str}T17:30"
+        booking_info['description'] = "Help me with arrays."
+
+        success, message = book_slot(creds, booking_info, USER_EMAIL)
+        desired_success, desired_message = False, "There is no volunteer for the slot you selected. Try another."
+
+        self.assertEqual(desired_message, message)
+        self.assertEqual(desired_success, success)
+        
+
+
+
+
     def test_cancel_booking(self):
         service = service = build('calendar', 'v3', credentials=creds)
         
