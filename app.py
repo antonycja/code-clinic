@@ -179,7 +179,8 @@ def cancel_booking(day,time):
     date_time = booking.get_start_date_time(user_input)
     booking_info = {"dateTime": f"{date_time}"}
 
-    creds,user_data = gen_creds()
+    username = current_logged_profile()["username"]
+    creds,user_data = gen_creds(username)
     signal, message = booking.cancel_booking(creds,booking_info,user_data['email'])
     exit(message)
 
