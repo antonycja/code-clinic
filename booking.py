@@ -7,6 +7,9 @@
 import os.path, sys
 import datetime as dt
 
+from ics import Event, Calendar
+from datetime import timedelta
+
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -97,7 +100,7 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
             event['description'] = booking_info['description']
 
             event_id = event['id']
-            
+
 
             updated_event = service.events().update(calendarId= CLINIC_CALENDAR_ID, eventId=event_id, body=event).execute()
 
@@ -386,33 +389,122 @@ def time_valid(time : str)->bool:
     return is_time_valid      
 
 
+def export_to_ical(creds, ical_file_path):
+    """
+    Exports the bookings in iCal file format.
+
+    Parameters:
+    creds (Credentials): A Credentials object necessary to build a calendar.
+    ical_file_path (str): The location and name of the file you want to export bookings to.
+
+    Returns:
+    message (str): A message stating that the bookings have been exported to the relevant file.
+    """
+    calendar = Calendar()
+    bookings = get_bookings(creds)
+
+    for booking in bookings:
+        event = Event()
+        event.name = booking['summary']
+
+        plus_pos = booking['start']['dateTime'].index("+")
+        start_date_time = booking['start']['dateTime'][:plus_pos]
+        event.begin = dt.datetime.strptime(start_date_time, "%Y-%m-%dT%H:%M:%S")
+
+        plus_pos = booking['end']['dateTime'].index("+")
+        end_date_time = booking['end']['dateTime'][:plus_pos]
+        event.end = dt.datetime.strptime(end_date_time, "%Y-%m-%dT%H:%M:%S")
+        
+        event.description = booking['description']
+        event.location = booking['location']
+
+        event.attendees = []
+        for attendee in booking['attendees']:
+            event.attendees.append(attendee['email'])
+
+        calendar.events.add(event)
+    
+    with open(ical_file_path, "w") as ics_file:
+        ics_file.writelines(calendar)
+    
+    message = f"Bookings exported to {ical_file_path}"
+    return message
+
+
+
+
+
+def get_bookings(creds):
+    bookings = []
+    now = dt.datetime.utcnow().isoformat() + "Z"
+
+    start_date = dt.datetime.utcnow()
+    end_date = dt.datetime.utcnow() + timedelta(days=6)
+
+    # Format dates in RFC3339 format for the API request
+    start_date_str = start_date.isoformat() + 'Z'
+    end_date_str = end_date.isoformat() + 'Z'
+
+    service = build('calendar', 'v3', credentials=creds)
+    events_result = service.events().list(calendarId=CLINIC_CALENDAR_ID, timeMin=now, timeMax=end_date_str, maxResults=150).execute()
+    events = events_result.get("items", [])
+
+    for event in events:
+        if len(event['attendees']) == 2:
+            bookings.append(event)
+
+
+    return bookings
+
+            
+
+
+def is_within_7_days(event, now)-> bool:
+    event_start_date_time = event['start']['dateTime']
+    items = event_start_date_time.split("-")
+    event_year, event_month, event_day = int(items[0]), int(items[1]), int(items[2][:2])
+
+    items = now.split("-")
+    current_year, current_month, current_day = int(items[0]), int(items[1]), int(items[2][:2])
+
+    event_date_time = dt.datetime(event_year, event_month, event_day)
+    now_date_time = dt.datetime(current_year, current_month, current_day)
+
+    delta = event_date_time - now_date_time
+
+    if delta > 6:
+        return False
+    return True
+    
+
 if __name__== '__main__':
  
-    # print(get_start_date_time("12"))
+    #print(get_start_date_time("1T12"))
 
     creds = authenticate()
 
-    # service = build('calendar', 'v3', credentials=creds)
-    # create_event(service)
+    # # service = build('calendar', 'v3', credentials=creds)
+    # # create_event(service)
 
-    date_time = '2024-02-23T15:00:00+02:00'
-    description = 'I need help with 2D arrays'
 
-    booking_info = dict()
+    # booking_info = dict()
 
-    start_date_time = "28T10:00"
-    description = "Arrays"
+    # start_date_time = "1T12:00"
+    # description = "Arrays"
 
     # booking_info['dateTime'] = start_date_time
     # booking_info['description'] = description
 
     # message = book_slot(creds, booking_info, USER_EMAIL)
-    # print(message)
 
-    start_date_time = "28T10:00"
-    booking_info['dateTime'] = start_date_time
-    message = cancel_booking(creds, booking_info, USER_EMAIL)
+
+    # # start_date_time = "28T10:00"
+    # # booking_info['dateTime'] = start_date_time
+    # # message = cancel_booking(creds, booking_info, USER_EMAIL)
+
+    message = export_to_ical(creds, "bookings.ics")
 
     print(message)
-    os.remove('token.json')
+    # os.remove('token.json')
+
     pass
