@@ -63,8 +63,9 @@ def determine_calendar(calendar: int, cal_type_list: list, calendar_dict: dict) 
     else:
         calendars = [calendar for calendar in calendar_dict.values()]
         cal_type = "ALL calendars"
+        
 
-    return calendars, cal_type, cal_type_list
+    return cal_type, calendars
 
 
 def get_data_from_calendar_api(service: object, calendar: int, days: int) -> list:
