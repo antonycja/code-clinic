@@ -64,7 +64,7 @@ def get_profile():
     If the user does have a profile and dir it will return the username.
 
     Returns:
-        _type_: _description_
+        str: the username of the user
     """
 
     username = input("Enter your username: ")
@@ -74,6 +74,19 @@ def get_profile():
         exit(f"profile '{username}' does not exists. run code-clinic configure")
 
     return username
+
+
+def current_logged_profile():
+    """
+    Returns the profile that is currently/ previously logged-in on the system
+
+    Returns:
+        dict: current/previously logged in user if any.
+    """
+
+    path = save_path(files.get_home(),'.elite')
+
+    return writer.load_pickle(path,'.systems.log')
 
 # groups the click command to the specific app
 @click.group
