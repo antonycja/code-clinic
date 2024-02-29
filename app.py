@@ -250,7 +250,14 @@ def view_calendar(personal: bool,clinic: bool, days:str, filtered:str=None):
         calendar_id = 0
         
     viewing.get_calendar_results(creds, filtered, calendar_id, days)
-        
+
+@click.command(help= ": displays the current logged in user.")
+def current_user():
+    user = current_logged_profile()
+
+    if user == None:
+        exit("No user is currently logged-in")
+    exit(f'The current logged-in user is: {user["username"]}')
 
 app.add_command(configure)
 app.add_command(make_booking)
@@ -260,7 +267,7 @@ app.add_command(cancel_volunteering)
 app.add_command(view_calendar)
 app.add_command(login)
 app.add_command(signin)
-
+app.add_command(current_user)
 
 
 
