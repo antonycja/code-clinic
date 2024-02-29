@@ -13,7 +13,7 @@ import setup
 from file_handling import files
 from helpers import writer
 from os.path import exists, join as save_path
-from calendar_logic import booking, volunteer as volunteering
+from calendar_logic import booking, volunteer as volunteering, view_calendar as viewing
 import sys
 
 
@@ -211,7 +211,7 @@ def view_calendar(personal: bool,clinic: bool, days:str, filtered:str=None):
     else: # If both of them are the same then just show both calendars
         calendar_id = 0
         
-    viewing_calendar.get_calendar_results(creds, filtered, calendar_id, days)
+    viewing.get_calendar_results(creds, filtered, calendar_id, days)
         
 
 app.add_command(configure)
