@@ -99,8 +99,8 @@ def app():
 @click.option('-n','--name',help = 'Your username; [USECASE: -n/--name "username"]')
 @click.option('-e','--email',help = 'Your cooperate email address; [USECASE: -e/--email "email"]')
 def configure(name: str = None,email: str = None):
-    folders = setup.secure_folder()
     data = config.generate_logIn_cred(name,email)
+    folders = setup.secure_folder(data["username"])
     setup.encrypt_it(data,folders,'keys','creds','creds','recon','config','creds')
     cs = authentication.get_credentials()
     setup.encrypt_it(cs,folders,'keys','elite','cs','recon','cs','elite')
