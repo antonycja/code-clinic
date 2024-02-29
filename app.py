@@ -163,11 +163,11 @@ def make_booking(day,time,desc):
     date_time = booking.get_start_date_time(user_input)
     booking_info = {"dateTime": f"{date_time}","description" : f"{desc}"}
 
-    creds,user_data = gen_creds()
+    username = current_logged_profile()["username"]
+    creds,user_data = gen_creds(username)
     signal, message = booking.book_slot(creds,booking_info,user_data['email'])
 
     exit(message)
-
 
 
 @click.command(help = ': cancel a code clinic session')
