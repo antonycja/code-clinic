@@ -217,7 +217,8 @@ def cancel_volunteering(day,time):
     start_time = booking.get_start_date_time(user_input)
     end_time = booking.get_start_date_time(f'{day}T{gen_end_time}')
 
-    creds, user_data = gen_creds()
+    username = current_logged_profile()["username"]
+    creds,user_data = gen_creds(username)
 
     message = volunteering.cancel_event(creds,start_time,end_time)
     exit(message)
