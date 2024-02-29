@@ -89,7 +89,7 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
         if event['start']['dateTime'] == booking_info['dateTime']:
             number_of_attendees = len(event['attendees'])
             if number_of_attendees == 2:
-                message = "Slot is already booked. TRY ANOTHER."
+                message = "Slot is already booked. Try another!"
                 return False, message
             elif is_volunteer(event, USER_EMAIL):
                 message = "You are a volunteer for this slot. You cannot book it!"
@@ -109,7 +109,7 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
             return True, message
     
 
-    message = "There is no volunteer for the slot you selected. TRY ANOTHER."
+    message = "There is no volunteer for the slot you selected. Try another."
     return False, message
 
 
