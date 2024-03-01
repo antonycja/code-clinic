@@ -204,7 +204,8 @@ def filter_calendar_events(filter_by: list, data_list: list) -> list:
     Returns:
         list: a list containing only the events that meet the filter criteria.
     """
-    file = convert_csv_to_dict(filename)
+    file = data_list
+    
     if not filter_by:
         return file
 
