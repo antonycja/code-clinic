@@ -13,14 +13,14 @@ except HttpError as error:
         print("An error occured:", error) 
 
 event_description = 'Join this event if you need help.'
-volunteer_email = 'amaposa023@student.wethinkcode.co.za'
-# volunteer_email = 'cthomas023@student.wethinkcode.co.za'
-starttime = '2024-01-01T17:00:00+02:00'
-endtime = '2024-01-01T17:30:00+02:00'
+# volunteer_email = 'amaposa023@student.wethinkcode.co.za'
+volunteer_email = 'cthomas023@student.wethinkcode.co.za'
+starttime = '2024-03-01T14:00:00+02:00'
+endtime = '2024-03-01T14:30:00+02:00'
 # starttime = '2024-02-26T17:00:00+02:00'
 # endtime = '2024-02-26T17:30:00+02:00'
 campus = 'WTC CPT'
 
 if __name__ == '__main__':
-    # create_volunteer_slot(creds, volunteer_email, starttime, endtime, campus)
-    cancel_event(creds, starttime, endtime, volunteer_email)
+    create_volunteer_slot(creds, volunteer_email, starttime, endtime, campus)
+    # cancel_event(creds, starttime, endtime, volunteer_email)
