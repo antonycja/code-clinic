@@ -156,6 +156,7 @@ def create_event_info(events: list, cal_name: str) -> list:
     Returns:
         list: a list containing dictionaries of relevant data.
     """
+
     event_info_list = []
     for event in events:
         date_time = event["start"].get("dateTime").split("T")
@@ -193,7 +194,7 @@ def create_event_info(events: list, cal_name: str) -> list:
     return event_info_list
 
 
-def filter_calendar_events(filter_by: list, filename: str) -> list:
+def filter_calendar_events(filter_by: list, data_list: list) -> list:
     """filter the events by looking for the given keywords and only return those events.
 
     Args:
