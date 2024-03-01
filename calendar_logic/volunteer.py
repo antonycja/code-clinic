@@ -45,7 +45,7 @@ def create_volunteer_slot(creds, volunteer_email, starttime, endtime, campus, ca
             event = {
                 'summary': 'VOLUNTEER SLOT',
                 'location': campus,
-                'description': "Join this event for a code-clinic session",
+                'description': "Join this event for a code-clinic session with a volunteer.",
                 'start': {
                     'dateTime': starttime,
                     'timeZone': 'Africa/Johannesburg'
@@ -91,7 +91,7 @@ def is_booked(starttime, endtime, email, service, calendar_id):
     Returns:
         bool: True if the volunteer is booked; False otherwise.
     """
-    event_id = get_event(service, calendar_id, starttime, endtime)
+    event_id = get_event(service, calendar_id, starttime, endtime, email)
     if not event_id:
         return False
     event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
@@ -103,7 +103,7 @@ def is_booked(starttime, endtime, email, service, calendar_id):
     return False
 
 
-def get_event(service, calendar_id, starttime, endtime):
+def get_event(service, calendar_id, starttime, endtime, volunteer_email):
     """
     Retrieve the event ID for the event within the specified time frame.
 
@@ -128,13 +128,16 @@ def get_event(service, calendar_id, starttime, endtime):
             )
         .execute()
         )
-        event = events_result.get('items', [])
-        return event[0]['id']
+        events = events_result.get('items', [])
+        if events:
+            for event in events:
+                if event['attendees'][0]['email'] == volunteer_email:
+                    return event['id']
     except IndexError as error:
-        print(f'There is not a slots booked for the specified time')
+        print(f'There is not a slot booked for the specified time')
         return None
 
-def cancel_event(creds, starttime, endtime, calendar_id = calendar_id):
+def cancel_event(creds, starttime, endtime, volunteer_email, calendar_id = calendar_id):
     """
     Cancel the event within the specified time frame.
 
@@ -150,9 +153,9 @@ def cancel_event(creds, starttime, endtime, calendar_id = calendar_id):
     service = build_service(creds)
 
     try:
-        event_id = get_event(service, calendar_id, starttime, endtime)
+        event_id = get_event(service, calendar_id, starttime, endtime, volunteer_email)
         event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
-        if len(event['attendees']) > 1:
+        if len(event['attendees']) > 1 or event['attendees'][0]['email'] != volunteer_email:
             message = 'You cannot cancel a slot that has already been booked by a student.'
         else:
             service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
@@ -194,7 +197,6 @@ def end_time(start_time:str):
     if min < 10:
         min = f'0{min}'
     
-    
     return f'{hours}:{min}'
 
 
@@ -228,3 +230,4 @@ def campus_abb(campus: str):
 
     return campus
 
+# def store_volunteer_data(event_id, ):
