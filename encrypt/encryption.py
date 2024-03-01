@@ -3,6 +3,8 @@ The encryption module is in charge of creating, writing and reading the encrypte
 data
 """
 
+from deps import install_dependencies
+install_dependencies()
 
 from Cryptodome.Random import get_random_bytes
 from Crypto.Protocol.KDF import PBKDF2
