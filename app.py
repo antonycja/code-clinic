@@ -86,8 +86,12 @@ def current_logged_profile():
 
     path = save_path(files.get_home(),'.elite')
 
-    return writer.load_pickle(path,'.systems.log')
+    try:
+        user =  writer.load_pickle(path,'.systems.log')
+    except FileNotFoundError:
+        user = {"username":None}
 
+    return user
 # groups the click command to the specific app
 @click.group
 def app():
@@ -207,8 +211,8 @@ def volunteer(day,time,campus):
 
 # push this tomorrow first, added body for canceling
 @click.command(help = ": cancel a code clinic session hosted by you. NB booked sessions can't be canceled.")
-@click.option('-d','--day',prompt = 'Enter the date on which you would like to volunteer',help ='A date that you are available and able to help others; [USECASE: -d/--day 24]')
-@click.option('-t','--time',prompt= 'Enter the time of the session you want to volunteer',help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
+@click.option('-d','--day',prompt = 'Enter the date which you would like to cancel',help ='A date with an active event; [USECASE: -d/--day 24]')
+@click.option('-t','--time',prompt= 'Enter the time of the session you would like to cancel',help = "the start time of the active; [USECASE: -t/--time 08:30]")
 def cancel_volunteering(day,time):
 
     user_input = f'{day}T{time}'
@@ -272,12 +276,13 @@ app.add_command(current_user)
 
 
 if __name__ == '__main__':
-    sys.argv.append("cancel-volunteering")
+    # sys.argv.append("cancel-volunteering")
     # sys.argv.append("configure")
     # sys.argv.append("login")
     # sys.argv.append("-p")
     # sys.argv.append("-c")
     # sys.argv.append(True)
+    sys.argv.append("signin")
 
     usern = current_logged_profile()["username"]
     if usern == None and not 'signin' in sys.argv:
