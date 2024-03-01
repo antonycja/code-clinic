@@ -8,7 +8,7 @@ __author__ = 'Johnny Ilanga'
 from getpass import getpass
 import time
 from helpers import writer
-from os.path import exists
+from os.path import exists, join as save_path
 
 def login(data: dict):
     """
@@ -38,16 +38,17 @@ def login(data: dict):
     return False, ["",""]
 
 
-
-def code_clinic_login(data: dict):
+# edited added folder references, commit too
+def code_clinic_login(data: dict, folders: dict):
     """
     The main log in function for code clinic
 
     Args:
         data (dict): a dict containing important user related data
+        folders (dict): contains the paths of all the important directories
     """
     access, exp = login(data)
-    dump_token(data["email"],access,exp)
+    dump_token(data["email"],access,exp,folders)
 
 
     return access
@@ -92,8 +93,8 @@ def token_exp(login_time: str):
 
     return logout_time
 
-
-def dump_token(user_name: str, access: bool, expiration_data: str):
+# commit as well, changed dump token so that the user token is dumped in the userprofile tmp file 
+def dump_token(user_name: str, access: bool, expiration_data: str,folders:dict):
     """
     Creates a snapshot of the access token and dumps it in a file.
     The token snapshot saves user time from by eliminating the login process
@@ -103,6 +104,7 @@ def dump_token(user_name: str, access: bool, expiration_data: str):
         user_name (str): the username of the user the token belongs too
         access (bool): access to application
         expiration_data (str): expiration date and time of the token
+        folders (dict): contains all the relevant folder that the app writes and reads from
     """
 
     logIn_token = {
@@ -112,11 +114,13 @@ def dump_token(user_name: str, access: bool, expiration_data: str):
             "expiration": expiration_data[1],
         }
     }
-    writer.save_to_json("/tmp", ".logIn_token", logIn_token)
+
+    # we are writing to the user specified dir
+    writer.save_to_json(folders["usertmp"], ".logIn_token", logIn_token)
 
 
 # commit first: added token clearing before exiting if token data is not valid
-def check_token(path:str, data: dict ):
+def check_token(path:str, data: dict ,folders:dict):
     """
     Checks whether the given token is valid. If the token is valid, we will skip
     the login menu. If token is not valid, the program gets terminated.
@@ -144,21 +148,22 @@ Please login using
   code-clinic login
     """
 
+
     # if access == False:
-    if exists("/tmp/.logIn_token.json"):
+    if exists(path):
         # reading the username to see if it has a token
         token = writer.read_from_json(path)[f'{data["email"]}']
 
         if not token["access"]:
-            dump_token(data["email"],False,["",""])
+            dump_token(data["email"],False,["",""],folders)
             exit(err_message)  # get error from wtc_lms
 
 
         if not IsValidToken(token):
-            dump_token(data["email"],False,["",""])
+            dump_token(data["email"],False,["",""],folders)
             exit(exp_message) # get from lms
     else:
-        dump_token(data["email"],False,["",""])
+        dump_token(data["email"],False,["",""],folders)
         exit(err_message)
 
 
@@ -294,4 +299,3 @@ def IsValidToken(token_data: dict, current_date: str = timeshift(sys_time())):
         return False
 
     return True
-

@@ -87,7 +87,8 @@ def get_data_from_calendar_api(service: object, calendar: int, days: int, cal_ty
     for calendar_id in calendars:
         events = get_events(service, calendar_id, days)
         event_list.append(events)
-        
+
+    message = None
     for index, events in enumerate(event_list):
         if calendar != 1 and calendar != 2:
             cal_name = cal_type_list[index].upper()
@@ -99,11 +100,12 @@ def get_data_from_calendar_api(service: object, calendar: int, days: int, cal_ty
             event_info = create_event_info(events, cal_name)
             [selected_events_info_list.append(
                 event) for event in event_info]
+            
         else:
-            print(tabulate(
-                [[f"No upcoming events for this {cal_name} calendar."]], tablefmt="double_grid"))
+            message = tabulate(
+                [[f"No upcoming events for this {cal_name} calendar."]], tablefmt="double_grid")
 
-    return selected_events_info_list
+    return selected_events_info_list, message
 
 
 def display_events(display_events: list) -> None:
@@ -258,16 +260,18 @@ def get_calendar_results(user_credentials: object, filter_keywords: str, calenda
             calendar, cal_type_list, calendar_dict)
 
         print(
-            f"Getting the upcoming event(s) for the next {days} day(s) for {cal_type}...\n")
-
+        f"Getting the upcoming event(s) for the next {days} day(s) for {cal_type}...\n")
+        
         # get event in the specified
-        selected_events_info_list = get_data_from_calendar_api(
+        selected_events_info_list, message = get_data_from_calendar_api(
             service, calendar, days, cal_type, calendars, cal_type_list)
-
-        # Get events in the next 7 days
+        
+        if message != None:
+            print(message)
+        
+        # Get events in the next 7 days 
         all_calendar_ids = [calendar for calendar in calendar_dict.values()]
-        next_7_days = get_data_from_calendar_api(
-            service, 0, 7, cal_type, all_calendar_ids, cal_type_list)
+        next_7_days,message = get_data_from_calendar_api(service, 0, 7, cal_type, all_calendar_ids, cal_type_list)
         # checking if the current saved data is up to date, if not updating it.
         if calendar_data_changed(next_7_days, filename):
             write_to_csv_file(next_7_days, filename)

@@ -1,9 +1,9 @@
 from googleapiclient.errors import HttpError
 from googleapiclient.discovery import build
+from calendar_logic.booking import is_occupied
 
 calendar_id = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 
-# commit first
 def build_service(creds):
     """
     Creates a google service object using oauth2.0.
@@ -45,7 +45,7 @@ def create_volunteer_slot(creds, volunteer_email, starttime, endtime, campus, ca
             event = {
                 'summary': 'VOLUNTEER SLOT',
                 'location': campus,
-                'description': "Join this event for a code-clinic session",
+                'description': "Join this event for a code-clinic session with a volunteer.",
                 'start': {
                     'dateTime': starttime,
                     'timeZone': 'Africa/Johannesburg'
@@ -79,7 +79,7 @@ def create_volunteer_slot(creds, volunteer_email, starttime, endtime, campus, ca
 
 def is_booked(starttime, endtime, email, service, calendar_id):
     """
-    Check if the volunteer is already booked for a session during the specified time.
+    Check if a volunteer has already booked a slot for the specified time.
 
     Args:
         starttime (str): Start time of the event in 'YYYY-MM-DDTHH:MM:SS' format.
@@ -89,12 +89,14 @@ def is_booked(starttime, endtime, email, service, calendar_id):
         calendar_id (str): ID of the Google Calendar.
 
     Returns:
-        bool: True if the volunteer is booked; False otherwise.
+        bool: True if the slot is booked; False otherwise.
     """
-    event_id = get_event(service, calendar_id, starttime, endtime)
+    event_id = get_event(service, calendar_id, starttime, endtime, email)
     if not event_id:
         return False
     event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+    if is_occupied(event, email):
+        return True
     start = event['start']['dateTime']
     if start == starttime:
         attendee = event['attendees'][0]['email']
@@ -103,7 +105,7 @@ def is_booked(starttime, endtime, email, service, calendar_id):
     return False
 
 
-def get_event(service, calendar_id, starttime, endtime):
+def get_event(service, calendar_id, starttime, endtime, volunteer_email):
     """
     Retrieve the event ID for the event within the specified time frame.
 
@@ -128,13 +130,19 @@ def get_event(service, calendar_id, starttime, endtime):
             )
         .execute()
         )
-        event = events_result.get('items', [])
-        return event[0]['id']
+        events = events_result.get('items', [])
+        if events:
+            for event in events:
+                if event['attendees'][0]['email'] == volunteer_email:
+                    return event['id']
+                else:
+                    print("You have not volunteered yet.")
+                    return None
     except IndexError as error:
-        print(f'There is not a slots booked for the specified time')
+        print(f'There is not a slot booked for the specified time')
         return None
 
-def cancel_event(creds, starttime, endtime, calendar_id = calendar_id):
+def cancel_event(creds, starttime, endtime, volunteer_email, calendar_id = calendar_id):
     """
     Cancel the event within the specified time frame.
 
@@ -150,10 +158,15 @@ def cancel_event(creds, starttime, endtime, calendar_id = calendar_id):
     service = build_service(creds)
 
     try:
-        event_id = get_event(service, calendar_id, starttime, endtime)
+        event_id = get_event(service, calendar_id, starttime, endtime, volunteer_email)
         event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+
         if len(event['attendees']) > 1:
             message = 'You cannot cancel a slot that has already been booked by a student.'
+        
+        elif event['attendees'][0]['email'] != volunteer_email:
+            message = 'you cannot cancel a slot that you have not volunteered for.'
+
         else:
             service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
             message = 'Slot successfully cancelled.'
@@ -193,7 +206,6 @@ def end_time(start_time:str):
     
     if min < 10:
         min = f'0{min}'
-    
     
     return f'{hours}:{min}'
 
