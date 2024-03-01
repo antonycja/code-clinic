@@ -72,6 +72,17 @@ def get_profile():
 
     return username
 
+def confirm_cancellation():
+    """
+    cancellation confirmation
+    """
+
+    choice = input("Are you sure you want to cancel this event? (Y/N): ")
+
+    if choice.lower() == 'y':
+        return True
+
+    return False
 
 def current_logged_profile():
     """
@@ -208,7 +219,12 @@ def cancel_booking(day:str ,time:str):
 
     username = current_logged_profile()["username"]
     creds,user_data = gen_creds(username)
-    signal, message = booking.cancel_booking(creds,booking_info,user_data['email'])
+
+    if confirm_cancellation():
+        signal, message = booking.cancel_booking(creds,booking_info,user_data['email'])
+    else:
+        message = "Aborting cancellation!"
+
     exit(message)
 
 
@@ -217,7 +233,7 @@ def cancel_booking(day:str ,time:str):
 @click.command(help = ': volunteer to host a code clinic session')
 @click.option('-d','--day',prompt = 'Enter the date on which you would like to volunteer',help ='A date that you are available and able to help others; [USECASE: -d/--day 24]')
 @click.option('-t','--time',prompt= 'Enter the time of the session you want to volunteer',help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
-@click.option('-c','--campus',prompt = 'Enter the name of the campus that you attend (optional)', help = 'The campus you attend, (CPT, JHB, DBN, CJC); [USECASE: -c/--campus CPT]')
+@click.option('-c','--campus',default = "",prompt = 'Enter the name of the campus that you attend (optional)', help = 'The campus you attend, (CPT, JHB, DBN, CJC); [USECASE: -c/--campus CPT]')
 def volunteer(day: str,time:str ,campus: str):
     """
     An event is created, where the relevant user volunteers to host a session
@@ -262,7 +278,10 @@ def cancel_volunteering(day: str ,time: str):
     username = current_logged_profile()["username"]
     creds,user_data = gen_creds(username)
 
-    message = volunteering.cancel_event(creds,start_time,end_time,user_data["email"])
+    if confirm_cancellation():
+        message = volunteering.cancel_event(creds,start_time,end_time,user_data["email"])
+    else:
+        message = "Aborting cancellation!"
     exit(message)
 
 
@@ -312,8 +331,8 @@ def current_user():
 
 
 @click.command(help=": Exports calendar data in ical format")
-@click.option('-p','--path',default = save_path(files.get_home(),'Downloads'),prompt = "Enter the directory to save the file (absolute path). Leave blank for default path:",help = 'saves the calendar onto your local machine. [Default folder = Downloads]' )
-@click.option('-n','--name',default = "", prompt = "Enter file in which t save the content (booking)",help = 'The name to name the file to save the data in')
+@click.option('-p','--path',default = save_path(files.get_home(),'Downloads'),prompt = "Enter the directory to save the file (absolute path). Leave blank for default path:",help = 'saves the calendar onto your local machine. [Default folder = Downloads]; [USECASE: -p/--path ~/home/Desktop]' )
+@click.option('-n','--name',default = "", prompt = "Enter file in which t save the content (booking)",help = 'The name to name the file to save the data in; [USECASE: -n/--name my_calendar]')
 def export_calendar(path: str, name: str):
     """
     Exports the calendar to a file that can be imported on other applications
