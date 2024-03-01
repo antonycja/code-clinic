@@ -116,11 +116,11 @@ def dump_token(user_name: str, access: bool, expiration_data: str,folders:dict):
     }
 
     # we are writing to the user specified dir
-    writer.save_to_json(save_path(folders["tmp"],f".{user_name.split('@')[0]}"), ".logIn_token", logIn_token)
+    writer.save_to_json(folders["usertmp"], ".logIn_token", logIn_token)
 
 
 # commit first: added token clearing before exiting if token data is not valid
-def check_token(path:str, data: dict ):
+def check_token(path:str, data: dict ,folders:dict):
     """
     Checks whether the given token is valid. If the token is valid, we will skip
     the login menu. If token is not valid, the program gets terminated.
@@ -148,21 +148,22 @@ Please login using
   code-clinic login
     """
 
+
     # if access == False:
     if exists(path):
         # reading the username to see if it has a token
         token = writer.read_from_json(path)[f'{data["email"]}']
 
         if not token["access"]:
-            dump_token(data["email"],False,["",""])
+            dump_token(data["email"],False,["",""],folders)
             exit(err_message)  # get error from wtc_lms
 
 
         if not IsValidToken(token):
-            dump_token(data["email"],False,["",""])
+            dump_token(data["email"],False,["",""],folders)
             exit(exp_message) # get from lms
     else:
-        dump_token(data["email"],False,["",""])
+        dump_token(data["email"],False,["",""],folders)
         exit(err_message)
 
 
