@@ -1,5 +1,11 @@
-auth
-auth.py
-credentials.json
+
+# Beware of the sand
+sand* 
+# files 
+*.json
+*.bin
+*.pick*
+__pycache__
+*.csv
 token.json
-volunteer_data.json
+dummy.py
