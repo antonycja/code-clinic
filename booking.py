@@ -398,7 +398,7 @@ def export_to_ical(creds, ical_file_path):
     ical_file_path (str): The location and name of the file you want to export bookings to.
 
     Returns:
-    message (str): A message stating that the bookings have been exported to the relevant file.
+    message (str): A message stating that the bookings have been exported and also contains the file path to the ics file..
     """
     calendar = Calendar()
     bookings = get_bookings(creds)
