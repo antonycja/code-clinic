@@ -34,7 +34,7 @@ def gen_creds(username):
 
 
 
-    if LogIn.check_token(save_path(dir,".logIn_token.json"),data):
+    if LogIn.check_token(save_path(dir,".logIn_token.json"),data,folders):
 
         if not exists(save_path(dir,".elite.json")):
             cs = setup.decrypt_it(folders,'keys','elite','cs','elite')
@@ -241,9 +241,9 @@ def view_calendar(personal: bool,clinic: bool, days:str, filtered:str=""):
     username = current_logged_profile()["username"]
     creds,user_data = gen_creds(username)
 
-    if personal == True and clinic == False: # Only personal is True
+    if personal == True: # Only personal is True
         calendar_id = 1
-    elif clinic == True and personal == False: # Only clinic is True
+    elif clinic == True: # Only clinic is True
         calendar_id = 2
     
     else: # If both of them are the same then just show both calendars
@@ -272,7 +272,6 @@ app.add_command(current_user)
 
 
 if __name__ == '__main__':
-
     usern = current_logged_profile()["username"]
     if usern == None and not 'signin' in sys.argv:
         exit("""No active user found. Please login using
