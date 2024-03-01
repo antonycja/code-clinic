@@ -248,24 +248,26 @@ def get_calendar_results(user_credentials: object, filter_keywords: str, calenda
         # The name of the file where the data should be stored.
         filename = "calendar_data.csv"
         calendar_dict = {"personal": "primary",
-                     "clinic": "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"}
+                         "clinic": "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"}
         cal_type_list = ["PERSONAL calendar", "CODE CLINIC calendar"]
-        
+
         days = int(days)
-        
+
         service = build("calendar", "v3", credentials=user_credentials)
-        cal_type, calendars = determine_calendar(calendar, cal_type_list, calendar_dict)
-        
+        cal_type, calendars = determine_calendar(
+            calendar, cal_type_list, calendar_dict)
+
         print(
-        f"Getting the upcoming event(s) for the next {days} day(s) for {cal_type}...\n")
-        
-        # get event in the specified 
+            f"Getting the upcoming event(s) for the next {days} day(s) for {cal_type}...\n")
+
+        # get event in the specified
         selected_events_info_list = get_data_from_calendar_api(
             service, calendar, days, cal_type, calendars, cal_type_list)
-        
-        # Get events in the next 7 days 
+
+        # Get events in the next 7 days
         all_calendar_ids = [calendar for calendar in calendar_dict.values()]
-        next_7_days = get_data_from_calendar_api(service, 0, 7, cal_type, all_calendar_ids, cal_type_list)
+        next_7_days = get_data_from_calendar_api(
+            service, 0, 7, cal_type, all_calendar_ids, cal_type_list)
         # checking if the current saved data is up to date, if not updating it.
         if calendar_data_changed(next_7_days, filename):
             write_to_csv_file(next_7_days, filename)
@@ -274,7 +276,7 @@ def get_calendar_results(user_credentials: object, filter_keywords: str, calenda
         if filter_keywords:
             filter_keywords = filter_keywords.split(",")
             selected_events_info_list = filter_calendar_events(
-                filter_keywords, filename)
+                filter_keywords, selected_events_info_list)
 
         display_events(selected_events_info_list)
 
