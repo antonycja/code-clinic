@@ -2,6 +2,14 @@ import csv
 
 
 def convert_csv_to_dict(filename: str) -> list:
+    """convert a csv file to a python dictionary.
+
+    Args:
+        filename (str): the name of the file
+
+    Returns:
+        list: a list containing the list of dictionaries.
+    """
     with open(filename, "r") as cal_data:
         csv_file = csv.reader(cal_data)
         data_to_list = list(csv_file)
