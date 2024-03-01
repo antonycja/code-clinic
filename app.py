@@ -2,10 +2,6 @@
 This will be my main module. Using click to create the cli
 """
 
-"""
-This will be my main module. Using click to create the cli
-"""
-
 import click
 from authentication import authentication, LogIn
 from config import config
@@ -16,6 +12,7 @@ from os.path import exists, join as save_path
 from calendar_logic import booking, volunteer as volunteering, view_calendar as viewing
 import sys
 
+__author__ = 'Johnny Ilanga'
 
 def gen_creds(username):
     """
@@ -103,6 +100,14 @@ def app():
 @click.option('-n','--name',help = 'Your username; [USECASE: -n/--name "username"]')
 @click.option('-e','--email',help = 'Your cooperate email address; [USECASE: -e/--email "email"]')
 def configure(name: str = None,email: str = None):
+    """
+    Profile configurator. Creates a profile for a new user / reconfigures a profile for an existing.
+    Running this command will reset your profile and fix all file errors
+
+    Args:
+        name (str, optional): the name/username of the profile
+        email (str, optional): the email address of the organization
+    """
     data = config.generate_logIn_cred(name,email)
     folders = setup.secure_folder(data["username"])
     setup.encrypt_it(data,folders,'keys','creds','SOS','recon','config','creds')
@@ -113,6 +118,9 @@ def configure(name: str = None,email: str = None):
 #login
 @click.command(context_settings=dict(ignore_unknown_options=True,allow_extra_args = False))
 def login(log_file = save_path(files.get_home(),'.elite','.systems.log')):
+    """
+    The main login function. logins your user account
+    """
 
     log_data = dict()
     if exists(log_file):
@@ -143,6 +151,10 @@ def login(log_file = save_path(files.get_home(),'.elite','.systems.log')):
 @click.command(help=": Allows a new user to sign-in. Signs out the currently logged on user.")
 @click.pass_context # allows me to invoke a click command without its decorations
 def signin(ctx):
+    """
+    Signs in a new user. If someone is already signed in, they will be signed out.
+
+    """
 
     # log_data = dict()
     username = get_profile()
@@ -160,8 +172,14 @@ def signin(ctx):
 @click.option('-t','--time',prompt ="Enter the time of the session you want to reserve",help="When you want the session to take place; [USECASE: -t/--time 08:30]")
 @click.option('-D','--desc',prompt = 'Provide a meeting summary.',help = 'A short summary that explains the purpose off the meeting; [USECASE: -D/--Desc "summary"]')
 def make_booking(day,time,desc):
+    """
+    Books an event on the calendar for the relative user.
 
-    "TODO: fix booking of an already booked session. Check if booker is allowed to cancel a session that a volunteer is in."
+    Args:
+        day (str): the day (date) the event takes place
+        time (str): the time that the event will take place
+        desc (str): a short summary about the details of the event
+    """
 
     user_input = f'{day}T{time}'
     booking_info = {"dateTime": user_input,"description" : f"{desc}"}
@@ -176,7 +194,14 @@ def make_booking(day,time,desc):
 @click.command(help = ': cancel a code clinic session')
 @click.option('-d','--day',prompt = "Enter the date you want to cancel the booking",help="The date of the presently booked meeting that you wish to cancel; [USECASE: -d/--day 24]")
 @click.option('-t','--time',prompt ='Enter the time of the session you wish to cancel',help = "The time of the currently planned meeting that you wish to cancel; [USECASE: -t/--time 08:30]")
-def cancel_booking(day,time):
+def cancel_booking(day:str ,time:str):
+    """
+    Cancels an event where the relative user is an attendee
+
+    Args:
+        day (str): the day (date) the event takes place
+        time (str): the time that the event will take place
+    """
 
     user_input = f'{day}T{time}'
     booking_info = {"dateTime": user_input}
@@ -193,7 +218,15 @@ def cancel_booking(day,time):
 @click.option('-d','--day',prompt = 'Enter the date on which you would like to volunteer',help ='A date that you are available and able to help others; [USECASE: -d/--day 24]')
 @click.option('-t','--time',prompt= 'Enter the time of the session you want to volunteer',help = "When you want the session to take place; [USECASE: -t/--time 08:30]")
 @click.option('-c','--campus',prompt = 'Enter the name of the campus that you attend (optional)', help = 'The campus you attend, (CPT, JHB, DBN, CJC); [USECASE: -c/--campus CPT]')
-def volunteer(day,time,campus):
+def volunteer(day: str,time:str ,campus: str):
+    """
+    An event is created, where the relevant user volunteers to host a session
+
+    Args:
+        day (str): the day (date) the event takes place
+        time (str): the time that the event will take place
+        campus (str): the campus that the host attends
+    """
 
     user_input = f'{day}T{time}'
     gen_end_time = volunteering.end_time(time)
@@ -211,7 +244,14 @@ def volunteer(day,time,campus):
 @click.command(help = ": cancel a code clinic session hosted by you. NB booked sessions can't be canceled.")
 @click.option('-d','--day',prompt = 'Enter the date which you would like to cancel',help ='A date with an active event; [USECASE: -d/--day 24]')
 @click.option('-t','--time',prompt= 'Enter the time of the session you would like to cancel',help = "the start time of the active; [USECASE: -t/--time 08:30]")
-def cancel_volunteering(day,time):
+def cancel_volunteering(day: str ,time: str):
+    """
+    Cancels an event where the relative user is a host and there is no attendee. Events with attendees will not be cancelled
+
+    Args:
+        day (str): the day (date) the event takes place
+        time (str): the time that the event will take place
+    """
 
     user_input = f'{day}T{time}'
     gen_end_time = volunteering.end_time(time)
@@ -228,8 +268,6 @@ def cancel_volunteering(day,time):
 
 
 # view calendar
-''' TODO: fix the break if user does not have a token created
-delete the token to find out'''
 
 @click.command(help = ": displays the calenders")
 @click.option('-p','--personal',default=False,help = "Display personal calendar only; [default = FALSE] [USECASE: -p True]")
@@ -239,6 +277,14 @@ delete the token to find out'''
 @click.option('-d','--days', default = 7, prompt= 'Enter the number of days to view, leave empty for [default = 7 days]',help = "The number of days you would like to view from today [default = 7]; [USECASE: -d/--days 10]")
 @click.option('-f','--filtered',default ="", prompt= 'Enter the filter keywords ("," separated for multiple keywords)',help = "Display only the data that contains the filter keywords; [USECASE: -f/--filtered cpt,not booked,10:00]")
 def view_calendar(personal: bool,clinic: bool, days:str, filtered:str=""):
+    """
+    Displays the calenders. Users have options to view both their personal and code-clinic calendar
+    Args:
+        personal (bool): the users personal calender
+        clinic (bool): the code-clinic calender
+        days (str): the number of days to forecast/show
+        filtered (str, optional): keywords, that returns the relevant events if the keyword matches on the event. Defaults to "".
+    """
 
     username = current_logged_profile()["username"]
     creds,user_data = gen_creds(username)
@@ -255,6 +301,9 @@ def view_calendar(personal: bool,clinic: bool, days:str, filtered:str=""):
 
 @click.command(help= ": displays the current logged in user.")
 def current_user():
+    """
+    Displays the current user that is logged-in on the app
+    """
     user = current_logged_profile()
 
     if user == None:
