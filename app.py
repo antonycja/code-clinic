@@ -289,13 +289,11 @@ app.add_command(export_calendar)
 
 
 if __name__ == '__main__':
-    # sys.argv.append("cancel-volunteering")
-    # sys.argv.append("configure")
-    # sys.argv.append("login")
-    # sys.argv.append("-p")
-    # sys.argv.append("-c")
-    # sys.argv.append(True)
-    # sys.argv.append("signin")
+
+    if not exists(save_path(files.get_home(),".elite")):
+        print('Welcome to Code_Clinic\nYou do not appear to have a config file defined, so let me ask you some questions.')
+        setup.setup()
+        exit('\nSetup complete.\nRun: code_clinic')
 
     usern = current_logged_profile()["username"]
     if usern == None and not 'signin' in sys.argv:
