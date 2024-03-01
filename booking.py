@@ -10,6 +10,7 @@ from os.path import join
 
 from ics import Event, Calendar
 from datetime import timedelta
+import datetime
 
 
 from google.auth.transport.requests import Request
@@ -82,7 +83,7 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
     """
     now = dt.datetime.utcnow().isoformat() + "Z"
 
-    events_result = service.events().list(calendarId=CLINIC_CALENDAR_ID, timeMin=now, maxResults=10, singleEvents=True, orderBy='startTime').execute()
+    events_result = service.events().list(calendarId=CLINIC_CALENDAR_ID, timeMin=now, maxResults=1000, singleEvents=True, orderBy='startTime').execute()
 
     events = events_result.get('items', [])
 
@@ -90,7 +91,7 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
     found = False
 
     for event in events:
-        if is_occupied(event, USER_EMAIL):
+        if is_occupied(event, USER_EMAIL) and event['start']['dateTime'] == booking_info['dateTime']:
             message = "You are occupied for this slot. You cannot book it!"
             return False, message
 
@@ -403,7 +404,7 @@ def time_valid(time : str)->bool:
     return is_time_valid      
 
 
-def export_to_ical(creds, ical_file_path, file_name='bookings.ics'):
+def export_to_ical(creds, ical_file_path, file_name='bookings'):
     """
     Exports the bookings in iCal file format.
 
@@ -445,9 +446,6 @@ def export_to_ical(creds, ical_file_path, file_name='bookings.ics'):
     return message
 
 
-
-
-
 def get_bookings(creds):
     bookings = []
     now = dt.datetime.utcnow().isoformat() + "Z"
@@ -470,8 +468,6 @@ def get_bookings(creds):
 
     return bookings
 
-            
-
 
 def is_within_7_days(event, now)-> bool:
     event_start_date_time = event['start']['dateTime']
@@ -490,5 +486,3 @@ def is_within_7_days(event, now)-> bool:
         return False
     return True
     
-
-
