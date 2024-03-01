@@ -2,6 +2,7 @@ from unittest import TestCase, main
 from booking import book_slot,cancel_booking, get_start_date_time, authenticate, CLINIC_CALENDAR_ID, export_to_ical
 import datetime
 import os
+from os.path import join
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -110,11 +111,11 @@ class TestBooking(TestCase):
         'description': 'You can book this slot if  you want to volunteer.',
         'colorId' : 6,
         'start': {
-            'dateTime': f"2024-{month_now_str}-{day_now_str}T16:00:00+02:00",
+            'dateTime': f"2024-{month_now_str}-{day_now_str}T17:00:00+02:00",
             'timeZone': 'Africa/Johannesburg',
         },
         'end': {
-            'dateTime': f'2024-{month_now_str}-{day_now_str}T16:30:00+02:00',
+            'dateTime': f'2024-{month_now_str}-{day_now_str}T17:30:00+02:00',
             'timeZone': 'Africa/Johannesburg'
         },
         'recurrence': [
@@ -128,7 +129,7 @@ class TestBooking(TestCase):
         event = service.events().insert(calendarId=CLINIC_CALENDAR_ID, body=event).execute()
 
         booking_info = dict()
-        booking_info['dateTime'] = f"{day_now_str}T16:00"
+        booking_info['dateTime'] = f"{day_now_str}T17:00"
         booking_info['description'] = "Help me with arrays."
 
         success, message = book_slot(creds, booking_info, USER_EMAIL)
@@ -152,11 +153,11 @@ class TestBooking(TestCase):
         'description': 'You can book this slot if  you want to volunteer.',
         'colorId' : 6,
         'start': {
-            'dateTime': f"2024-{month_now_str}-{day_now_str}T16:00:00+02:00",
+            'dateTime': f"2024-{month_now_str}-{day_now_str}T17:00:00+02:00",
             'timeZone': 'Africa/Johannesburg',
         },
         'end': {
-            'dateTime': f'2024-{month_now_str}-{day_now_str}T16:30:00+02:00',
+            'dateTime': f'2024-{month_now_str}-{day_now_str}T17:30:00+02:00',
             'timeZone': 'Africa/Johannesburg'
         },
         'recurrence': [
@@ -170,21 +171,22 @@ class TestBooking(TestCase):
         event = service.events().insert(calendarId=CLINIC_CALENDAR_ID, body=event).execute()
 
         booking_info = dict()
-        booking_info['dateTime'] = f"{day_now_str}T16:00"
+        booking_info['dateTime'] = f"{day_now_str}T17:00"
         booking_info['description'] = "Help me with arrays."
 
         success, message = book_slot(creds, booking_info, USER_EMAIL)
         desired_success, desired_message = True, "Booking Successful!"
 
-        self.assertEqual(desired_success, success)
         self.assertEqual(desired_message, message)
+        self.assertEqual(desired_success, success)
+        
 
         booking_info = dict()
         booking_info['dateTime'] = f"{day_now_str}T16:00"
         booking_info['description'] = "Help me with dics."
 
         success, message = book_slot(creds, booking_info, USER_EMAIL)
-        desired_success, desired_message = False, "Slot is already booked. Try another!"
+        desired_success, desired_message = False, "You are occupied for this slot. You cannot book it!"
         #Delete the event
         service.events().delete(calendarId=CLINIC_CALENDAR_ID, eventId=event['id']).execute()
     
@@ -199,11 +201,11 @@ class TestBooking(TestCase):
         'description': 'You can book this slot if  you want to volunteer.',
         'colorId' : 6,
         'start': {
-            'dateTime': f"2024-{month_now_str}-{day_now_str}T16:00:00+02:00",
+            'dateTime': f"2024-{month_now_str}-{day_now_str}T17:00:00+02:00",
             'timeZone': 'Africa/Johannesburg',
         },
         'end': {
-            'dateTime': f'2024-{month_now_str}-{day_now_str}T16:30:00+02:00',
+            'dateTime': f'2024-{month_now_str}-{day_now_str}T17:30:00+02:00',
             'timeZone': 'Africa/Johannesburg'
         },
         'recurrence': [
@@ -217,11 +219,11 @@ class TestBooking(TestCase):
         event = service.events().insert(calendarId=CLINIC_CALENDAR_ID, body=event).execute()
 
         booking_info = dict()
-        booking_info['dateTime'] = f"{day_now_str}T16:00"
+        booking_info['dateTime'] = f"{day_now_str}T17:00"
         booking_info['description'] = "Help me with arrays."
 
         success, message = book_slot(creds, booking_info,  "bulelatshulisi@gmail.com")
-        desired_success, desired_message = False, "You are a volunteer for this slot. You cannot book it!"
+        desired_success, desired_message = False, 'You are occupied for this slot. You cannot book it!'
 
         self.assertEqual(desired_success, success)
         self.assertEqual(desired_message, message)
@@ -257,11 +259,11 @@ class TestBooking(TestCase):
         'description': 'You can book this slot if  you want to volunteer.',
         'colorId' : 6,
         'start': {
-            'dateTime': f"2024-{month_now_str}-{day_now_str}T16:00:00+02:00",
+            'dateTime': f"2024-{month_now_str}-{day_now_str}T17:00:00+02:00",
             'timeZone': 'Africa/Johannesburg',
         },
         'end': {
-            'dateTime': f'2024-{month_now_str}-{day_now_str}T16:30:00+02:00',
+            'dateTime': f'2024-{month_now_str}-{day_now_str}T17:30:00+02:00',
             'timeZone': 'Africa/Johannesburg'
         },
         'recurrence': [
@@ -275,7 +277,7 @@ class TestBooking(TestCase):
         event = service.events().insert(calendarId=CLINIC_CALENDAR_ID, body=event).execute()
 
         booking_info = dict()
-        booking_info['dateTime'] = f"{day_now_str}T16:00"
+        booking_info['dateTime'] = f"{day_now_str}T17:00"
         booking_info['description'] = "Help me with arrays."
 
         success, message = book_slot(creds, booking_info, USER_EMAIL)
@@ -305,14 +307,15 @@ class TestBooking(TestCase):
 
 
     def test_export_to_ical(self):
-            file_path = "bookings.ics"
-            actual_message = export_to_ical(creds, file_path)
-            desired_message = f"Bookings exported to {file_path}"
+            file_path = ""
+            file_name = "bookings"
+            actual_message = export_to_ical(creds, file_path, file_name)
+            desired_message = f"Bookings exported to {join(file_path,f'{file_name}.ics')}"
 
             self.assertEqual(desired_message, actual_message)
-            self.assertTrue(os.path.exists(file_path))
+            self.assertTrue(os.path.exists(join(file_path,f"{file_name}.ics")))
 
-            os.remove(file_path)
+            os.remove(join(file_path,f"{file_name}.ics"))
 
 
 if __name__=="__main__":
