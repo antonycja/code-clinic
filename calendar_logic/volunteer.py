@@ -1,9 +1,9 @@
 from googleapiclient.errors import HttpError
 from googleapiclient.discovery import build
+# from booking import is_occupied
 
 calendar_id = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 
-# commit first
 def build_service(creds):
     """
     Creates a google service object using oauth2.0.
@@ -95,6 +95,8 @@ def is_booked(starttime, endtime, email, service, calendar_id):
     if not event_id:
         return False
     event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+    if is_occupied(event, email):
+        return True
     start = event['start']['dateTime']
     if start == starttime:
         attendee = event['attendees'][0]['email']
@@ -133,6 +135,9 @@ def get_event(service, calendar_id, starttime, endtime, volunteer_email):
             for event in events:
                 if event['attendees'][0]['email'] == volunteer_email:
                     return event['id']
+                else:
+                    print("You have not volunteered yet.")
+                    return None
     except IndexError as error:
         print(f'There is not a slot booked for the specified time')
         return None
@@ -235,3 +240,17 @@ def campus_abb(campus: str):
 
     return campus
 
+
+#delete pls
+def is_occupied(event, USER_EMAIL) -> bool:
+    return is_attendee(event, USER_EMAIL)
+
+
+def is_attendee(event, USER_EMAIL):
+    if len( event['attendees']) == 2:
+        attendee1 = event['attendees'][0]
+        attendee2 = event['attendees'][1]
+        return attendee1['email'] == USER_EMAIL or attendee2['email'] == USER_EMAIL
+    elif len(event['attendees']) == 1:
+        attendee1 = event['attendees'][0]
+        return attendee1['email'] == USER_EMAIL
