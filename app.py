@@ -261,6 +261,20 @@ def current_user():
         exit("No user is currently logged-in")
     exit(f'The current logged-in user is: {user["username"]}')
 
+
+@click.command(help=": Exports calendar data in ical format")
+@click.option('-p','--path',default = save_path(files.get_home(),'Downloads'),prompt = "Enter the directory to save the file (absolute path). Leave blank for default path:",help = 'saves the calendar onto your local machine. [Default folder = Downloads]' )
+@click.option('-n','--name',default = "", prompt = "Enter file in which t save the content (booking)",help = 'The name to name the file to save the data in')
+def export_calendar(path: str, name: str):
+    usern= current_logged_profile()["username"]
+    creds, user_data = gen_creds(usern)
+
+    if name == "":
+        name = None
+    message = booking.export_to_ical(creds,path,name)
+    print(message)
+
+
 app.add_command(configure)
 app.add_command(make_booking)
 app.add_command(cancel_booking)
@@ -270,6 +284,7 @@ app.add_command(view_calendar)
 app.add_command(login)
 app.add_command(signin)
 app.add_command(current_user)
+app.add_command(export_calendar)
 
 
 
