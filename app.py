@@ -220,7 +220,7 @@ def cancel_volunteering(day,time):
     username = current_logged_profile()["username"]
     creds,user_data = gen_creds(username)
 
-    message = volunteering.cancel_event(creds,start_time,end_time)
+    message = volunteering.cancel_event(creds,start_time,end_time,user_data["email"])
     exit(message)
 
 
@@ -272,7 +272,13 @@ app.add_command(current_user)
 
 
 if __name__ == '__main__':
-    
+    sys.argv.append("cancel-volunteering")
+    # sys.argv.append("configure")
+    # sys.argv.append("login")
+    # sys.argv.append("-p")
+    # sys.argv.append("-c")
+    # sys.argv.append(True)
+
     usern = current_logged_profile()["username"]
     if usern == None and not 'signin' in sys.argv:
         exit("""No active user found. Please login using
