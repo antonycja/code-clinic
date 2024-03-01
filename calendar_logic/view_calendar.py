@@ -1,12 +1,10 @@
 import datetime
 from tabulate import tabulate
-from curses import newpad
 from collections import defaultdict
 import os
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-
-from helpers.download_calendar import write_to_csv_file, calendar_data_changed, convert_csv_to_dict
+from helpers.download_calendar import write_to_csv_file, calendar_data_changed
 
 
 def get_events(service: object, calender: str, days: int) -> list:
