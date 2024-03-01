@@ -315,6 +315,13 @@ def current_user():
 @click.option('-p','--path',default = save_path(files.get_home(),'Downloads'),prompt = "Enter the directory to save the file (absolute path). Leave blank for default path:",help = 'saves the calendar onto your local machine. [Default folder = Downloads]' )
 @click.option('-n','--name',default = "", prompt = "Enter file in which t save the content (booking)",help = 'The name to name the file to save the data in')
 def export_calendar(path: str, name: str):
+    """
+    Exports the calendar to a file that can be imported on other applications
+
+    Args:
+        path (str): The path to save the file
+        name (str): the name to save the file as
+    """
     usern= current_logged_profile()["username"]
     creds, user_data = gen_creds(usern)
 
