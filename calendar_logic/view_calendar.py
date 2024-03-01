@@ -106,28 +106,28 @@ def get_data_from_calendar_api(service: object, calendar: int, days: int, cal_ty
     return selected_events_info_list
 
 
-def display_events(events: list) -> None:
+def display_events(display_events: list) -> None:
     """print out the results on the terminal.
 
     Args:
-        events (list): a list containing the event data to be shown to the user.
+        display_events (list): a list containing the event data to be shown to the user.
     """
     # get the current terminal size
     terminal_size = os.get_terminal_size()
 
     # Prevent a keyerror by defaulting to a list if the value still needs to be generated.
-    calendar_events = defaultdict(list)
-    for event in events:
-        calendar_events[event['Calendar']].append(event)
+    calendar_display_events = defaultdict(list)
+    for event in display_events:
+        calendar_display_events[event['Calendar']].append(event)
 
-    # Print each calendar's events
-    for calendar, events in calendar_events.items():
-        table_events = []
+    # Print each calendar's display_events
+    for calendar, display_events in calendar_display_events.items():
+        display_table_events = []
         print(f"{calendar}:")
-        for event in events:
+        for event in display_events:
             event_details = {"Date": event["date"], "Time": f'{event["start time"]} - {event["end time"]}',
                              "Summary": event["summary"], "Location": event["location"], "Organizer": event["organizer"], "Attendees": ', '.join(event["attendees"])}
-            table_events.append(event_details)
+            display_table_events.append(event_details)
 
         # the max row span of each row in the table
         row_span = [(terminal_size.columns-10) // len(event_details.keys())
@@ -137,7 +137,7 @@ def display_events(events: list) -> None:
         row_span[-2] = row_span[-2]+5
 
         # Create the table using table events list created above
-        table = tabulate(table_events, headers="keys", tablefmt="fancy_grid",
+        table = tabulate(display_table_events, headers="keys", tablefmt="fancy_grid",
                          colalign=("center"), maxcolwidths=row_span)
 
         # Display the table and add spaces after
