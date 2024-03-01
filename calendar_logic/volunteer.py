@@ -1,9 +1,9 @@
 from googleapiclient.errors import HttpError
 from googleapiclient.discovery import build
+from booking import is_occupied
 
 calendar_id = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 
-# commit first
 def build_service(creds):
     """
     Creates a google service object using oauth2.0.
@@ -79,7 +79,7 @@ def create_volunteer_slot(creds, volunteer_email, starttime, endtime, campus, ca
 
 def is_booked(starttime, endtime, email, service, calendar_id):
     """
-    Check if the volunteer is already booked for a session during the specified time.
+    Check if a volunteer has already booked a slot for the specified time.
 
     Args:
         starttime (str): Start time of the event in 'YYYY-MM-DDTHH:MM:SS' format.
@@ -89,12 +89,14 @@ def is_booked(starttime, endtime, email, service, calendar_id):
         calendar_id (str): ID of the Google Calendar.
 
     Returns:
-        bool: True if the volunteer is booked; False otherwise.
+        bool: True if the slot is booked; False otherwise.
     """
     event_id = get_event(service, calendar_id, starttime, endtime, email)
     if not event_id:
         return False
     event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+    if is_occupied(event, email):
+        return True
     start = event['start']['dateTime']
     if start == starttime:
         attendee = event['attendees'][0]['email']
@@ -133,6 +135,9 @@ def get_event(service, calendar_id, starttime, endtime, volunteer_email):
             for event in events:
                 if event['attendees'][0]['email'] == volunteer_email:
                     return event['id']
+                else:
+                    print("You have not volunteered yet.")
+                    return None
     except IndexError as error:
         print(f'There is not a slot booked for the specified time')
         return None
@@ -155,8 +160,13 @@ def cancel_event(creds, starttime, endtime, volunteer_email, calendar_id = calen
     try:
         event_id = get_event(service, calendar_id, starttime, endtime, volunteer_email)
         event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
-        if len(event['attendees']) > 1 or event['attendees'][0]['email'] != volunteer_email:
+
+        if len(event['attendees']) > 1:
             message = 'You cannot cancel a slot that has already been booked by a student.'
+        
+        elif event['attendees'][0]['email'] != volunteer_email:
+            message = 'you cannot cancel a slot that you have not volunteered for.'
+
         else:
             service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
             message = 'Slot successfully cancelled.'
@@ -230,4 +240,3 @@ def campus_abb(campus: str):
 
     return campus
 
-# def store_volunteer_data(event_id, ):
