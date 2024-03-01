@@ -293,7 +293,7 @@ if __name__ == '__main__':
 
 
     data = setup.decrypt_it(folders, "keys", "creds", "config", "creds")
-    if 'login' in sys.argv or 'signin' in sys.argv or LogIn.check_token(save_path(folders["tmp"],f'.{usern}',".logIn_token.json"),data):
+    if 'login' in sys.argv or 'signin' in sys.argv or LogIn.check_token(save_path(folders["tmp"],f'.{usern}',".logIn_token.json"),data,folders):
         app()
 
 
