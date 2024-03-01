@@ -1,6 +1,4 @@
 from googleapiclient.errors import HttpError
-from datetime import datetime, timedelta
-import json
 
 
 def create_volunteer_slot(service, calendar_id, volunteer_email, event_description, starttime, endtime, campus):
