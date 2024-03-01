@@ -18,6 +18,9 @@ def get_events(service: object, calender: str, days: int) -> list:
     Returns:
         list: a list of events for the specified period.
     """
+    if not isinstance(calender, str) or not isinstance(days, int):
+        return None
+
     now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
     end = (datetime.datetime.utcnow() + datetime.timedelta(days=days)
            ).isoformat() + "Z"  # Get the date in <days> amount of days
@@ -47,7 +50,7 @@ def determine_calendar(calendar: int, cal_type_list: list, calendar_dict: dict) 
         calendar (int): the number option of the calendar.
         cal_type_list (list): a list with the names of the calendars.
         calendar_dict (dict): a dictionary with the calendar IDs.
-        
+
     Returns:
         tuple: a tuple containing the cal_type, calendars.
     """
@@ -61,7 +64,6 @@ def determine_calendar(calendar: int, cal_type_list: list, calendar_dict: dict) 
     else:
         calendars = [calendar for calendar in calendar_dict.values()]
         cal_type = "ALL calendars"
-        
 
     return cal_type, calendars
 
@@ -85,7 +87,7 @@ def get_data_from_calendar_api(service: object, calendar: int, days: int, cal_ty
     for calendar_id in calendars:
         events = get_events(service, calendar_id, days)
         event_list.append(events)
-
+        
     for index, events in enumerate(event_list):
         if calendar != 1 and calendar != 2:
             cal_name = cal_type_list[index].upper()
@@ -94,7 +96,6 @@ def get_data_from_calendar_api(service: object, calendar: int, days: int, cal_ty
 
         # Check if there is are events or not on each calendar, if there are no events on the specified time period, let the user know.
         if events:
-            # print(events)
             event_info = create_event_info(events, cal_name)
             [selected_events_info_list.append(
                 event) for event in event_info]
