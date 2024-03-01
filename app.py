@@ -107,7 +107,7 @@ def app():
 
 
 # configuration
-@click.command(help = ": reconfigures/resets the code-clinic application.")
+@click.command(help = ": creates or reconfigures/resets the code-clinic application.")
 @click.option('-n','--name',help = 'Your username; [USECASE: -n/--name "username"]')
 @click.option('-e','--email',help = 'Your cooperate email address; [USECASE: -e/--email "email"]')
 def configure(name: str = None,email: str = None):
@@ -127,7 +127,7 @@ def configure(name: str = None,email: str = None):
 
 
 #login
-@click.command(context_settings=dict(ignore_unknown_options=True,allow_extra_args = False))
+@click.command(context_settings=dict(ignore_unknown_options=True,allow_extra_args = False),help = " ")
 def login(log_file = save_path(files.get_home(),'.elite','.systems.log')):
     """
     The main login function. logins your user account
