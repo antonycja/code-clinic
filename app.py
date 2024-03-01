@@ -285,7 +285,7 @@ if __name__ == '__main__':
 
 
     success, message, folders = setup.pre_load(usern)
-    if 'configure' in sys.argv or '--help' in sys.argv or '-h' in sys.argv or len(sys.argv) < 2:
+    if 'configure' in sys.argv or '--help' in sys.argv or '-h' in sys.argv or len(sys.argv) < 2 or 'current-user' in sys.argv:
         app()
     elif success == False and not 'configure' in sys.argv:
         print(message)
