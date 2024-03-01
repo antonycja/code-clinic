@@ -164,8 +164,7 @@ def make_booking(day,time,desc):
     "TODO: fix booking of an already booked session. Check if booker is allowed to cancel a session that a volunteer is in."
 
     user_input = f'{day}T{time}'
-    date_time = booking.get_start_date_time(user_input)
-    booking_info = {"dateTime": f"{date_time}","description" : f"{desc}"}
+    booking_info = {"dateTime": user_input,"description" : f"{desc}"}
 
     username = current_logged_profile()["username"]
     creds,user_data = gen_creds(username)
@@ -180,8 +179,7 @@ def make_booking(day,time,desc):
 def cancel_booking(day,time):
 
     user_input = f'{day}T{time}'
-    date_time = booking.get_start_date_time(user_input)
-    booking_info = {"dateTime": f"{date_time}"}
+    booking_info = {"dateTime": user_input}
 
     username = current_logged_profile()["username"]
     creds,user_data = gen_creds(username)
@@ -282,7 +280,7 @@ if __name__ == '__main__':
     # sys.argv.append("-p")
     # sys.argv.append("-c")
     # sys.argv.append(True)
-    sys.argv.append("signin")
+    # sys.argv.append("signin")
 
     usern = current_logged_profile()["username"]
     if usern == None and not 'signin' in sys.argv:
