@@ -7,7 +7,6 @@ def install_dependencies():
     dependencies = ['click', 'tabulate', 'pycryptodome', 'pycryptodomex',
                     'google-api-python-client', 'google-auth-httplib2', 'google-auth-oauthlib', 'ics']
 
-    print('Installing dependencies...')
     for depend in dependencies:
         try:
             __import__(depend)
@@ -18,4 +17,4 @@ def install_dependencies():
             else:
                 subprocess.run(
                     f'pip install {depend} > /tmp/ignore.txt', shell=True)
-    print("Installation complete!")
+
