@@ -92,6 +92,14 @@ class TestBooking(TestCase):
         self.assertEqual(desired_output, actual_output)
 
 
+    def test_get_start_date_time_odd_times(self):
+        user_input = f"{day_now_str}T14:15"
+
+        actual_output = get_start_date_time(user_input)
+        desired_output = "invalid time."
+        
+        self.assertEqual(desired_output, actual_output)
+
     def test_book_slot(self):
         service = service = build('calendar', 'v3', credentials=creds)
         
@@ -239,9 +247,6 @@ class TestBooking(TestCase):
         self.assertEqual(desired_success, success)
         
 
-
-
-
     def test_cancel_booking(self):
         service = service = build('calendar', 'v3', credentials=creds)
         
@@ -288,15 +293,26 @@ class TestBooking(TestCase):
         service.events().delete(calendarId=CLINIC_CALENDAR_ID, eventId=event['id']).execute()
 
 
+    def test_cancel_booking_no_booking(self):
+        booking_info = dict()
+        booking_info['dateTime'] = f"{day_now_str}T16:30"
+
+
+        #Cancel Booking
+
+        success, message = cancel_booking(creds, booking_info, USER_EMAIL)
+        desired_success, desired_message = False, "No booking to cancel."
+
+
     def test_export_to_ical(self):
-        file_path = "bookings.ics"
-        actual_message = export_to_ical(creds, file_path)
-        desired_message = f"Bookings exported to {file_path}"
+            file_path = "bookings.ics"
+            actual_message = export_to_ical(creds, file_path)
+            desired_message = f"Bookings exported to {file_path}"
 
-        self.assertEqual(desired_message, actual_message)
-        self.assertTrue(os.path.exists(file_path))
+            self.assertEqual(desired_message, actual_message)
+            self.assertTrue(os.path.exists(file_path))
 
-        os.remove(file_path)
+            os.remove(file_path)
 
 
 if __name__=="__main__":
