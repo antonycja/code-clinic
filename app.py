@@ -101,7 +101,7 @@ def app():
 def configure(name: str = None,email: str = None):
     data = config.generate_logIn_cred(name,email)
     folders = setup.secure_folder(data["username"])
-    setup.encrypt_it(data,folders,'keys','creds','creds','recon','config','creds')
+    setup.encrypt_it(data,folders,'keys','creds','SOS','recon','config','creds')
     cs = authentication.get_credentials()
     setup.encrypt_it(cs,folders,'keys','elite','cs','recon','cs','elite')
 
@@ -272,6 +272,7 @@ app.add_command(current_user)
 
 
 if __name__ == '__main__':
+    
     usern = current_logged_profile()["username"]
     if usern == None and not 'signin' in sys.argv:
         exit("""No active user found. Please login using
