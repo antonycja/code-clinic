@@ -8,7 +8,7 @@ from ics import Event, Calendar
 from datetime import timedelta
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-
+from os.path import join
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 CLINIC_CALENDAR_ID = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
@@ -361,7 +361,7 @@ def time_valid(time : str)->bool:
     return is_time_valid      
 
 
-def export_to_ical(creds, ical_file_path):
+def export_to_ical(creds, ical_file_path,file_name ="bookings"):
     """
     Exports the bookings in iCal file format.
 
@@ -396,10 +396,10 @@ def export_to_ical(creds, ical_file_path):
 
         calendar.events.add(event)
     
-    with open(ical_file_path, "w") as ics_file:
+    with open(join(ical_file_path,f'{file_name}.ics'), "w") as ics_file:
         ics_file.writelines(calendar)
     
-    message = f"Bookings exported to {ical_file_path}"
+    message = f"Bookings exported to {join(ical_file_path,f'{file_name}.ics')}"
     return message
 
 
