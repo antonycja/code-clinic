@@ -1,6 +1,6 @@
 from googleapiclient.errors import HttpError
 from googleapiclient.discovery import build
-from booking import is_occupied
+from calendar_logic.booking import is_occupied
 
 calendar_id = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 
