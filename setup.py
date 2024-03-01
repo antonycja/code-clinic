@@ -9,6 +9,8 @@ from helpers import writer, animation
 from authentication import authentication
 from os.path import join as save_path
 from os.path import exists
+import subprocess
+from test_base import captured_output
 
 __author__ = 'Johnny Ilanga'
 __version_ = '1.0'
@@ -198,3 +200,32 @@ def generate_creds(folders):
 
 
     return creds
+
+def install_dependencies():
+    """
+    Installs all the required dependencies (package modules)
+    """
+
+    dependencies = ['click','tabulate','pycryptodome','pycryptodomex','google-api-python-client','google-auth-httplib2','google-auth-oauthlib','ics']
+
+    print('Installing dependencies...')
+    for depend in dependencies:
+        try:
+            __import__(depend)
+        except ModuleNotFoundError:
+            if 'google' in depend:
+                subprocess.run(f'pip install --upgrade {depend} --break-system-packages > /tmp/ignore.txt',shell=True)
+            else:
+                subprocess.run(f'pip install {depend} --break-system-packages > /tmp/ignore.txt' ,shell=True)
+    print("Installation complete!")
+
+
+
+
+
+
+
+
+install_dependencies()
+
+
