@@ -13,7 +13,7 @@ from os.path import join
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 CLINIC_CALENDAR_ID = "c_7f60d63097ebf921579ca266668826f490dc72478a9d37d17ad62046836f598a@group.calendar.google.com"
 YEAR = 2024
-
+USER_EMAIL = 'jilanga023@student.wethinkcode.co.za'
 months = {
     1 : 31,
     2 : 29,
@@ -77,15 +77,21 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
 
     events = events_result.get('items', [])
 
+    message = ""
+    found = False
+
+    for event in events:
+        if is_occupied(event, USER_EMAIL):
+            message = "You are occupied for this slot. You cannot book it!"
+            return False, message
+
     for event in events:
         if event['start']['dateTime'] == booking_info['dateTime']:
             number_of_attendees = len(event['attendees'])
             if number_of_attendees == 2:
                 message = "Slot is already booked. Try another!"
-                return False, message
-            elif is_volunteer(event, USER_EMAIL):
-                message = "You are a volunteer for this slot. You cannot book it!"
-                return False, message
+                continue
+
             
             event['attendees'].append({'email': USER_EMAIL})
             event["summary"] = "Code Clinic Meeting"
@@ -100,19 +106,26 @@ def update_event(service, booking_info : dict, USER_EMAIL) -> tuple:
 
             return True, message
     
-
+    if message:
+        return found, message
+    
     message = "There is no volunteer for the slot you selected. Try another."
     return False, message
 
 
-def is_volunteer(event, USER_EMAIL) -> bool:
+def is_occupied(event, USER_EMAIL) -> bool:
     return is_attendee(event, USER_EMAIL)
 
 
 def is_attendee(event, USER_EMAIL):
-    attendee = event['attendees'][0]
-
-    return attendee['email'] == USER_EMAIL
+    if len( event['attendees']) == 2:
+        attendee1 = event['attendees'][0]
+        attendee2 = event['attendees'][1]
+        return attendee1['email'] == USER_EMAIL or attendee2['email'] == USER_EMAIL
+    elif len(event['attendees']) == 1:
+        attendee1 = event['attendees'][0]
+        return attendee1['email'] == USER_EMAIL
+    
 
 
 def create_event(service):
@@ -361,7 +374,7 @@ def time_valid(time : str)->bool:
     return is_time_valid      
 
 
-def export_to_ical(creds, ical_file_path,file_name ="bookings"):
+def export_to_ical(creds, ical_file_path, file_name='bookings.ics'):
     """
     Exports the bookings in iCal file format.
 
@@ -396,10 +409,10 @@ def export_to_ical(creds, ical_file_path,file_name ="bookings"):
 
         calendar.events.add(event)
     
-    with open(join(ical_file_path,f'{file_name}.ics'), "w") as ics_file:
+    with open(join(ical_file_path, f"{file_name}.ics"), "w") as ics_file:
         ics_file.writelines(calendar)
     
-    message = f"Bookings exported to {join(ical_file_path,f'{file_name}.ics')}"
+    message = f"Bookings exported to {join(ical_file_path, file_name)}.ics"
     return message
 
 
@@ -448,4 +461,3 @@ def is_within_7_days(event, now)-> bool:
         return False
     return True
     
-
