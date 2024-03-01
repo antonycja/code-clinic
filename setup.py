@@ -218,14 +218,3 @@ def install_dependencies():
             else:
                 subprocess.run(f'pip install {depend} --break-system-packages > /tmp/ignore.txt' ,shell=True)
     print("Installation complete!")
-
-
-
-
-
-
-
-
-install_dependencies()
-
-
