@@ -84,7 +84,7 @@ def token_exp(login_time: str):
     exp_time = time.replace(hour,str(exp_hour))
 
     # between midnight till 3, if we created token a few hours before midnight
-    if exp_hour in ['01','02','03']:
+    if exp_hour in ['00','01','02','03']:
         new_date = fix_date(date)
         # exp date set to tomorrow
         return login_time.replace(time,exp_time).replace(date,new_date)

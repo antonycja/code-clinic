@@ -51,4 +51,3 @@ def check_user_profile(user_name: str):
         return True
 
     return False
-

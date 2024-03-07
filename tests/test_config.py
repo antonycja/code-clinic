@@ -13,7 +13,7 @@ class Test_data_generation(unittest.TestCase):
         email = 'james023@student.wethinkcode.co.za'
         password = '123'
         with captured_io(StringIO(f'{name}\n{email}\n{password}\n{password}\n')) as (out,err):
-            data = generating_logIn_cred()
+            data = generate_logIn_cred()
             self.assertEqual(data['username'],name)
             self.assertEqual(data['email'],email)
             self.assertEqual(data['password'],password)
@@ -24,7 +24,7 @@ class Test_data_generation(unittest.TestCase):
         email = 'james023@student.wethinkcode.co.za'
         password = '123'
         with captured_io(StringIO(f'{name}\n{email}\n{password}\n{password}\n')) as (out,err):
-            data = generating_logIn_cred()
+            data = generate_logIn_cred()
             self.assertIsInstance(data,dict)
             self.assertEqual(len(data),3)
     
@@ -32,10 +32,9 @@ class Test_data_generation(unittest.TestCase):
         name = 'james023'
         email = 'james023@student.wethinkcode.co.za'
         password = '123'
-        expected_output = '''Enter your username: Enter your email: Enter passphrase: Enter same passphrase: Passphrases do not match. Try again.
-\nEnter passphrase: Enter same passphrase:'''
+        expected_output = '''Please provide your username: Please provide your email: Passphrases do not match. Try again.'''
         with captured_io(StringIO(f'{name}\n{email}\n{password}\n12345\n{password}\n{password}')) as (out,err):
-            data = generating_logIn_cred()
+            data = generate_logIn_cred()
             output = out.getvalue().strip()
             self.assertEqual(expected_output,output)
 
@@ -45,7 +44,7 @@ class Test_data_generation(unittest.TestCase):
         email = 'james023@student.wethinkcode.co.za'
         password = ''
         with captured_io(StringIO(f'{name}\n{email}\n{password}\n{password}\n')) as (out,err):
-            data = generating_logIn_cred()
+            data = generate_logIn_cred()
             self.assertIsNone(data['password'])
 
     

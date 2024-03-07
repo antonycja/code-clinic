@@ -3,15 +3,12 @@ The encryption module is in charge of creating, writing and reading the encrypte
 data
 """
 
-from deps import install_dependencies
-install_dependencies()
-
 from Cryptodome.Random import get_random_bytes
 from Crypto.Protocol.KDF import PBKDF2
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad, unpad
-from string import ascii_letters
-from random import randint, choice
+import string
+import random
 from os.path import join as save_path
 import re
 
@@ -20,13 +17,12 @@ __all__ = [
     'generate_key',
     'generating_salt_and_pepper',
     'encrypt_data',
-    'write_enc_data', 
+    'write_enc_data',
     'read_enc_data',
     'save_key',
     'read_key',
-    'return_data',
-    'convert_bytes',
-    'convert_str'
+    'convert_bytes_to_str',
+    'convert_str_to_bytes'
     ]
 
 
@@ -46,7 +42,7 @@ def generating_salt_and_pepper():
     recovery_key["salt"] = salt
     
     # randomly generated password. length of password is randomly selected 
-    password = "".join([choice(ascii_letters) for i in range(randint(8,17))])
+    password = "".join([random.choice(string.ascii_letters) for i in range(random.randint(8,17))])
     recovery_key["pepper"] = password
     
     return salt, password, recovery_key
