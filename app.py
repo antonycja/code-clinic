@@ -362,7 +362,7 @@ def export_calendar(path: str, name: str):
     creds, user_data = gen_creds(usern)
 
     if name == "":
-        name = None
+        name = "Booking"
     message = booking.export_to_ical(creds, path, name)
     print(message)
 
@@ -388,7 +388,7 @@ if __name__ == '__main__':
 
     if 'configure' in sys.argv:
         app()
-    
+
     usern = current_logged_profile()["username"]
     if usern == None and not 'signin' in sys.argv:
         exit("""No active user found. Please login using
