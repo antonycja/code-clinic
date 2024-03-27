@@ -24,9 +24,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 # permissions being granted to user. Consider it as rules of usage
 SCOPES = ["https://www.googleapis.com/auth/calendar"]  # (Full Access)
 
-__author__ = "Johnny Ilanga"
-__all__ = ["authenticate"]
-
 
 def get_credentials():
     """
