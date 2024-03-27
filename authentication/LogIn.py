@@ -2,9 +2,6 @@
 The particular module is designed only for login functions
 """
 
-__author__ = 'Johnny Ilanga'
-
-
 from getpass import getpass
 import time
 from helpers import writer
